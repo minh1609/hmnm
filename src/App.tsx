@@ -5,6 +5,7 @@ import { getSeason } from '@/utils';
 
 import { JourneyCounter } from '@/components/JourneyCounter';
 import { FallingObjects } from '@/components/FallingObjects';
+import FerrariTooltip from '@/components/FerrariTooltip';
 import { ferrariTokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
@@ -16,6 +17,7 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import { Box, Chip, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
 
 const years = Object.keys(datingTimeline).map(Number);
 
@@ -132,7 +134,7 @@ function App() {
                 sx={{ overflow: 'hidden' }}
             >
                 <Timeline position="alternate">
-                    {currentTimeline.events.map((event) => {
+                    {currentTimeline.events.map((event, index) => {
                         const season = getSeason(event.date);
                         return (
                             <TimelineItem key={event.date.toISOString()}>
@@ -197,10 +199,52 @@ function App() {
                                             cursor: 'default',
                                         })}
                                     >
-                                        {event.name}
-                                    </Typography>
-                                    <Typography sx={{ fontWeight: 600 }}>
-                                        {event.des}
+                                        {index % 2 == 0 && event.name}
+                                        {event.des && (
+                                            <FerrariTooltip
+                                                title={
+                                                    Array.isArray(event.des) ? (
+                                                        <ul
+                                                            style={{
+                                                                margin: '2px 0',
+                                                                paddingLeft:
+                                                                    '1.2em',
+                                                            }}
+                                                        >
+                                                            {event.des.map(
+                                                                (item, i) => (
+                                                                    <li key={i}>
+                                                                        {item}
+                                                                    </li>
+                                                                )
+                                                            )}
+                                                        </ul>
+                                                    ) : (
+                                                        event.des
+                                                    )
+                                                }
+                                                placement="top"
+                                            >
+                                                {
+                                                    <LightbulbIcon
+                                                        sx={{
+                                                            color: ferrariTokens
+                                                                .colors.gold,
+                                                            fontSize: '1.1rem',
+                                                            mb: '-2px',
+                                                            mx: 0.5,
+                                                            transition:
+                                                                'transform 0.2s ease',
+                                                            '&:hover': {
+                                                                transform:
+                                                                    'scale(1.35)',
+                                                            },
+                                                        }}
+                                                    />
+                                                }
+                                            </FerrariTooltip>
+                                        )}
+                                        {index % 2 == 1 && event.name}
                                     </Typography>
                                 </TimelineContent>
                             </TimelineItem>
