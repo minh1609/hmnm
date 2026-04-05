@@ -143,7 +143,7 @@ export function JourneyCounter() {
                 alignItems: 'center',
                 gap: 2,
                 px: 2,
-                py: 3,
+                mt: 5,
             }}
         >
             <Typography
@@ -174,16 +174,8 @@ export function JourneyCounter() {
             >
                 <StatCard value={values.days} label="Days Shared" />
                 <StatCard value={values.hoursToday} label="Hours Today" live />
-                <StatCard
-                    value={values.minutesPast}
-                    label="Minutes Past"
-                    live
-                />
-                <StatCard
-                    sx={{ cursor: 'pointer' }}
-                    value={TRIPS_TAKEN}
-                    label="Trips Taken"
-                />
+                <StatCard value={values.minutesPast} label="Minutes Past" live />
+                <StatCard sx={{ cursor: 'pointer' }} value={TRIPS_TAKEN} label="Trips Taken" />
             </Box>
         </Box>
     );

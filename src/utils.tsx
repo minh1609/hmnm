@@ -24,7 +24,7 @@ export function getSeason(date: Date): SeasonInfo {
             color: '#f59e0b',
             bgColor: '#fef3c7',
         };
-    if (month >= 9 && month <= 11)
+    if (month >= 9 && month <= 10)
         return {
             icon: <EnergySavingsLeafIcon sx={{ fontSize: 14 }} />,
             color: '#ea580c',

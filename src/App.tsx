@@ -33,9 +33,7 @@ const yearSx =
         cursor: 'pointer',
         transition: 'all 0.2s ease',
         userSelect: 'none',
-        borderBottom: active
-            ? `2px solid ${theme.palette.primary.main}`
-            : '2px solid transparent',
+        borderBottom: active ? `2px solid ${theme.palette.primary.main}` : '2px solid transparent',
         pb: '2px',
         '&:hover': { color: 'primary.main', opacity: 1 },
     });
@@ -70,75 +68,77 @@ function App() {
     return (
         <>
             <FallingObjects />
-            <JourneyCounter />
 
             <Box
                 sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    pt: 3,
-                    pb: 1,
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 100,
+                    backgroundColor: ferrariTokens.colors.red,
                 }}
             >
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                    {years.map((year) => (
-                        <Box
-                            key={year}
-                            onClick={() => handleYearSelect(year)}
-                            sx={yearSx(year === selectedYear)}
-                        >
-                            {year}
-                        </Box>
-                    ))}
-                </Box>
-            </Box>
+                <JourneyCounter />
 
-            {datingTimeline[selectedYear].description && (
                 <Box
-                    ref={descRef}
-                    className="year-desc-enter"
                     sx={{
                         display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        mt: 1.5,
-                        mb: 0.5,
+                        justifyContent: 'center',
+                        pt: 3,
+                        pb: 1,
                     }}
                 >
-                    <Typography
-                        sx={() => ({
-                            fontFamily: ferrariTokens.fonts.display,
-                            fontWeight: 700,
-                            fontSize: '1.6rem',
-                            lineHeight: 1.1,
-                            letterSpacing: '0.14em',
-                            textTransform: 'uppercase',
-                            color: '#ffffff',
-                            textShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}, 0 2px 4px rgba(0,0,0,0.5)`,
-                            userSelect: 'none',
-                        })}
-                    >
-                        🏁 {datingTimeline[selectedYear].description}
-                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        {years.map((year) => (
+                            <Box key={year} onClick={() => handleYearSelect(year)} sx={yearSx(year === selectedYear)}>
+                                {year}
+                            </Box>
+                        ))}
+                    </Box>
                 </Box>
-            )}
+
+                {datingTimeline[selectedYear].description && (
+                    <Box
+                        ref={descRef}
+                        className="year-desc-enter"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: 0.5,
+                            mt: 1.5,
+                            mb: 0.5,
+                        }}
+                    >
+                        <Typography
+                            sx={() => ({
+                                fontFamily: ferrariTokens.fonts.display,
+                                fontWeight: 700,
+                                fontSize: '1.6rem',
+                                lineHeight: 1.1,
+                                letterSpacing: '0.14em',
+                                textTransform: 'uppercase',
+                                color: '#ffffff',
+                                textShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}, 0 2px 4px rgba(0,0,0,0.5)`,
+                                userSelect: 'none',
+                            })}
+                        >
+                            🏁 {datingTimeline[selectedYear].description}
+                        </Typography>
+                    </Box>
+                )}
+            </Box>
 
             <Box
                 key={`timeline-${selectedYear}`}
-                className={
-                    slideDir === 'left'
-                        ? 'timeline-slide-left'
-                        : 'timeline-slide-right'
-                }
-                sx={{ overflow: 'hidden' }}
+                className={slideDir === 'left' ? 'timeline-slide-left' : 'timeline-slide-right'}
+                sx={{ overflow: 'hidden', pb: 3 }}
             >
                 <Timeline position="alternate">
                     {currentTimeline.events.map((event, index) => {
                         const season = getSeason(event.date);
                         return (
                             <TimelineItem key={event.date.toISOString()}>
-                                <TimelineOppositeContent color="text.secondary">
+                                <TimelineOppositeContent color="text.secondary" key={event.name}>
                                     <Typography fontWeight="bold"></Typography>
                                     <Chip
                                         size="small"
@@ -156,12 +156,10 @@ function App() {
                                             fontWeight: 600,
                                             borderRadius: '8px',
                                             cursor: 'default',
-                                            transition:
-                                                'transform 0.15s ease, box-shadow 0.15s ease',
+                                            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             '&:hover': {
                                                 transform: 'scale(1.12)',
-                                                boxShadow:
-                                                    '0 2px 8px rgba(0,0,0,0.18)',
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
                                             },
                                             '& .MuiChip-icon': {
                                                 color: season.color,
@@ -172,17 +170,14 @@ function App() {
                                 <TimelineSeparator>
                                     <TimelineDot
                                         sx={{
-                                            backgroundColor:
-                                                ferrariTokens.colors.gold,
-                                            borderColor:
-                                                ferrariTokens.colors.goldLight,
+                                            backgroundColor: ferrariTokens.colors.gold,
+                                            borderColor: ferrariTokens.colors.goldLight,
                                             boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
                                         }}
                                     />
                                     <TimelineConnector
                                         sx={{
-                                            backgroundColor:
-                                                ferrariTokens.colors.gold,
+                                            backgroundColor: ferrariTokens.colors.gold,
                                         }}
                                     />
                                 </TimelineSeparator>
@@ -190,8 +185,7 @@ function App() {
                                     <Typography
                                         fontWeight={700}
                                         sx={(theme) => ({
-                                            fontFamily:
-                                                theme.typography.h3.fontFamily,
+                                            fontFamily: theme.typography.h3.fontFamily,
                                             fontSize: '1.05rem',
                                             textTransform: 'uppercase',
                                             letterSpacing: '0.06em',
@@ -207,17 +201,12 @@ function App() {
                                                         <ul
                                                             style={{
                                                                 margin: '2px 0',
-                                                                paddingLeft:
-                                                                    '1.2em',
+                                                                paddingLeft: '1.2em',
                                                             }}
                                                         >
-                                                            {event.des.map(
-                                                                (item, i) => (
-                                                                    <li key={i}>
-                                                                        {item}
-                                                                    </li>
-                                                                )
-                                                            )}
+                                                            {event.des.map((item, i) => (
+                                                                <li key={i}>{item}</li>
+                                                            ))}
                                                         </ul>
                                                     ) : (
                                                         event.des
@@ -228,16 +217,13 @@ function App() {
                                                 {
                                                     <LightbulbIcon
                                                         sx={{
-                                                            color: ferrariTokens
-                                                                .colors.gold,
+                                                            color: ferrariTokens.colors.gold,
                                                             fontSize: '1.1rem',
                                                             mb: '-2px',
                                                             mx: 0.5,
-                                                            transition:
-                                                                'transform 0.2s ease',
+                                                            transition: 'transform 0.2s ease',
                                                             '&:hover': {
-                                                                transform:
-                                                                    'scale(1.35)',
+                                                                transform: 'scale(1.35)',
                                                             },
                                                         }}
                                                     />

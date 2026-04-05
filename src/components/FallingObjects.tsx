@@ -89,7 +89,7 @@ export function FallingObjects() {
                 position: 'fixed',
                 inset: 0,
                 pointerEvents: 'none',
-                zIndex: 0,
+                zIndex: 9999,
                 overflow: 'hidden',
             }}
         >
