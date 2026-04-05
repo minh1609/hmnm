@@ -7,7 +7,7 @@ export function HeartDivider() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1.5,
-                color: '#c2185b',
+                color: 'primary.main',
                 opacity: 0.45,
             }}
         >
@@ -15,7 +15,8 @@ export function HeartDivider() {
                 sx={{
                     width: 48,
                     height: '1px',
-                    background: 'linear-gradient(to right, transparent, #c2185b)',
+                    background:
+                        'linear-gradient(to right, transparent, #c2185b)',
                 }}
             />
             <Typography
@@ -28,7 +29,8 @@ export function HeartDivider() {
                 sx={{
                     width: 48,
                     height: '1px',
-                    background: 'linear-gradient(to left, transparent, #c2185b)',
+                    background:
+                        'linear-gradient(to left, transparent, #c2185b)',
                 }}
             />
         </Box>

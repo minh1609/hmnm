@@ -1,3 +1,11 @@
-export const colors = {
-    primary: '#b5174f',
-} as const;
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#ff2800',
+        },
+    },
+});
+
+export default theme;

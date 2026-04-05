@@ -1,6 +1,5 @@
 import './App.css';
-import { useState } from 'react';
-import { colors } from '@/theme';
+import { useRef, useState } from 'react';
 import { datingTimeline } from '@/data';
 import { getSeason } from '@/utils';
 
@@ -15,29 +14,52 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import { Box, Chip, Typography } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
 
 const years = Object.keys(datingTimeline).map(Number);
 
-const yearSx = (active: boolean) => ({
+const yearSx = (active: boolean): SxProps<Theme> => (theme) => ({
     fontFamily: "'Cormorant Garamond', serif",
     fontStyle: 'italic',
     fontWeight: active ? 600 : 400,
     fontSize: active ? '1.9rem' : '1.25rem',
-    color: active ? colors.primary : '#c2185b',
-    opacity: active ? 1 : 0.45,
+    color: 'primary.main',
+    opacity: active ? 1 : 0.6,
     cursor: 'pointer',
     letterSpacing: '0.02em',
     transition: 'all 0.2s ease',
     userSelect: 'none',
     borderBottom: active
-        ? `1.5px solid ${colors.primary}`
+        ? `1.5px solid ${theme.palette.primary.main}`
         : '1.5px solid transparent',
     pb: '2px',
-    '&:hover': { opacity: 1, color: colors.primary },
+    '&:hover': { opacity: 1, color: 'primary.main' },
 });
 
 function App() {
     const [selectedYear, setSelectedYear] = useState(years[0]);
+    const [slideDir, setSlideDir] = useState<'left' | 'right'>('left');
+    const prevYearRef = useRef(years[0]);
+
+    const handleYearSelect = (year: number) => {
+        if (year === selectedYear) return;
+        setSlideDir(year > prevYearRef.current ? 'left' : 'right');
+        prevYearRef.current = year;
+        setSelectedYear(year);
+    };
+
+    const descRef = useRef<HTMLDivElement>(null);
+
+    // Retrigger the enter animation without remounting
+    const prevDescYear = useRef(selectedYear);
+    if (prevDescYear.current !== selectedYear) {
+        prevDescYear.current = selectedYear;
+        if (descRef.current) {
+            descRef.current.classList.remove('year-desc-enter');
+            void descRef.current.offsetHeight; // force reflow
+            descRef.current.classList.add('year-desc-enter');
+        }
+    }
 
     const currentTimeline = datingTimeline[selectedYear];
 
@@ -57,7 +79,7 @@ function App() {
                     {years.map((year) => (
                         <Box
                             key={year}
-                            onClick={() => setSelectedYear(year)}
+                            onClick={() => handleYearSelect(year)}
                             sx={yearSx(year === selectedYear)}
                         >
                             {year}
@@ -68,6 +90,8 @@ function App() {
 
             {datingTimeline[selectedYear].description && (
                 <Box
+                    ref={descRef}
+                    className="year-desc-enter"
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -85,7 +109,7 @@ function App() {
                             fontSize: '2.4rem',
                             lineHeight: 1.15,
                             letterSpacing: '0.03em',
-                            color: colors.primary,
+                            color: 'primary.main',
                             textShadow: '0 1px 8px rgba(194,24,91,0.10)',
                             userSelect: 'none',
                         }}
@@ -95,75 +119,85 @@ function App() {
                 </Box>
             )}
 
-            <Timeline position="alternate">
-                {currentTimeline.events.map((event) => {
-                    const season = getSeason(event.date);
-                    return (
-                        <TimelineItem key={event.date.toISOString()}>
-                            <TimelineOppositeContent color="text.secondary">
-                                <Typography fontWeight="bold"></Typography>
-                                <Chip
-                                    size="small"
-                                    icon={season.icon}
-                                    label={event.date
-                                        .toLocaleDateString('en-GB', {
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric',
-                                        })
-                                        .replace(/\//g, '-')}
-                                    sx={{
-                                        backgroundColor: season.bgColor,
-                                        color: season.color,
-                                        fontWeight: 600,
-                                        borderRadius: '8px',
-                                        cursor: 'default',
-                                        transition:
-                                            'transform 0.15s ease, box-shadow 0.15s ease',
-                                        '&:hover': {
-                                            transform: 'scale(1.12)',
-                                            boxShadow:
-                                                '0 2px 8px rgba(0,0,0,0.18)',
-                                        },
-                                        '& .MuiChip-icon': {
+            <Box
+                key={`timeline-${selectedYear}`}
+                className={
+                    slideDir === 'left'
+                        ? 'timeline-slide-left'
+                        : 'timeline-slide-right'
+                }
+                sx={{ overflow: 'hidden' }}
+            >
+                <Timeline position="alternate">
+                    {currentTimeline.events.map((event) => {
+                        const season = getSeason(event.date);
+                        return (
+                            <TimelineItem key={event.date.toISOString()}>
+                                <TimelineOppositeContent color="text.secondary">
+                                    <Typography fontWeight="bold"></Typography>
+                                    <Chip
+                                        size="small"
+                                        icon={season.icon}
+                                        label={event.date
+                                            .toLocaleDateString('en-GB', {
+                                                day: '2-digit',
+                                                month: '2-digit',
+                                                year: 'numeric',
+                                            })
+                                            .replace(/\//g, '-')}
+                                        sx={{
+                                            backgroundColor: season.bgColor,
                                             color: season.color,
-                                        },
-                                    }}
-                                />
-                            </TimelineOppositeContent>
-                            <TimelineSeparator>
-                                <TimelineDot />
-                                <TimelineConnector />
-                            </TimelineSeparator>
-                            <TimelineContent>
-                                <Typography
-                                    fontWeight={500}
-                                    sx={{
-                                        fontFamily:
-                                            "'Cormorant Garamond', serif",
-                                        fontSize: '1.15rem',
-                                        fontStyle: 'italic',
-                                        color: '#c2185b',
+                                            fontWeight: 600,
+                                            borderRadius: '8px',
+                                            cursor: 'default',
+                                            transition:
+                                                'transform 0.15s ease, box-shadow 0.15s ease',
+                                            '&:hover': {
+                                                transform: 'scale(1.12)',
+                                                boxShadow:
+                                                    '0 2px 8px rgba(0,0,0,0.18)',
+                                            },
+                                            '& .MuiChip-icon': {
+                                                color: season.color,
+                                            },
+                                        }}
+                                    />
+                                </TimelineOppositeContent>
+                                <TimelineSeparator>
+                                    <TimelineDot />
+                                    <TimelineConnector />
+                                </TimelineSeparator>
+                                <TimelineContent>
+                                    <Typography
+                                        fontWeight={500}
+                                        sx={{
+                                            fontFamily:
+                                                "'Cormorant Garamond', serif",
+                                            fontSize: '1.15rem',
+                                            fontStyle: 'italic',
+                                        color: 'primary.main',
                                         letterSpacing: '0.3px',
-                                        cursor: 'default',
-                                    }}
-                                >
-                                    {event.name}
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                    sx={{
-                                        fontSize: '0.82rem',
-                                        color: 'text.secondary',
-                                    }}
-                                >
-                                    {event.des}
-                                </Typography>
-                            </TimelineContent>
-                        </TimelineItem>
-                    );
-                })}
-            </Timeline>
+                                            cursor: 'default',
+                                        }}
+                                    >
+                                        {event.name}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            fontSize: '0.82rem',
+                                            color: 'text.secondary',
+                                        }}
+                                    >
+                                        {event.des}
+                                    </Typography>
+                                </TimelineContent>
+                            </TimelineItem>
+                        );
+                    })}
+                </Timeline>
+            </Box>
         </>
     );
 }

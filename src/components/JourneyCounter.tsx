@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import { HeartDivider } from './HeartDivider';
-import { colors } from '@/theme';
 
 const FIRST_DATE = new Date('2025-08-26T00:00:00');
 const TRIPS_TAKEN = 1;
@@ -72,7 +71,7 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                     fontWeight: 700,
                     fontSize: { xs: '2rem', sm: '2.8rem' },
                     lineHeight: 1,
-                    color: colors.primary,
+                    color: 'primary.main',
                     letterSpacing: '-0.02em',
                     fontVariantNumeric: 'tabular-nums',
                 }}
@@ -124,7 +123,7 @@ export function JourneyCounter() {
                     fontWeight: 400,
                     fontSize: { xs: '2.4rem', sm: '3rem' },
                     lineHeight: 1.1,
-                    color: colors.primary,
+                    color: 'primary.main',
                     letterSpacing: '0.02em',
                     textShadow: '0 1px 10px rgba(194,24,91,0.13)',
                     userSelect: 'none',
