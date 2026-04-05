@@ -117,6 +117,10 @@ export const datingTimeline: Record<number, TimelineYear> = {
                 des: 'May lúc em ra tiễn không tặng thêm anh cái thư 😮‍💨',
             },
             {
+                date: new Date('2026-02-02T12:00:00'),
+                name: 'Gặp mẹ 🌼 ',
+            },
+            {
                 date: new Date('2026-01-29T12:00:00'),
                 name: 'Valentine 💝 remote',
                 des: ['🧁 🎂, 1 macaron, 🌷', '🧋 🍪'],
@@ -138,6 +142,11 @@ export const datingTimeline: Record<number, TimelineYear> = {
                 date: new Date('2026-03-04T12:00:00'),
                 name: 'Lần đâu đi uống cafe ☕️ buổi sáng ☀️',
                 des: 'Tối trước mua nhầm cốc ube 🍠 to, rồi bị nhạt quá 😅',
+            },
+            {
+                date: new Date('2026-03-14T12:00:00'),
+                name: '⬜️ Valentine',
+                des: 'Bất ngờ xuất hiện dưới nhà anh, rồi tặng anh hộp Chocolate 🍫 💜',
             },
         ],
     },

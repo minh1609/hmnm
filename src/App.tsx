@@ -137,8 +137,8 @@ function App() {
                     {currentTimeline.events.map((event, index) => {
                         const season = getSeason(event.date);
                         return (
-                            <TimelineItem key={event.date.toISOString()}>
-                                <TimelineOppositeContent color="text.secondary" key={event.name}>
+                            <TimelineItem key={event.name}>
+                                <TimelineOppositeContent color="text.secondary">
                                     <Typography fontWeight="bold"></Typography>
                                     <Chip
                                         size="small"
