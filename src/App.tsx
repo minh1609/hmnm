@@ -53,6 +53,7 @@ function App() {
     };
 
     const handleYearSelect = (year: number) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         if (year === selectedYear) return;
         setSlideDir(year > prevYearRef.current ? 'left' : 'right');
         prevYearRef.current = year;
@@ -168,6 +169,7 @@ function App() {
                                             cursor: event.burstIcon ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             '&:hover': {
+                                                backgroundColor: season.bgColor,
                                                 transform: 'scale(1.12)',
                                                 boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
                                             },
@@ -250,12 +252,7 @@ function App() {
             </Box>
 
             {kissBurst && (
-                <IconBurst
-                    x={kissBurst.x}
-                    y={kissBurst.y}
-                    icon={kissBurst.icon}
-                    onDone={() => setKissBurst(null)}
-                />
+                <IconBurst x={kissBurst.x} y={kissBurst.y} icon={kissBurst.icon} onDone={() => setKissBurst(null)} />
             )}
         </>
     );

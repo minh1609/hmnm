@@ -38,7 +38,8 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                 background: `linear-gradient(175deg, ${c.redDeep} 0%, ${c.redDark} 100%)`,
                 border: `1px solid rgba(0,0,0,0.3)`,
                 borderTop: `3px solid ${c.gold}`,
-                minWidth: { xs: 78, sm: 110 },
+                flex: 1,
+                minWidth: 0,
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'transform 0.15s ease, box-shadow 0.15s ease',
@@ -165,9 +166,10 @@ export function JourneyCounter() {
             <Box
                 sx={{
                     display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'center',
-                    gap: { xs: 1.5, sm: 2 },
+                    flexWrap: 'nowrap',
+                    width: '100%',
+                    justifyContent: 'space-evenly',
+                    gap: { xs: 1, sm: 2 },
                     mt: 0.5,
                     cursor: 'default',
                 }}
