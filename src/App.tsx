@@ -3,8 +3,8 @@ import { useRef, useState } from 'react';
 import { datingTimeline } from '@/data';
 import { getSeason } from '@/utils';
 
-import { HeartDivider } from '@/components/HeartDivider';
 import { JourneyCounter } from '@/components/JourneyCounter';
+import { FallingObjects } from '@/components/FallingObjects';
 import { ferrariTokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
@@ -67,6 +67,7 @@ function App() {
 
     return (
         <>
+            <FallingObjects />
             <JourneyCounter />
 
             <Box

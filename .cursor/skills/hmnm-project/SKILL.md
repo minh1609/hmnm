@@ -35,33 +35,33 @@ src/
 Single source of truth. Always import from `@/theme`, never hardcode hex values.
 
 ```ts
-ferrariTokens.colors.red        // #DC0000  — primary brand
-ferrariTokens.colors.redBright  // #FF2800
-ferrariTokens.colors.redDeep    // #8B0000
-ferrariTokens.colors.redGlow    // rgba(220,0,0,0.35)
-ferrariTokens.colors.gold       // #C8A84B  — accent/trim
-ferrariTokens.colors.goldLight  // #E8D070
-ferrariTokens.colors.goldGlow   // rgba(200,168,75,0.3)
-ferrariTokens.colors.black      // #0D0D0D  — page background
-ferrariTokens.colors.surface    // #1A1A1A  — card/paper bg
-ferrariTokens.colors.panel      // #242424
-ferrariTokens.colors.border     // #2E2E2E
+ferrariTokens.colors.red; // #DC0000  — primary brand
+ferrariTokens.colors.redBright; // #FF2800
+ferrariTokens.colors.redDeep; // #8B0000
+ferrariTokens.colors.redGlow; // rgba(220,0,0,0.35)
+ferrariTokens.colors.gold; // #C8A84B  — accent/trim
+ferrariTokens.colors.goldLight; // #E8D070
+ferrariTokens.colors.goldGlow; // rgba(200,168,75,0.3)
+ferrariTokens.colors.black; // #0D0D0D  — page background
+ferrariTokens.colors.surface; // #1A1A1A  — card/paper bg
+ferrariTokens.colors.panel; // #242424
+ferrariTokens.colors.border; // #2E2E2E
 ```
 
 **Fonts** (all loaded via Google Fonts in `index.html`):
 
-| Token | Font | Use |
-|-------|------|-----|
-| `fonts.sans` | Titillium Web | Body / UI text |
+| Token           | Font             | Use                                 |
+| --------------- | ---------------- | ----------------------------------- |
+| `fonts.sans`    | Titillium Web    | Body / UI text                      |
 | `fonts.display` | Barlow Condensed | Racing display / numbers / headings |
-| `fonts.script` | Great Vibes | Romantic captions / section titles |
-| `fonts.mono` | system mono | Code |
+| `fonts.script`  | Great Vibes      | Romantic captions / section titles  |
+| `fonts.mono`    | system mono      | Code                                |
 
 ## Adding timeline events (`src/data.ts`)
 
 ```ts
 export interface TimelineEvent {
-    date: Date;   // Use new Date('YYYY-MM-DDTHH:mm:ss')
+    date: Date; // Use new Date('YYYY-MM-DDTHH:mm:ss')
     name: string; // Event title — shown in UPPERCASE via CSS
     des?: string; // Optional subtitle / description
 }
@@ -84,11 +84,11 @@ Years are derived dynamically — just add a new key to include a new year tab.
 
 ## Animations (`src/App.css`)
 
-| CSS class | Effect |
-|-----------|--------|
-| `timeline-slide-left` | Slide in from right when advancing year |
-| `timeline-slide-right` | Slide in from left when going back |
-| `year-desc-enter` | Fade + slide up for year description text |
+| CSS class              | Effect                                    |
+| ---------------------- | ----------------------------------------- |
+| `timeline-slide-left`  | Slide in from right when advancing year   |
+| `timeline-slide-right` | Slide in from left when going back        |
+| `year-desc-enter`      | Fade + slide up for year description text |
 
 Retrigger without remount: remove class → force reflow (`offsetHeight`) → re-add class.
 
@@ -96,12 +96,12 @@ Retrigger without remount: remove class → force reflow (`offsetHeight`) → re
 
 `getSeason(date)` returns `{ icon, color, bgColor }` based on month:
 
-| Months | Season | Color |
-|--------|--------|-------|
-| 3–5 | Spring | Purple `#a855f7` |
-| 6–8 | Summer | Amber `#f59e0b` |
-| 9–11 | Autumn | Orange `#ea580c` |
-| 12–2 | Winter | Blue `#3b82f6` |
+| Months | Season | Color            |
+| ------ | ------ | ---------------- |
+| 3–5    | Spring | Purple `#a855f7` |
+| 6–8    | Summer | Amber `#f59e0b`  |
+| 9–11   | Autumn | Orange `#ea580c` |
+| 12–2   | Winter | Blue `#3b82f6`   |
 
 ## Conventions
 

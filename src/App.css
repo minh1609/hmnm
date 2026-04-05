@@ -214,6 +214,23 @@
     animation: slideInFromLeft 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+@keyframes fallingDrift {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    5% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(115vh) translateX(var(--drift)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
 .ticks {
     position: relative;
     width: 100%;

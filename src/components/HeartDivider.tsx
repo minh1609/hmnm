@@ -3,13 +3,13 @@ import { Box, Typography } from '@mui/material';
 export function HeartDivider() {
     return (
         <Box
-            sx={(theme) => ({
+            sx={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1.5,
                 color: 'white',
                 opacity: 0.5,
-            })}
+            }}
         >
             <Typography
                 component="span"
