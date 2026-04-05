@@ -12,6 +12,7 @@ export const ferrariTokens = {
         red: '#DC0000',
         redBright: '#FF2800',
         redDeep: '#8B0000',
+        redDark: '#5A0000',
         redGlow: 'rgba(220, 0, 0, 0.35)',
         redGlowFaint: 'rgba(220, 0, 0, 0.12)',
 
@@ -20,7 +21,7 @@ export const ferrariTokens = {
         goldLight: '#E8D070',
         goldGlow: 'rgba(200, 168, 75, 0.3)',
 
-        // Backgrounds
+        // Backgrounds (dark fallbacks)
         black: '#0D0D0D',
         carbon: '#141414',
         surface: '#1A1A1A',
@@ -52,27 +53,27 @@ const theme = createTheme({
     palette: {
         mode: 'dark',
         primary: {
-            main: c.red,
-            light: c.redBright,
-            dark: c.redDeep,
-            contrastText: c.white,
-        },
-        secondary: {
             main: c.gold,
             light: c.goldLight,
             dark: '#A07830',
             contrastText: c.black,
         },
+        secondary: {
+            main: c.red,
+            light: c.redBright,
+            dark: c.redDeep,
+            contrastText: c.white,
+        },
         background: {
-            default: c.black,
-            paper: c.surface,
+            default: c.red,
+            paper: c.redDeep,
         },
         text: {
             primary: c.white,
-            secondary: c.muted,
-            disabled: c.subtle,
+            secondary: '#000000',
+            disabled: '#444444',
         },
-        divider: c.border,
+        divider: 'rgba(0,0,0,0.25)',
     },
 
     typography: {
@@ -126,7 +127,7 @@ const theme = createTheme({
         MuiCssBaseline: {
             styleOverrides: {
                 body: {
-                    backgroundColor: c.black,
+                    backgroundColor: c.red,
                     color: c.white,
                 },
             },

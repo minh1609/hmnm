@@ -35,14 +35,14 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                 pt: { xs: 1.5, sm: 2 },
                 pb: { xs: 1, sm: 1.5 },
                 borderRadius: '4px',
-                background: `linear-gradient(175deg, ${c.surface} 0%, ${c.black} 100%)`,
-                border: `1px solid ${c.border}`,
-                borderTop: `3px solid ${c.red}`,
+                background: `linear-gradient(175deg, ${c.redDeep} 0%, ${c.redDark} 100%)`,
+                border: `1px solid rgba(0,0,0,0.3)`,
+                borderTop: `3px solid ${c.gold}`,
                 minWidth: { xs: 78, sm: 110 },
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
                 '&::before': {
                     content: '""',
                     position: 'absolute',
@@ -50,7 +50,7 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                     left: 0,
                     right: 0,
                     height: '1px',
-                    background: `linear-gradient(90deg, transparent, ${c.redGlow}, transparent)`,
+                    background: `linear-gradient(90deg, transparent, ${c.goldGlow}, transparent)`,
                 },
                 '&::after': {
                     content: '""',
@@ -64,8 +64,8 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                 },
                 '&:hover': {
                     transform: 'translateY(-3px)',
-                    boxShadow: `0 8px 28px ${c.redGlow}`,
-                    borderTop: `3px solid ${c.redBright}`,
+                    boxShadow: `0 8px 28px ${c.goldGlow}`,
+                    borderTop: `3px solid ${c.goldLight}`,
                 },
                 ...sx,
             }}
@@ -79,12 +79,12 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                         width: 5,
                         height: 5,
                         borderRadius: '50%',
-                        backgroundColor: c.red,
+                        backgroundColor: c.goldLight,
                         animation: 'ferrariPulse 1.4s infinite',
                         '@keyframes ferrariPulse': {
                             '0%, 100%': {
                                 opacity: 1,
-                                boxShadow: `0 0 4px ${c.red}`,
+                                boxShadow: `0 0 4px ${c.gold}`,
                             },
                             '50%': { opacity: 0.25, boxShadow: 'none' },
                         },
@@ -100,7 +100,7 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                     color: c.white,
                     letterSpacing: '-0.03em',
                     fontVariantNumeric: 'tabular-nums',
-                    textShadow: `0 0 20px ${c.redGlow}`,
+                    textShadow: `0 0 20px ${c.goldGlow}`,
                 }}
             >
                 {value.toLocaleString()}
@@ -109,14 +109,14 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                 sx={{
                     width: '100%',
                     height: '1px',
-                    background: `linear-gradient(90deg, transparent, ${c.redDeep}66, transparent)`,
+                    background: `linear-gradient(90deg, transparent, ${c.goldGlow}, transparent)`,
                     my: 0.6,
                 }}
             />
             <Typography
                 variant="caption"
                 sx={{
-                    color: c.gold,
+                    color: c.white,
                     textAlign: 'center',
                     fontSize: { xs: '0.58rem', sm: '0.65rem' },
                 }}
@@ -148,17 +148,18 @@ export function JourneyCounter() {
         >
             <Typography
                 sx={(theme) => ({
-                    fontFamily: ferrariTokens.fonts.script,
-                    fontWeight: 400,
-                    fontSize: { xs: '2.4rem', sm: '3rem' },
-                    lineHeight: 1.1,
+                    fontFamily: ferrariTokens.fonts.display,
+                    fontWeight: 800,
+                    fontSize: { xs: '2rem', sm: '2.6rem' },
+                    lineHeight: 1,
                     color: theme.palette.primary.main,
-                    letterSpacing: '0.02em',
-                    textShadow: `0 1px 12px ${theme.palette.primary.dark}44`,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    textShadow: `0 0 24px ${theme.palette.primary.dark}88, 0 2px 4px rgba(0,0,0,0.6)`,
                     userSelect: 'none',
                 })}
             >
-                The Journey So Far ...
+                The Journey So Far
             </Typography>
 
             <Box

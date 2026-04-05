@@ -19,22 +19,24 @@ import type { SxProps, Theme } from '@mui/material';
 
 const years = Object.keys(datingTimeline).map(Number);
 
-const yearSx = (active: boolean): SxProps<Theme> => (theme) => ({
-    fontFamily: theme.typography.h2.fontFamily,
-    fontWeight: active ? 900 : 600,
-    fontSize: active ? '1.9rem' : '1.25rem',
-    color: active ? 'primary.main' : 'text.secondary',
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.06em',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    userSelect: 'none',
-    borderBottom: active
-        ? `2px solid ${theme.palette.primary.main}`
-        : '2px solid transparent',
-    pb: '2px',
-    '&:hover': { color: 'primary.main', opacity: 1 },
-});
+const yearSx =
+    (active: boolean): SxProps<Theme> =>
+    (theme) => ({
+        fontFamily: theme.typography.h2.fontFamily,
+        fontWeight: active ? 900 : 600,
+        fontSize: active ? '1.9rem' : '1.25rem',
+        color: active ? 'primary.main' : 'text.secondary',
+        textTransform: 'uppercase' as const,
+        letterSpacing: '0.06em',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        userSelect: 'none',
+        borderBottom: active
+            ? `2px solid ${theme.palette.primary.main}`
+            : '2px solid transparent',
+        pb: '2px',
+        '&:hover': { color: 'primary.main', opacity: 1 },
+    });
 
 function App() {
     const [selectedYear, setSelectedYear] = useState(years[0]);
@@ -103,14 +105,15 @@ function App() {
                 >
                     <HeartDivider />
                     <Typography
-                        sx={(theme) => ({
-                            fontFamily: ferrariTokens.fonts.script,
-                            fontWeight: 400,
-                            fontSize: '2.4rem',
-                            lineHeight: 1.15,
-                            letterSpacing: '0.03em',
-                            color: 'primary.main',
-                            textShadow: `0 1px 12px ${theme.palette.primary.dark}55`,
+                        sx={() => ({
+                            fontFamily: ferrariTokens.fonts.display,
+                            fontWeight: 700,
+                            fontSize: '1.6rem',
+                            lineHeight: 1.1,
+                            letterSpacing: '0.14em',
+                            textTransform: 'uppercase',
+                            color: '#ffffff',
+                            textShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}, 0 2px 4px rgba(0,0,0,0.5)`,
                             userSelect: 'none',
                         })}
                     >
@@ -197,13 +200,7 @@ function App() {
                                     >
                                         {event.name}
                                     </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            fontSize: '0.82rem',
-                                            color: 'text.secondary',
-                                        }}
-                                    >
+                                    <Typography sx={{ fontWeight: 600 }}>
                                         {event.des}
                                     </Typography>
                                 </TimelineContent>
