@@ -11,7 +11,7 @@ export interface TimelineYear {
 
 export const datingTimeline: Record<number, TimelineYear> = {
     2025: {
-        description: 'Beginning',
+        description: 'A new Beginning',
         events: [
             {
                 date: new Date('2025-08-26T12:00:00'),

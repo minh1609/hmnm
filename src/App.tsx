@@ -1,7 +1,11 @@
 import './App.css';
 import { useState } from 'react';
+import { colors } from '@/theme';
 import { datingTimeline } from '@/data';
 import { getSeason } from '@/utils';
+
+import { HeartDivider } from '@/components/HeartDivider';
+import { JourneyCounter } from '@/components/JourneyCounter';
 
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -14,6 +18,24 @@ import { Box, Chip, Typography } from '@mui/material';
 
 const years = Object.keys(datingTimeline).map(Number);
 
+const yearSx = (active: boolean) => ({
+    fontFamily: "'Cormorant Garamond', serif",
+    fontStyle: 'italic',
+    fontWeight: active ? 600 : 400,
+    fontSize: active ? '1.9rem' : '1.25rem',
+    color: active ? colors.primary : '#c2185b',
+    opacity: active ? 1 : 0.45,
+    cursor: 'pointer',
+    letterSpacing: '0.02em',
+    transition: 'all 0.2s ease',
+    userSelect: 'none',
+    borderBottom: active
+        ? `1.5px solid ${colors.primary}`
+        : '1.5px solid transparent',
+    pb: '2px',
+    '&:hover': { opacity: 1, color: colors.primary },
+});
+
 function App() {
     const [selectedYear, setSelectedYear] = useState(years[0]);
 
@@ -21,6 +43,8 @@ function App() {
 
     return (
         <>
+            <JourneyCounter />
+
             <Box
                 sx={{
                     display: 'flex',
@@ -34,31 +58,7 @@ function App() {
                         <Box
                             key={year}
                             onClick={() => setSelectedYear(year)}
-                            sx={{
-                                fontFamily: "'Playfair Display', serif",
-                                fontStyle: 'italic',
-                                fontWeight: year === selectedYear ? 600 : 400,
-                                fontSize:
-                                    year === selectedYear ? '1.8rem' : '1.2rem',
-                                color:
-                                    year === selectedYear
-                                        ? '#b5174f'
-                                        : '#c2185b',
-                                opacity: year === selectedYear ? 1 : 0.45,
-                                cursor: 'pointer',
-                                letterSpacing: '0.02em',
-                                transition: 'all 0.2s ease',
-                                userSelect: 'none',
-                                borderBottom:
-                                    year === selectedYear
-                                        ? '1.5px solid #b5174f'
-                                        : '1.5px solid transparent',
-                                pb: '2px',
-                                '&:hover': {
-                                    opacity: 1,
-                                    color: '#b5174f',
-                                },
-                            }}
+                            sx={yearSx(year === selectedYear)}
                         >
                             {year}
                         </Box>
@@ -77,46 +77,15 @@ function App() {
                         mb: 0.5,
                     }}
                 >
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1.5,
-                            color: '#c2185b',
-                            opacity: 0.45,
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                width: 48,
-                                height: '1px',
-                                background:
-                                    'linear-gradient(to right, transparent, #c2185b)',
-                            }}
-                        />
-                        <Typography
-                            component="span"
-                            sx={{ fontSize: '0.6rem', letterSpacing: '3px' }}
-                        >
-                            ♥
-                        </Typography>
-                        <Box
-                            sx={{
-                                width: 48,
-                                height: '1px',
-                                background:
-                                    'linear-gradient(to left, transparent, #c2185b)',
-                            }}
-                        />
-                    </Box>
+                    <HeartDivider />
                     <Typography
                         sx={{
-                            fontFamily: "'Playfair Display', serif",
-                            fontStyle: 'italic',
-                            fontWeight: 600,
-                            fontSize: '2rem',
-                            letterSpacing: '0.04em',
-                            color: '#b5174f',
+                            fontFamily: "'Great Vibes', cursive",
+                            fontWeight: 400,
+                            fontSize: '2.4rem',
+                            lineHeight: 1.15,
+                            letterSpacing: '0.03em',
+                            color: colors.primary,
                             textShadow: '0 1px 8px rgba(194,24,91,0.10)',
                             userSelect: 'none',
                         }}
@@ -168,10 +137,11 @@ function App() {
                             </TimelineSeparator>
                             <TimelineContent>
                                 <Typography
-                                    fontWeight={600}
+                                    fontWeight={500}
                                     sx={{
-                                        fontFamily: "'Playfair Display', serif",
-                                        fontSize: '1.05rem',
+                                        fontFamily:
+                                            "'Cormorant Garamond', serif",
+                                        fontSize: '1.15rem',
                                         fontStyle: 'italic',
                                         color: '#c2185b',
                                         letterSpacing: '0.3px',
