@@ -25,7 +25,7 @@ const yearSx =
         fontFamily: theme.typography.h2.fontFamily,
         fontWeight: active ? 900 : 600,
         fontSize: active ? '1.9rem' : '1.25rem',
-        color: active ? 'primary.main' : 'text.secondary',
+        color: active ? 'white' : 'white',
         textTransform: 'uppercase' as const,
         letterSpacing: '0.06em',
         cursor: 'pointer',
@@ -194,7 +194,7 @@ function App() {
                                             fontSize: '1.05rem',
                                             textTransform: 'uppercase',
                                             letterSpacing: '0.06em',
-                                            color: 'primary.main',
+                                            color: 'white',
                                             cursor: 'default',
                                         })}
                                     >

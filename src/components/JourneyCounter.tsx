@@ -152,14 +152,14 @@ export function JourneyCounter() {
                     fontWeight: 800,
                     fontSize: { xs: '2rem', sm: '2.6rem' },
                     lineHeight: 1,
-                    color: theme.palette.primary.main,
+                    color: 'white',
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
                     textShadow: `0 0 24px ${theme.palette.primary.dark}88, 0 2px 4px rgba(0,0,0,0.6)`,
                     userSelect: 'none',
                 })}
             >
-                The Journey So Far
+                The Journey So Far ...
             </Typography>
 
             <Box
