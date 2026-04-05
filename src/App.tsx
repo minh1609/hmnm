@@ -103,7 +103,6 @@ function App() {
                         mb: 0.5,
                     }}
                 >
-                    <HeartDivider />
                     <Typography
                         sx={() => ({
                             fontFamily: ferrariTokens.fonts.display,
@@ -117,7 +116,7 @@ function App() {
                             userSelect: 'none',
                         })}
                     >
-                        {datingTimeline[selectedYear].description}
+                        🏁 {datingTimeline[selectedYear].description}
                     </Typography>
                 </Box>
             )}
@@ -181,7 +180,6 @@ function App() {
                                         sx={{
                                             backgroundColor:
                                                 ferrariTokens.colors.gold,
-                                            opacity: 0.35,
                                         }}
                                     />
                                 </TimelineSeparator>
