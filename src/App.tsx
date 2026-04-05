@@ -5,6 +5,7 @@ import { getSeason } from '@/utils';
 
 import { HeartDivider } from '@/components/HeartDivider';
 import { JourneyCounter } from '@/components/JourneyCounter';
+import { ferrariTokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -19,21 +20,20 @@ import type { SxProps, Theme } from '@mui/material';
 const years = Object.keys(datingTimeline).map(Number);
 
 const yearSx = (active: boolean): SxProps<Theme> => (theme) => ({
-    fontFamily: "'Cormorant Garamond', serif",
-    fontStyle: 'italic',
-    fontWeight: active ? 600 : 400,
+    fontFamily: theme.typography.h2.fontFamily,
+    fontWeight: active ? 900 : 600,
     fontSize: active ? '1.9rem' : '1.25rem',
-    color: 'primary.main',
-    opacity: active ? 1 : 0.6,
+    color: active ? 'primary.main' : 'text.secondary',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.06em',
     cursor: 'pointer',
-    letterSpacing: '0.02em',
     transition: 'all 0.2s ease',
     userSelect: 'none',
     borderBottom: active
-        ? `1.5px solid ${theme.palette.primary.main}`
-        : '1.5px solid transparent',
+        ? `2px solid ${theme.palette.primary.main}`
+        : '2px solid transparent',
     pb: '2px',
-    '&:hover': { opacity: 1, color: 'primary.main' },
+    '&:hover': { color: 'primary.main', opacity: 1 },
 });
 
 function App() {
@@ -103,16 +103,16 @@ function App() {
                 >
                     <HeartDivider />
                     <Typography
-                        sx={{
-                            fontFamily: "'Great Vibes', cursive",
+                        sx={(theme) => ({
+                            fontFamily: ferrariTokens.fonts.script,
                             fontWeight: 400,
                             fontSize: '2.4rem',
                             lineHeight: 1.15,
                             letterSpacing: '0.03em',
                             color: 'primary.main',
-                            textShadow: '0 1px 8px rgba(194,24,91,0.10)',
+                            textShadow: `0 1px 12px ${theme.palette.primary.dark}55`,
                             userSelect: 'none',
-                        }}
+                        })}
                     >
                         {datingTimeline[selectedYear].description}
                     </Typography>
@@ -165,21 +165,35 @@ function App() {
                                     />
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
-                                    <TimelineDot />
-                                    <TimelineConnector />
+                                    <TimelineDot
+                                        sx={{
+                                            backgroundColor:
+                                                ferrariTokens.colors.gold,
+                                            borderColor:
+                                                ferrariTokens.colors.goldLight,
+                                            boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
+                                        }}
+                                    />
+                                    <TimelineConnector
+                                        sx={{
+                                            backgroundColor:
+                                                ferrariTokens.colors.gold,
+                                            opacity: 0.35,
+                                        }}
+                                    />
                                 </TimelineSeparator>
                                 <TimelineContent>
                                     <Typography
-                                        fontWeight={500}
-                                        sx={{
+                                        fontWeight={700}
+                                        sx={(theme) => ({
                                             fontFamily:
-                                                "'Cormorant Garamond', serif",
-                                            fontSize: '1.15rem',
-                                            fontStyle: 'italic',
-                                        color: 'primary.main',
-                                        letterSpacing: '0.3px',
+                                                theme.typography.h3.fontFamily,
+                                            fontSize: '1.05rem',
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '0.06em',
+                                            color: 'primary.main',
                                             cursor: 'default',
-                                        }}
+                                        })}
                                     >
                                         {event.name}
                                     </Typography>

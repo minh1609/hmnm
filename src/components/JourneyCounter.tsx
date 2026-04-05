@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
-import { HeartDivider } from './HeartDivider';
+import { ferrariTokens } from '@/theme';
 
 const FIRST_DATE = new Date('2025-08-26T00:00:00');
 const TRIPS_TAKEN = 1;
@@ -23,25 +23,49 @@ interface StatCardProps {
 }
 
 function StatCard({ value, label, live, sx }: StatCardProps) {
+    const { colors: c, fonts: f } = ferrariTokens;
     return (
         <Box
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 0.5,
-                px: { xs: 2, sm: 4 },
-                py: { xs: 2, sm: 2.5 },
-                borderRadius: '16px',
-                background:
-                    'linear-gradient(135deg, rgba(194,24,91,0.06) 0%, rgba(181,23,79,0.03) 100%)',
-                border: '1px solid rgba(194,24,91,0.14)',
-                minWidth: { xs: 68, sm: 100 },
+                gap: 0,
+                px: { xs: 2.5, sm: 3.5 },
+                pt: { xs: 1.5, sm: 2 },
+                pb: { xs: 1, sm: 1.5 },
+                borderRadius: '4px',
+                background: `linear-gradient(175deg, ${c.surface} 0%, ${c.black} 100%)`,
+                border: `1px solid ${c.border}`,
+                borderTop: `3px solid ${c.red}`,
+                minWidth: { xs: 78, sm: 110 },
                 position: 'relative',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                overflow: 'hidden',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+                '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '1px',
+                    background: `linear-gradient(90deg, transparent, ${c.redGlow}, transparent)`,
+                },
+                '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '2px',
+                    background: `linear-gradient(90deg, transparent 0%, #a07830 30%, ${c.goldLight} 50%, #a07830 70%, transparent 100%)`,
+                    opacity: 0.6,
+                },
                 '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 6px 20px rgba(194,24,91,0.12)',
+                    transform: 'translateY(-3px)',
+                    boxShadow: `0 8px 28px ${c.redGlow}`,
+                    borderTop: `3px solid ${c.redBright}`,
                 },
                 ...sx,
             }}
@@ -50,44 +74,51 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                 <Box
                     sx={{
                         position: 'absolute',
-                        top: 8,
-                        right: 10,
-                        width: 6,
-                        height: 6,
+                        top: 7,
+                        right: 8,
+                        width: 5,
+                        height: 5,
                         borderRadius: '50%',
-                        backgroundColor: '#c2185b',
-                        opacity: 0.7,
-                        animation: 'pulse 2s infinite',
-                        '@keyframes pulse': {
-                            '0%, 100%': { opacity: 0.7, transform: 'scale(1)' },
-                            '50%': { opacity: 0.3, transform: 'scale(0.6)' },
+                        backgroundColor: c.red,
+                        animation: 'ferrariPulse 1.4s infinite',
+                        '@keyframes ferrariPulse': {
+                            '0%, 100%': {
+                                opacity: 1,
+                                boxShadow: `0 0 4px ${c.red}`,
+                            },
+                            '50%': { opacity: 0.25, boxShadow: 'none' },
                         },
                     }}
                 />
             )}
             <Typography
                 sx={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontWeight: 700,
-                    fontSize: { xs: '2rem', sm: '2.8rem' },
+                    fontFamily: f.display,
+                    fontWeight: 900,
+                    fontSize: { xs: '2.2rem', sm: '3rem' },
                     lineHeight: 1,
-                    color: 'primary.main',
-                    letterSpacing: '-0.02em',
+                    color: c.white,
+                    letterSpacing: '-0.03em',
                     fontVariantNumeric: 'tabular-nums',
+                    textShadow: `0 0 20px ${c.redGlow}`,
                 }}
             >
                 {value.toLocaleString()}
             </Typography>
-            <Typography
+            <Box
                 sx={{
-                    fontFamily: "'Nunito', sans-serif",
-                    fontSize: { xs: '0.65rem', sm: '0.72rem' },
-                    fontWeight: 600,
-                    color: '#c2185b',
-                    opacity: 0.7,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
+                    width: '100%',
+                    height: '1px',
+                    background: `linear-gradient(90deg, transparent, ${c.redDeep}66, transparent)`,
+                    my: 0.6,
+                }}
+            />
+            <Typography
+                variant="caption"
+                sx={{
+                    color: c.gold,
                     textAlign: 'center',
+                    fontSize: { xs: '0.58rem', sm: '0.65rem' },
                 }}
             >
                 {label}
@@ -115,19 +146,17 @@ export function JourneyCounter() {
                 py: 3,
             }}
         >
-            <HeartDivider />
-
             <Typography
-                sx={{
-                    fontFamily: "'Great Vibes', cursive",
+                sx={(theme) => ({
+                    fontFamily: ferrariTokens.fonts.script,
                     fontWeight: 400,
                     fontSize: { xs: '2.4rem', sm: '3rem' },
                     lineHeight: 1.1,
-                    color: 'primary.main',
+                    color: theme.palette.primary.main,
                     letterSpacing: '0.02em',
-                    textShadow: '0 1px 10px rgba(194,24,91,0.13)',
+                    textShadow: `0 1px 12px ${theme.palette.primary.dark}44`,
                     userSelect: 'none',
-                }}
+                })}
             >
                 The Journey So Far ...
             </Typography>

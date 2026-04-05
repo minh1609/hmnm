@@ -1,27 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Nunito:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Great+Vibes&display=swap');
+/*
+ * Ferrari F1 CSS custom properties — mirrors ferrariTokens in theme.ts.
+ * Use these for non-MUI contexts: plain CSS rules, keyframe animations,
+ * pseudo-elements, and global resets.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400;1,600&family=Barlow+Condensed:wght@700;900&family=Great+Vibes&display=swap');
 
 :root {
-    --text: #6b6375;
-    --text-h: #08060d;
-    --bg: #fff;
-    --border: #e5e4e7;
-    --code-bg: #f4f3ec;
-    --accent: #aa3bff;
-    --accent-bg: rgba(170, 59, 255, 0.1);
-    --accent-border: rgba(170, 59, 255, 0.5);
-    --social-bg: rgba(244, 243, 236, 0.5);
-    --shadow:
-        rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    /* Brand */
+    --ferrari-red: #dc0000;
+    --ferrari-red-bright: #ff2800;
+    --ferrari-red-deep: #8b0000;
+    --ferrari-red-glow: rgba(220, 0, 0, 0.35);
+    --ferrari-red-glow-faint: rgba(220, 0, 0, 0.12);
 
-    --sans: 'Nunito', system-ui, 'Segoe UI', sans-serif;
-    --heading: 'Playfair Display', Georgia, serif;
+    /* Accent / trim */
+    --ferrari-gold: #c8a84b;
+    --ferrari-gold-light: #e8d070;
+    --ferrari-gold-glow: rgba(200, 168, 75, 0.3);
+
+    /* Backgrounds */
+    --ferrari-black: #0d0d0d;
+    --ferrari-carbon: #141414;
+    --ferrari-surface: #1a1a1a;
+    --ferrari-panel: #242424;
+
+    /* Borders */
+    --ferrari-border: #2e2e2e;
+    --ferrari-border-subtle: #1e1e1e;
+
+    /* Text */
+    --ferrari-white: #ffffff;
+    --ferrari-muted: #999999;
+    --ferrari-subtle: #555555;
+
+    /* Semantic aliases */
+    --bg: var(--ferrari-black);
+    --surface: var(--ferrari-surface);
+    --border: var(--ferrari-border);
+    --text: var(--ferrari-muted);
+    --text-h: var(--ferrari-white);
+    --accent: var(--ferrari-red);
+    --accent-bg: var(--ferrari-red-glow-faint);
+    --accent-border: var(--ferrari-red-glow);
+    --gold: var(--ferrari-gold);
+    --shadow:
+        rgba(0, 0, 0, 0.65) 0 10px 20px -4px,
+        rgba(220, 0, 0, 0.1) 0 4px 8px -2px;
+
+    /* Fonts */
+    --sans: 'Titillium Web', 'Arial Narrow', Arial, sans-serif;
+    --display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
     --script: 'Great Vibes', cursive;
-    --editorial: 'Cormorant Garamond', Georgia, serif;
     --mono: ui-monospace, Consolas, monospace;
 
-    font: 18px/145% var(--sans);
-    letter-spacing: 0.18px;
-    color-scheme: light dark;
+    font: 17px/150% var(--sans);
+    letter-spacing: 0.02px;
+    color-scheme: dark;
     color: var(--text);
     background: var(--bg);
     font-synthesis: none;
@@ -30,28 +65,7 @@
     -moz-osx-font-smoothing: grayscale;
 
     @media (max-width: 1024px) {
-        font-size: 16px;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --text: #9ca3af;
-        --text-h: #f3f4f6;
-        --bg: #16171d;
-        --border: #2e303a;
-        --code-bg: #1f2028;
-        --accent: #c084fc;
-        --accent-bg: rgba(192, 132, 252, 0.15);
-        --accent-border: rgba(192, 132, 252, 0.5);
-        --social-bg: rgba(47, 48, 58, 0.5);
-        --shadow:
-            rgba(0, 0, 0, 0.4) 0 10px 15px -3px,
-            rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-    }
-
-    #social .button-icon {
-        filter: invert(1) brightness(2);
+        font-size: 15px;
     }
 }
 
@@ -72,6 +86,7 @@ body {
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    background: var(--bg);
 
     &::-webkit-scrollbar {
         display: none;
@@ -80,29 +95,31 @@ body {
 
 h1,
 h2 {
-    font-family: var(--heading);
-    font-weight: 500;
+    font-family: var(--display);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
     color: var(--text-h);
 }
 
 h1 {
     font-size: 56px;
-    letter-spacing: -1.68px;
     margin: 32px 0;
     @media (max-width: 1024px) {
         font-size: 36px;
         margin: 20px 0;
     }
 }
+
 h2 {
     font-size: 24px;
     line-height: 118%;
-    letter-spacing: -0.24px;
     margin: 0 0 8px;
     @media (max-width: 1024px) {
         font-size: 20px;
     }
 }
+
 p {
     margin: 0;
 }
@@ -119,5 +136,6 @@ code {
     font-size: 15px;
     line-height: 135%;
     padding: 4px 8px;
-    background: var(--code-bg);
+    background: var(--surface);
+    border: 1px solid var(--border);
 }

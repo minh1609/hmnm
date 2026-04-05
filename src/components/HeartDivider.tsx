@@ -3,21 +3,20 @@ import { Box, Typography } from '@mui/material';
 export function HeartDivider() {
     return (
         <Box
-            sx={{
+            sx={(theme) => ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1.5,
-                color: 'primary.main',
-                opacity: 0.45,
-            }}
+                color: theme.palette.primary.main,
+                opacity: 0.5,
+            })}
         >
             <Box
-                sx={{
+                sx={(theme) => ({
                     width: 48,
                     height: '1px',
-                    background:
-                        'linear-gradient(to right, transparent, #c2185b)',
-                }}
+                    background: `linear-gradient(to right, transparent, ${theme.palette.primary.main})`,
+                })}
             />
             <Typography
                 component="span"
@@ -26,12 +25,11 @@ export function HeartDivider() {
                 ♥
             </Typography>
             <Box
-                sx={{
+                sx={(theme) => ({
                     width: 48,
                     height: '1px',
-                    background:
-                        'linear-gradient(to left, transparent, #c2185b)',
-                }}
+                    background: `linear-gradient(to left, transparent, ${theme.palette.primary.main})`,
+                })}
             />
         </Box>
     );

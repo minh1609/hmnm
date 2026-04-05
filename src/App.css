@@ -164,7 +164,7 @@
 @keyframes slideInFromRight {
     from {
         opacity: 0;
-        transform: translateX(64px);
+        transform: translateX(200px);
     }
     to {
         opacity: 1;
@@ -175,7 +175,7 @@
 @keyframes slideInFromLeft {
     from {
         opacity: 0;
-        transform: translateX(-64px);
+        transform: translateX(-200px);
     }
     to {
         opacity: 1;
@@ -184,13 +184,21 @@
 }
 
 @keyframes fadeSlideDown {
-    from {
+    0% {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-30px); /* start above */
     }
-    to {
+    60% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(
+            10px
+        ); /* overshoot slightly below final position */
+    }
+    80% {
+        transform: translateY(-5px); /* bounce back up */
+    }
+    100% {
+        transform: translateY(0); /* settle at final position */
     }
 }
 
@@ -199,11 +207,11 @@
 }
 
 .timeline-slide-left {
-    animation: slideInFromRight 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: slideInFromRight 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .timeline-slide-right {
-    animation: slideInFromLeft 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: slideInFromLeft 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .ticks {
