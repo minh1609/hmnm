@@ -5,6 +5,7 @@ import { getSeason } from '@/utils';
 
 import { JourneyCounter } from '@/components/JourneyCounter';
 import { FallingObjects } from '@/components/FallingObjects';
+import { IconBurst } from '@/components/IconBurst';
 import FerrariTooltip from '@/components/FerrariTooltip';
 import { ferrariTokens } from '@/theme';
 
@@ -42,6 +43,14 @@ function App() {
     const [selectedYear, setSelectedYear] = useState(years[0]);
     const [slideDir, setSlideDir] = useState<'left' | 'right'>('left');
     const prevYearRef = useRef(years[0]);
+
+    const [kissBurst, setKissBurst] = useState<{ x: number; y: number; icon: string } | null>(null);
+
+    const handleChipClick = (e: React.MouseEvent, burstIcon?: string) => {
+        if (!burstIcon) return;
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        setKissBurst({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, icon: burstIcon });
+    };
 
     const handleYearSelect = (year: number) => {
         if (year === selectedYear) return;
@@ -150,12 +159,13 @@ function App() {
                                                 year: 'numeric',
                                             })
                                             .replace(/\//g, '-')}
+                                        onClick={(e) => handleChipClick(e, event.burstIcon)}
                                         sx={{
                                             backgroundColor: season.bgColor,
                                             color: season.color,
                                             fontWeight: 600,
                                             borderRadius: '8px',
-                                            cursor: 'default',
+                                            cursor: event.burstIcon ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             '&:hover': {
                                                 transform: 'scale(1.12)',
@@ -238,6 +248,15 @@ function App() {
                     })}
                 </Timeline>
             </Box>
+
+            {kissBurst && (
+                <IconBurst
+                    x={kissBurst.x}
+                    y={kissBurst.y}
+                    icon={kissBurst.icon}
+                    onDone={() => setKissBurst(null)}
+                />
+            )}
         </>
     );
 }

@@ -2,6 +2,7 @@ export interface TimelineEvent {
     date: Date;
     name: string;
     des?: string | string[];
+    burstIcon?: string;
 }
 
 export interface TimelineYear {
@@ -88,7 +89,8 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2025-12-24T12:00:00'),
                 name: 'Chirstmas 🎄',
-                des: ['Bánh cuốn', 'First 💋'],
+                des: ['Bánh cuốn', 'First 💋', '1 bị quà 🎁 đem về '],
+                burstIcon: '💋',
             },
             {
                 date: new Date('2025-12-27T12:00:00'),
@@ -105,6 +107,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
                 date: new Date('2026-01-01T12:00:00'),
                 name: 'New Year',
                 des: 'Xem Fireworks 🎇 ở Downtown với Quinnie, 💋',
+                burstIcon: '💥',
             },
             {
                 date: new Date('2026-01-02T12:00:00'),
@@ -124,6 +127,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
                 date: new Date('2026-01-29T12:00:00'),
                 name: 'Valentine 💝 remote',
                 des: ['🧁 🎂, 1 macaron, 🌷', '🧋 🍪'],
+                burstIcon: '🧧',
             },
             {
                 date: new Date('2026-02-17T12:00:00'),
@@ -132,11 +136,13 @@ export const datingTimeline: Record<number, TimelineYear> = {
                     'Mừng tuổi anh $100 luôn, nhìu nhất từ trước tới giờ 🤑',
                     'Anh giấu em đồng xu 🪙 năm 2000 trong phòng trước lúc anh bay, ngạc nhiên hông?',
                 ],
+                burstIcon: '🧧',
             },
             {
                 date: new Date('2026-02-28T12:00:00'),
                 name: 'Anh quay lại 🇨🇦',
                 des: 'Mang cho em bạn Twinkle Twinkle',
+                burstIcon: '🍁',
             },
             {
                 date: new Date('2026-03-04T12:00:00'),
@@ -145,8 +151,9 @@ export const datingTimeline: Record<number, TimelineYear> = {
             },
             {
                 date: new Date('2026-03-14T12:00:00'),
-                name: '⬜️ Valentine',
+                name: '🤍 Valentine ',
                 des: 'Bất ngờ xuất hiện dưới nhà anh, rồi tặng anh hộp Chocolate 🍫 💜',
+                burstIcon: '🤍',
             },
         ],
     },
