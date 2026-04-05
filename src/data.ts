@@ -31,7 +31,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
     },
 
     2026: {
-        description: '',
+        description: 'Breaking and Returning.',
         events: [
             {
                 date: new Date('2026-01-01T12:00:00'),
