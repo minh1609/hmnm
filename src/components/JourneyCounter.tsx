@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
 import { HeartDivider } from './HeartDivider';
 import { colors } from '@/theme';
 
@@ -19,9 +20,10 @@ interface StatCardProps {
     value: number;
     label: string;
     live?: boolean;
+    sx?: SxProps<Theme>;
 }
 
-function StatCard({ value, label, live }: StatCardProps) {
+function StatCard({ value, label, live, sx }: StatCardProps) {
     return (
         <Box
             sx={{
@@ -42,6 +44,7 @@ function StatCard({ value, label, live }: StatCardProps) {
                     transform: 'translateY(-2px)',
                     boxShadow: '0 6px 20px rgba(194,24,91,0.12)',
                 },
+                ...sx,
             }}
         >
             {live && (
@@ -137,6 +140,7 @@ export function JourneyCounter() {
                     justifyContent: 'center',
                     gap: { xs: 1.5, sm: 2 },
                     mt: 0.5,
+                    cursor: 'default',
                 }}
             >
                 <StatCard value={values.days} label="Days Shared" />
@@ -146,7 +150,11 @@ export function JourneyCounter() {
                     label="Minutes Past"
                     live
                 />
-                <StatCard value={TRIPS_TAKEN} label="Trips Taken" />
+                <StatCard
+                    sx={{ cursor: 'pointer' }}
+                    value={TRIPS_TAKEN}
+                    label="Trips Taken"
+                />
             </Box>
         </Box>
     );
