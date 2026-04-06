@@ -1,16 +1,4 @@
-export interface TripDestination {
-    name: string;
-    googleMapLink?: string;
-}
-
-export interface Trip {
-    name: string;
-    flag: string;
-    startDate: Date;
-    endDate: Date;
-    highlights: string[];
-    destinations: TripDestination[];
-}
+import type { Trip, TimelineYear } from '@/types';
 
 export const trips: Trip[] = [
     {
@@ -33,18 +21,6 @@ export const trips: Trip[] = [
         ],
     },
 ];
-
-export interface TimelineEvent {
-    date: Date;
-    name: string;
-    des?: string | string[];
-    burstIcon?: string;
-}
-
-export interface TimelineYear {
-    description: string;
-    events: TimelineEvent[];
-}
 
 export const datingTimeline: Record<number, TimelineYear> = {
     2025: {
@@ -86,7 +62,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2025-10-30T12:00:00'),
                 name: 'Halloween 🎃',
-                des: 'Ăn Mochi Donut 🍩 ở Sherway, thấy custom Halloween của em',
+                des: 'Ăn Mochi Donut 🍩 ở Sherway, thấy custome Halloween của em',
             },
             {
                 date: new Date('2025-11-01T12:00:00'),
