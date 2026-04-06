@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
+import { iconBurst } from '@/config';
 
 interface Props {
     x: number;
@@ -8,21 +9,19 @@ interface Props {
     onDone: () => void;
 }
 
-const COUNT = 18;
-
 export function IconBurst({ x, y, icon, onDone }: Props) {
     useEffect(() => {
-        const timer = setTimeout(onDone, 1500);
+        const timer = setTimeout(onDone, iconBurst.durationMs);
         return () => clearTimeout(timer);
     }, [onDone]);
 
-    const particles = Array.from({ length: COUNT }, (_, i) => {
-        const angle = (i / COUNT) * 2 * Math.PI + (Math.random() - 0.5) * 0.6;
-        const distance = 55 + Math.random() * 90;
+    const particles = Array.from({ length: iconBurst.count }, (_, i) => {
+        const angle = (i / iconBurst.count) * 2 * Math.PI + (Math.random() - 0.5) * iconBurst.angleJitter;
+        const distance = iconBurst.distanceMin + Math.random() * iconBurst.distanceExtra;
         const bx = Math.cos(angle) * distance;
         const by = Math.sin(angle) * distance;
-        const delay = Math.random() * 0.18;
-        const size = 1.1 + Math.random() * 1.0;
+        const delay = Math.random() * iconBurst.maxDelay;
+        const size = iconBurst.sizeBase + Math.random() * iconBurst.sizeExtra;
 
         return (
             <span

@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import { ferrariTokens } from '@/theme';
+import { trips } from '@/data';
 
 const FIRST_DATE = new Date('2025-08-26T00:00:00');
-const TRIPS_TAKEN = 1;
+const TRIPS_TAKEN = trips.length;
 
 function getCounterValues() {
     const now = new Date();

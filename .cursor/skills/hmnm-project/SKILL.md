@@ -13,11 +13,19 @@ A personal React app that tracks and displays a couple's relationship milestones
 src/
 ├── App.tsx              # Router: wraps Routes with page transition animation class
 ├── main.tsx             # Entry: BrowserRouter + ThemeProvider + CssBaseline
-├── data.ts              # All timeline + trips data (source of truth)
+├── config.ts            # Central config: activeProfile, fallingObjects, iconBurst settings
+├── types.ts             # Shared TypeScript interfaces (ImageFile, Icon, Trip, TimelineEvent, …)
 ├── theme.ts             # ferrariTokens + MUI theme
 ├── utils.tsx            # getSeason() → SeasonInfo (icon + colors)
 ├── App.css              # Slide/enter/fade animations (CSS classes)
 ├── index.css            # Global reset + CSS custom properties + fallingDrift keyframe
+├── data/
+│   ├── index.ts         # Re-exports from the active profile (driven by config.activeProfile)
+│   └── mindy/           # Profile folder — currently the only / active profile
+│       ├── index.ts     # Barrel: re-exports datingTimeline, trips, IMAGE_FILES, ICONS
+│       ├── events.ts    # datingTimeline data (Record<number, TimelineYear>)
+│       ├── trips.ts     # trips array (Trip[])
+│       └── objects.ts   # IMAGE_FILES (ImageFile[]) + ICONS (Icon[])
 ├── pages/
 │   ├── HomePage.tsx     # Main timeline page: year selector, MUI Timeline, swipe nav
 │   └── TripsPage.tsx    # Trips page: trip cards with destinations + highlights
@@ -110,30 +118,77 @@ ferrariTokens.colors.subtle; // #555555
 | `fonts.script`  | Great Vibes      | Romantic captions / section titles  |
 | `fonts.mono`    | system mono      | Code                                |
 
-## Data model (`src/data.ts`)
+## Config (`src/config.ts`)
 
-### Timeline events
+Central runtime configuration. Three exports:
+
+### `activeProfile`
 
 ```ts
+export const activeProfile = 'mindy' as const;
+export type DataProfile = typeof activeProfile;
+```
+
+Determines which folder under `src/data/` is the active data source. The profile folder must export `datingTimeline`, `trips`, `IMAGE_FILES`, and `ICONS`.
+
+### `fallingObjects`
+
+All tunable parameters for the `FallingObjects` ambient particle system:
+
+```ts
+fallingObjects.imageCount      // number of image particles
+fallingObjects.iconCount       // number of emoji/icon particles
+fallingObjects.particle.leftMin / leftMax     // horizontal spread (% of viewport)
+fallingObjects.particle.sizeMin / sizeMax     // particle size in px
+fallingObjects.particle.durationMin / durationMax  // fall duration in seconds
+fallingObjects.particle.delayMin / delayMax   // stagger delay in seconds (≤ 0)
+fallingObjects.particle.opacityMin / opacityMax    // idle translucency
+fallingObjects.particle.driftMin / driftMax   // horizontal sway in px
+```
+
+### `iconBurst`
+
+All tunable parameters for the `IconBurst` click effect:
+
+```ts
+iconBurst.count          // number of emoji particles per burst
+iconBurst.durationMs     // how long the burst stays on screen (ms); matches CSS animation
+iconBurst.angleJitter    // random angle spread per particle (radians)
+iconBurst.distanceMin    // minimum travel distance from origin (px)
+iconBurst.distanceExtra  // extra random distance on top of min (px)
+iconBurst.maxDelay       // max per-particle stagger delay (seconds)
+iconBurst.sizeBase       // base emoji font-size (rem)
+iconBurst.sizeExtra      // max extra font-size added randomly (rem)
+```
+
+## Types (`src/types.ts`)
+
+All shared interfaces live here. Import from `@/types`.
+
+```ts
+export interface ImageFile {
+    file: string;   // filename inside public/particles/
+    label: string;  // shown in FerrariTooltip on hover
+}
+
+export interface Icon {
+    symbol: string; // emoji or text symbol
+    color: string;  // CSS color (ignored for emojis, which render in their own colors)
+    label: string;  // shown in FerrariTooltip on hover
+}
+
 export interface TimelineEvent {
-    date: Date;        // Use new Date('YYYY-MM-DDTHH:mm:ss')
-    name: string;      // Event title — shown in UPPERCASE via CSS
-    des?: string | string[];  // Optional detail(s) shown in FerrariTooltip via LightbulbIcon
-    burstIcon?: string;       // Optional emoji — clicking the date Chip triggers IconBurst
+    date: Date;              // Use new Date('YYYY-MM-DDTHH:mm:ss')
+    name: string;            // Event title — shown in UPPERCASE via CSS
+    des?: string | string[]; // Optional detail(s) shown in FerrariTooltip via LightbulbIcon
+    burstIcon?: string;      // Optional emoji — clicking the date Chip triggers IconBurst
 }
 
 export interface TimelineYear {
     description: string;  // Shown above the timeline (Barlow Condensed, uppercase)
     events: TimelineEvent[];
 }
-```
 
-Events are keyed by year in `datingTimeline: Record<number, TimelineYear>`.  
-Years are derived dynamically — just add a new key to include a new year tab.
-
-### Trips
-
-```ts
 export interface TripDestination {
     name: string;
     googleMapLink?: string;  // If present, destination renders as clickable link
@@ -147,12 +202,59 @@ export interface Trip {
     highlights: string[]; // Bullet points shown in card body
     destinations: TripDestination[];
 }
-
-export const trips: Trip[];
 ```
 
-To add a new trip: append an object to the `trips` array in `data.ts`.  
-`TRIPS_TAKEN` in `JourneyCounter.tsx` must also be manually incremented to match `trips.length`.
+## Data layer (`src/data/`)
+
+### Profile system
+
+`src/data/index.ts` imports all profiles and re-exports the one matching `activeProfile`:
+
+```ts
+import { activeProfile } from '@/config';
+import * as mindy from '@/data/mindy';
+
+const profiles = { mindy } satisfies Record<string, typeof mindy>;
+export const { datingTimeline, trips, IMAGE_FILES, ICONS } = profiles[activeProfile];
+```
+
+To add a new profile: create a folder `src/data/<name>/` with an `index.ts` that exports the four required values, add the import to `src/data/index.ts`, and set `activeProfile` in `config.ts`.
+
+### Profile folder layout (`src/data/mindy/`)
+
+| File         | Export            | Type                            |
+| ------------ | ----------------- | ------------------------------- |
+| `events.ts`  | `datingTimeline`  | `Record<number, TimelineYear>`  |
+| `trips.ts`   | `trips`           | `Trip[]`                        |
+| `objects.ts` | `IMAGE_FILES`     | `ImageFile[]`                   |
+|              | `ICONS`           | `Icon[]`                        |
+
+### Timeline events (`events.ts`)
+
+Events are keyed by year in `datingTimeline: Record<number, TimelineYear>`.  
+Years are derived dynamically — just add a new key to include a new year tab.
+
+### Trips (`trips.ts`)
+
+To add a new trip: append a `Trip` object to the `trips` array.  
+`TRIPS_TAKEN` in `JourneyCounter.tsx` is now `trips.length` — it updates automatically; **no manual increment needed**.
+
+### Falling objects (`objects.ts`)
+
+```ts
+export const IMAGE_FILES: ImageFile[] = [
+    { file: 'pen.png', label: 'Favourite animal' },
+    { file: 'fer.png', label: 'Charles Leclerc - 16' },
+];
+
+export const ICONS: Icon[] = [
+    { symbol: '🍉', color: 'inherit', label: 'Description shown on hover' },
+    // ...
+];
+```
+
+To add new falling images: drop a PNG into `public/particles/` and add `{ file, label }` to `IMAGE_FILES`.  
+To add new falling icons/emoji: append `{ symbol, color, label }` to `ICONS`.
 
 ## Pages
 
@@ -177,21 +279,18 @@ To add a new trip: append an object to the `trips` array in `data.ts`.
 
 ### `FallingObjects` (`src/components/FallingObjects.tsx`)
 
-Ambient particle effect rendered via `createPortal` into `document.body` (fixed, z-index 0, pointer-events none).
+Ambient particle effect rendered via `createPortal` into `document.body` (fixed, z-index 9999, pointer-events auto on particles).
 
-- **Images**: transparent PNGs from `public/particles/`. Add a filename to `IMAGE_FILES` to include it.
-- **Icons**: emoji/symbols defined in the `ICONS` array as `{ symbol, color }`. Emojis ignore `color`.
-- Pool: `IMAGE_COUNT = 12` images + `ICON_COUNT = 13` icons, computed once at module load.
-- Each particle has randomized `left`, `size`, `duration`, `delay`, `opacity`, and `drift`.
+- **Images**: `ImageFile[]` from the active profile's `objects.ts`. Each has `file` (PNG filename) and `label` (tooltip text).
+- **Icons**: `Icon[]` from the active profile's `objects.ts`. Each has `symbol`, `color`, and `label`.
+- Particle counts and all physics params come from `fallingObjects` in `@/config`.
+- Hovering a particle pauses its animation and shows full opacity + a `FerrariTooltip` with its `label`.
 - Animation: `fallingDrift` keyframe defined in `index.css` using `--drift` CSS variable.
-
-To add new falling images: drop a PNG into `public/particles/` and add its filename to `IMAGE_FILES`.  
-To add new falling icons/emoji: append to the `ICONS` array in `FallingObjects.tsx`.
 
 ### `JourneyCounter` (`src/components/JourneyCounter.tsx`)
 
 - `FIRST_DATE` constant: `new Date('2025-08-26T00:00:00')` — update if start date changes.
-- `TRIPS_TAKEN` constant: manually incremented integer — keep in sync with `trips.length` in `data.ts`.
+- `TRIPS_TAKEN = trips.length` — automatically stays in sync with the trips array; no manual update needed.
 - `getCounterValues()` returns `{ days, hoursToday, minutesPast }`.
 - Refreshes every **30 seconds** via `setInterval`.
 - `StatCard` props: `value`, `label`, `live` (pulsing gold dot), `onClick`, `sx`.
@@ -200,11 +299,11 @@ To add new falling icons/emoji: append to the `ICONS` array in `FallingObjects.t
 
 ### `FerrariTooltip` (`src/components/FerrariTooltip.tsx`)
 
-A styled MUI `Tooltip` with Ferrari dark theme: `surface` background, white text, `border` outline, red glow shadow. Touch-friendly (`enterTouchDelay={0}`, `leaveTouchDelay={4000}`). Used in `HomePage` to show `event.des` details on the `LightbulbIcon`.
+A styled MUI `Tooltip` with Ferrari dark theme: `surface` background, white text, `border` outline, red glow shadow. Touch-friendly (`enterTouchDelay={0}`, `leaveTouchDelay={4000}`). Used in `HomePage` to show `event.des` details on the `LightbulbIcon`, and in `FallingObjects` to show particle labels.
 
 ### `IconBurst` (`src/components/IconBurst.tsx`)
 
-Renders 18 emoji particles via `createPortal` that burst outward from `(x, y)` coordinates. Uses CSS class `burst-particle` with `--bx`/`--by` CSS variables for direction. Auto-calls `onDone` after 1500ms. Triggered from `HomePage` when clicking a date Chip that has `burstIcon`.
+Renders emoji particles via `createPortal` that burst outward from `(x, y)` coordinates. All burst parameters (count, duration, distances, sizes) come from `iconBurst` in `@/config`. Uses CSS class `burst-particle` with `--bx`/`--by` CSS variables for direction. Auto-calls `onDone` after `iconBurst.durationMs`. Triggered from `HomePage` when clicking a date Chip that has `burstIcon`.
 
 ## Animations (`src/App.css`)
 
@@ -241,6 +340,9 @@ Retrigger without remount: remove class → force reflow (`offsetHeight`) → re
 - Keep `@/` alias (not relative imports) for all `src/` imports.
 - `des` field supports both `string` and `string[]` — always handle both cases.
 - `burstIcon` on a `TimelineEvent` makes the date Chip interactive and fires `IconBurst` on click.
+- All shared interfaces go in `src/types.ts`; import from `@/types`.
+- All tunable constants (counts, sizes, timings) go in `src/config.ts`; never hardcode magic numbers in components.
+- All data (events, trips, particles) lives in the active profile folder under `src/data/`; components import from `@/data`.
 
 ## Dev commands
 

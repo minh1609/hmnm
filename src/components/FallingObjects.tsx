@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import FerrariTooltip from '@/components/FerrariTooltip';
 
-import { IMAGE_FILES, ICONS } from '@/data/mindy/objects';
+import { IMAGE_FILES, ICONS } from '@/data';
+import { fallingObjects } from '@/config';
 
 // ── Images ────────────────────────────────────────────────────────────────────
 // Drop transparent PNGs into public/particles/ and list their filenames here.
@@ -51,20 +52,21 @@ function pick<T>(arr: T[]): T {
 }
 
 function baseParticle(id: number) {
+    const p = fallingObjects.particle;
     return {
         id,
-        left: rand(0, 100),
-        size: rand(18, 36),
-        duration: rand(10, 24),
-        delay: rand(-24, 0),
-        opacity: rand(0.25, 0.55),
-        drift: rand(-40, 40),
+        left: rand(p.leftMin, p.leftMax),
+        size: rand(p.sizeMin, p.sizeMax),
+        duration: rand(p.durationMin, p.durationMax),
+        delay: rand(p.delayMin, p.delayMax),
+        opacity: rand(p.opacityMin, p.opacityMax),
+        drift: rand(p.driftMin, p.driftMax),
     };
 }
 
 // Build pool: half images, half icons — computed once, stable across re-renders
-const IMAGE_COUNT = 6;
-const ICON_COUNT = 10;
+const IMAGE_COUNT = fallingObjects.imageCount;
+const ICON_COUNT = fallingObjects.iconCount;
 
 const PARTICLES: Particle[] = [
     ...Array.from<unknown, ImageParticle>({ length: IMAGE_COUNT }, (_, i) => ({

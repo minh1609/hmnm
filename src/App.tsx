@@ -10,8 +10,8 @@ let _prevPathname = '';
 function App() {
     const location = useLocation();
 
-    const prevOrder = routeOrder[_prevPathname] ?? -1;
-    const nextOrder = routeOrder[location.pathname] ?? 0;
+    // const prevOrder = routeOrder[_prevPathname] ?? -1;
+    // const nextOrder = routeOrder[location.pathname] ?? 0;
 
     let animClass: string;
     // if (prevOrder === -1) {
