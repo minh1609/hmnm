@@ -5,7 +5,6 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useNavigate } from 'react-router-dom';
 import { trips } from '@/data';
 import { ferrariTokens } from '@/theme';
-import { FallingObjects } from '@/components/FallingObjects';
 
 function formatDateRange(start: Date, end: Date): string {
     const opts: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -13,7 +12,8 @@ function formatDateRange(start: Date, end: Date): string {
 }
 
 function durationDays(start: Date, end: Date): number {
-    return Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    let duration = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    return Math.max(duration, 1);
 }
 
 export function TripsPage() {
@@ -22,8 +22,6 @@ export function TripsPage() {
 
     return (
         <>
-            <FallingObjects />
-
             <Box sx={{ minHeight: '100vh', pb: 6 }}>
                 {/* Header */}
                 <Box
@@ -44,23 +42,24 @@ export function TripsPage() {
                     <IconButton
                         onClick={() => navigate('/')}
                         sx={{
-                            color: c.gold,
-                            border: `1px solid ${c.gold}`,
+                            color: c.white,
+                            border: `1px solid ${c.white}`,
                             borderRadius: '4px',
                             p: 0.75,
                             '&:hover': {
-                                backgroundColor: `${c.goldGlow}`,
-                                borderColor: c.goldLight,
+                                '& .MuiSvgIcon-root': {
+                                    transform: 'scale(1.35)',
+                                },
                             },
                         }}
                     >
-                        <ArrowBackIcon fontSize="small" />
+                        <ArrowBackIcon fontSize="small" sx={{ transition: 'transform 0.18s ease' }} />
                     </IconButton>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                         <FlightIcon
                             sx={{
-                                color: c.gold,
+                                color: c.white,
                                 fontSize: '1.6rem',
                                 transform: 'rotate(-45deg)',
                             }}
@@ -85,10 +84,10 @@ export function TripsPage() {
                         <Box
                             sx={{
                                 fontFamily: f.display,
-                                fontSize: '0.7rem',
+                                fontWeight: 700,
                                 letterSpacing: '0.12em',
                                 textTransform: 'uppercase',
-                                color: c.muted,
+                                color: 'white',
                                 textAlign: 'right',
                             }}
                         >
@@ -157,8 +156,8 @@ export function TripsPage() {
                                     pb: 1,
                                 }}
                             >
-                                <Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5 }}>
+                                <Box sx={{ flex: 1 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
                                         <Typography sx={{ fontSize: '2rem', lineHeight: 1 }}>{trip.flag}</Typography>
                                         <Typography
                                             sx={{
@@ -169,14 +168,15 @@ export function TripsPage() {
                                                 textTransform: 'uppercase',
                                                 color: c.white,
                                                 lineHeight: 1,
+                                                textAlign: 'left',
                                             }}
                                         >
                                             {trip.name}
                                         </Typography>
                                     </Box>
 
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                        <PlaceIcon sx={{ color: c.gold, fontSize: '0.95rem' }} />
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexWrap: 'wrap' }}>
+                                        <PlaceIcon sx={{ color: c.gold, fontSize: '0.95rem', flexShrink: 0 }} />
                                         <Typography
                                             variant="caption"
                                             sx={{
@@ -185,7 +185,24 @@ export function TripsPage() {
                                                 fontSize: '0.7rem',
                                             }}
                                         >
-                                            {trip.destination}
+                                            {trip.destinations.map((dest, i) => (
+                                                <Box
+                                                    key={i}
+                                                    component={dest.googleMapLink ? 'a' : 'span'}
+                                                    href={dest.googleMapLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    sx={{
+                                                        textDecoration: 'none',
+                                                        color: 'inherit',
+                                                        cursor: dest.googleMapLink ? 'pointer' : 'default',
+                                                        '&:hover': dest.googleMapLink ? { opacity: 0.75 } : {},
+                                                    }}
+                                                >
+                                                    {dest.name}
+                                                    {i < trip.destinations.length - 1 && ', '}
+                                                </Box>
+                                            ))}
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -202,6 +219,7 @@ export function TripsPage() {
                                         px: 1.5,
                                         py: 0.75,
                                         minWidth: 56,
+                                        ml: 0.5,
                                     }}
                                 >
                                     <Typography
@@ -224,7 +242,7 @@ export function TripsPage() {
                                             letterSpacing: '0.1em',
                                         }}
                                     >
-                                        DAYS
+                                        DAY(S)
                                     </Typography>
                                 </Box>
                             </Box>
