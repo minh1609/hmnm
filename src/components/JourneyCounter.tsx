@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import { ferrariTokens } from '@/theme';
@@ -19,13 +20,15 @@ interface StatCardProps {
     value: number;
     label: string;
     live?: boolean;
+    onClick?: () => void;
     sx?: SxProps<Theme>;
 }
 
-function StatCard({ value, label, live, sx }: StatCardProps) {
+function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
     const { colors: c, fonts: f } = ferrariTokens;
     return (
         <Box
+            onClick={onClick}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -44,6 +47,7 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
                 overflow: 'hidden',
                 transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                 boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                cursor: onClick ? 'pointer' : 'default',
                 '&::before': {
                     content: '""',
                     position: 'absolute',
@@ -130,6 +134,7 @@ function StatCard({ value, label, live, sx }: StatCardProps) {
 
 export function JourneyCounter() {
     const [values, setValues] = useState(getCounterValues());
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setInterval(() => setValues(getCounterValues()), 30000);
@@ -177,7 +182,7 @@ export function JourneyCounter() {
                 <StatCard value={values.days} label="Days Shared" />
                 <StatCard value={values.hoursToday} label="Hours Today" live />
                 <StatCard value={values.minutesPast} label="Minutes Past" live />
-                <StatCard sx={{ cursor: 'pointer' }} value={TRIPS_TAKEN} label="Trips Taken" />
+                <StatCard value={TRIPS_TAKEN} label="Trips Taken" onClick={() => navigate('/trips')} />
             </Box>
         </Box>
     );

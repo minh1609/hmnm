@@ -1,3 +1,25 @@
+export interface Trip {
+    name: string;
+    destination: string;
+    flag: string;
+    startDate: Date;
+    endDate: Date;
+    highlights: string[];
+    emoji?: string;
+}
+
+export const trips: Trip[] = [
+    {
+        name: 'Kelso Conservation Area',
+        destination: 'Missisauga, Canada',
+        flag: '🇨🇦',
+        startDate: new Date('2025-11-01T00:00:00'),
+        endDate: new Date('2025-11-01T00:00:00'),
+        highlights: [],
+        emoji: '✈️',
+    },
+];
+
 export interface TimelineEvent {
     date: Date;
     name: string;
@@ -70,6 +92,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
                     'Hôm đấy còn giận vì anh đòi đến nhà chơi',
                     'Đi nặn gốm, mỗi đứa 1 cái bát 🐧',
                 ],
+                burstIcon: '🎂',
             },
             {
                 date: new Date('2025-11-13T12:00:00'),
@@ -165,10 +188,14 @@ export const datingTimeline: Record<number, TimelineYear> = {
                 name: 'Bắt đầu 3 ngày chay tịnh 🥗',
                 des: [
                     'Cảm ơn các cụ phù hộ lấy Job Offer 📃',
-                    'Mua Bean Curd ở TnT, nhưng mua nhầm sauce có tôm khô',
+                    'Ăn Bean Curd, nhưng mua nhầm sauce có tôm khô',
                     '💤 🏠',
                 ],
                 burstIcon: '🍑',
+            },
+            {
+                date: new Date('2026-03-20T12:00:00'),
+                name: 'Em pack lunch 🍱 cho anh đi làm',
             },
             {
                 date: new Date('2026-04-03T12:00:00'),
