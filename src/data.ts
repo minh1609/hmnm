@@ -21,7 +21,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2025-09-01T12:00:00'),
                 name: 'First Met',
-                des: 'Chiang Mai Thai restaurant',
+                des: ['Chiang Mai Thai restaurant', 'Em mặc áo khoác trắng, makeup hơi lỗi, vẫn cute 😍'],
             },
             {
                 date: new Date('2025-09-27T12:00:00'),
@@ -35,7 +35,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
             },
             {
                 date: new Date('2025-10-03T12:00:00'),
-                name: 'Humber Collegue in Lakeshore',
+                name: 'Humber College in Lakeshore',
             },
             {
                 date: new Date('2025-10-03T12:00:00'),
@@ -50,7 +50,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2025-10-30T12:00:00'),
                 name: 'Halloween 🎃',
-                des: 'Ăn Mochi Donut ở Sherway, thấy custom Halloween của em',
+                des: 'Ăn Mochi Donut 🍩 ở Sherway, thấy custom Halloween của em',
             },
             {
                 date: new Date('2025-11-01T12:00:00'),
@@ -124,17 +124,17 @@ export const datingTimeline: Record<number, TimelineYear> = {
                 name: 'Gặp mẹ 🌼 ',
             },
             {
-                date: new Date('2026-01-29T12:00:00'),
+                date: new Date('2026-02-14T12:00:00'),
                 name: 'Valentine 💝 remote',
                 des: ['🧁 🎂, 1 macaron, 🌷', '🧋 🍪'],
-                burstIcon: '🧧',
+                burstIcon: '❤️',
             },
             {
                 date: new Date('2026-02-17T12:00:00'),
                 name: 'TẾT 🧧 ✨',
                 des: [
                     'Mừng tuổi anh $100 luôn, nhìu nhất từ trước tới giờ 🤑',
-                    'Anh giấu em đồng xu 🪙 năm 2000 trong phòng trước lúc anh bay, ngạc nhiên hông?',
+                    'Anh giấu em đồng xu 🪙  2000 trong phòng trước lúc anh bay, ngạc nhiên hông?',
                 ],
                 burstIcon: '🧧',
             },
@@ -154,6 +154,25 @@ export const datingTimeline: Record<number, TimelineYear> = {
                 name: '🤍 Valentine ',
                 des: 'Bất ngờ xuất hiện dưới nhà anh, rồi tặng anh hộp Chocolate 🍫 💜',
                 burstIcon: '🤍',
+            },
+            {
+                date: new Date('2026-03-16T12:00:00'),
+                name: 'Office job 💼 đầu tiên',
+                des: 'Cuối cùng ước mơ bao lâu của em thành hiện thực rồi',
+            },
+            {
+                date: new Date('2026-03-20T12:00:00'),
+                name: 'Bắt đầu 3 ngày chay tịnh 🥗',
+                des: [
+                    'Cảm ơn các cụ phù hộ lấy Job Offer 📃',
+                    'Mua Bean Curd ở TnT, nhưng mua nhầm sauce có tôm khô',
+                    '💤 🏠',
+                ],
+                burstIcon: '🍑',
+            },
+            {
+                date: new Date('2026-04-03T12:00:00'),
+                name: 'Trời ấm, mình đi chơi hồ, và ăn Krispy Kream 🍩',
             },
         ],
     },

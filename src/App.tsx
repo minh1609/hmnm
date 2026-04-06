@@ -16,7 +16,7 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import { Box, Chip, Typography } from '@mui/material';
+import { Alert, Box, Chip, Snackbar, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 
@@ -45,6 +45,37 @@ function App() {
     const prevYearRef = useRef(years[0]);
 
     const [kissBurst, setKissBurst] = useState<{ x: number; y: number; icon: string } | null>(null);
+
+    const [swipeAlert, setSwipeAlert] = useState<string | null>(null);
+    const touchStartX = useRef<number | null>(null);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartX.current === null) return;
+        const delta = e.changedTouches[0].clientX - touchStartX.current;
+        touchStartX.current = null;
+        if (Math.abs(delta) < 50) return;
+
+        const currentIndex = years.indexOf(selectedYear);
+        if (delta > 0) {
+            // swipe right → previous year
+            if (currentIndex === 0) {
+                setSwipeAlert('Tiếc mình không gặp nhau sớm hơn');
+            } else {
+                handleYearSelect(years[currentIndex - 1]);
+            }
+        } else {
+            // swipe left → next year
+            if (currentIndex === years.length - 1) {
+                setSwipeAlert('Mình còn nhiều thời gian để đi tiếp mà, từ từ em ❤️');
+            } else {
+                handleYearSelect(years[currentIndex + 1]);
+            }
+        }
+    };
 
     const handleChipClick = (e: React.MouseEvent, burstIcon?: string) => {
         if (!burstIcon) return;
@@ -141,6 +172,8 @@ function App() {
             <Box
                 key={`timeline-${selectedYear}`}
                 className={slideDir === 'left' ? 'timeline-slide-left' : 'timeline-slide-right'}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
                 sx={{ overflow: 'hidden', pb: 3 }}
             >
                 <Timeline position="alternate">
@@ -182,7 +215,7 @@ function App() {
                                 <TimelineSeparator>
                                     <TimelineDot
                                         sx={{
-                                            backgroundColor: ferrariTokens.colors.gold,
+                                            backgroundColor: ferrariTokens.colors.carbon,
                                             borderColor: ferrariTokens.colors.goldLight,
                                             boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
                                         }}
@@ -229,13 +262,14 @@ function App() {
                                                 {
                                                     <LightbulbIcon
                                                         sx={{
-                                                            color: ferrariTokens.colors.gold,
+                                                            color: 'white',
                                                             fontSize: '1.1rem',
                                                             mb: '-2px',
                                                             mx: 0.5,
                                                             transition: 'transform 0.2s ease',
                                                             '&:hover': {
                                                                 transform: 'scale(1.35)',
+                                                                color: 'gold',
                                                             },
                                                         }}
                                                     />
@@ -254,6 +288,29 @@ function App() {
             {kissBurst && (
                 <IconBurst x={kissBurst.x} y={kissBurst.y} icon={kissBurst.icon} onDone={() => setKissBurst(null)} />
             )}
+
+            <Snackbar
+                open={swipeAlert !== null}
+                autoHideDuration={2500}
+                onClose={() => setSwipeAlert(null)}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={() => setSwipeAlert(null)}
+                    severity="info"
+                    variant="filled"
+                    sx={{
+                        fontFamily: ferrariTokens.fonts.display,
+                        letterSpacing: '0.05em',
+                        backgroundColor: ferrariTokens.colors.redDeep,
+                        color: ferrariTokens.colors.white,
+                        '& .MuiAlert-icon': { color: ferrariTokens.colors.gold },
+                        '& .MuiAlert-action .MuiIconButton-root': { color: ferrariTokens.colors.muted },
+                    }}
+                >
+                    {swipeAlert}
+                </Alert>
+            </Snackbar>
         </>
     );
 }

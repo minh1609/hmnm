@@ -4,7 +4,7 @@ import type { TooltipProps } from '@mui/material/Tooltip';
 import { ferrariTokens } from '@/theme';
 
 const FerrariTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} arrow classes={{ popper: className }} />
+    <Tooltip enterTouchDelay={0} leaveTouchDelay={4000} {...props} arrow classes={{ popper: className }} />
 ))(() => ({
     [`& .${tooltipClasses.tooltip}`]: {
         backgroundColor: ferrariTokens.colors.surface,

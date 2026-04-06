@@ -80,8 +80,8 @@ function baseParticle(id: number) {
 }
 
 // Build pool: half images, half icons — computed once, stable across re-renders
-const IMAGE_COUNT = 12;
-const ICON_COUNT = 13;
+const IMAGE_COUNT = 6;
+const ICON_COUNT = 10;
 
 const PARTICLES: Particle[] = [
     ...Array.from<unknown, ImageParticle>({ length: IMAGE_COUNT }, (_, i) => ({
