@@ -2,32 +2,15 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import FerrariTooltip from '@/components/FerrariTooltip';
 
+import { IMAGE_FILES, ICONS } from '@/data/mindy/objects';
+
 // ── Images ────────────────────────────────────────────────────────────────────
 // Drop transparent PNGs into public/particles/ and list their filenames here.
 const BASE = import.meta.env.BASE_URL; // '/hmnm/'
-const IMAGE_FILES: { file: string; label: string }[] = [
-    { file: 'pen.png', label: 'Favourite animal' },
-    { file: 'fer.png', label: 'Charles Leclerc - 16' },
-];
 const IMAGE_SRCS = IMAGE_FILES.map(({ file, label }) => ({
     src: `${BASE}particles/${file}`,
     label,
 }));
-
-// ── Icons ─────────────────────────────────────────────────────────────────────
-// Mix unicode symbols (color applies) and emojis (color is ignored — they use
-// their own built-in colors). Add any emoji or symbol you like here.
-const ICONS: { symbol: string; color: string; label: string }[] = [
-    // Emojis — color value is unused, emojis render in their own colors
-    { symbol: '🍉', color: 'inherit', label: '5 in summer 2025 and more in 2026' },
-    { symbol: '🍪 ', color: 'inherit', label: 'Chocolate only' },
-    {
-        symbol: '🧋',
-        color: 'inherit',
-        label: 'Creme Burlee @ Machi Machi, Cream Cheese @ Matcha Matcha, Pure Latte @Chayam',
-    },
-    { symbol: '🧁', color: 'inherit', label: 'Vava Designer cake, Farmboy' },
-];
 
 // ── Particle types ─────────────────────────────────────────────────────────────
 type ImageParticle = {

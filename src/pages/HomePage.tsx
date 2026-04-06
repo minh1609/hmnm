@@ -1,6 +1,6 @@
 import '@/App.css';
 import { useRef, useState } from 'react';
-import { datingTimeline } from '@/data/mindy';
+import { datingTimeline } from '@/data/mindy/events';
 import { getSeason } from '@/utils';
 
 import { JourneyCounter } from '@/components/JourneyCounter';

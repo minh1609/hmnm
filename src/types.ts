@@ -1,3 +1,14 @@
+export interface ImageFile {
+    file: string;
+    label: string;
+}
+
+export interface Icon {
+    symbol: string;
+    color: string;
+    label: string;
+}
+
 export interface TripDestination {
     name: string;
     googleMapLink?: string;
