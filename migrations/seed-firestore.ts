@@ -17,9 +17,13 @@
  *      or with a custom path:
  *        SERVICE_ACCOUNT=./path/to/key.json npm run migrate
  *
+ * To grant admin role to a user (find their UID in Firebase Console → Authentication):
+ *   ADMIN_UID=<uid> npm run migrate
+ *
  * Firestore schema written:
  *   timeline_events/{autoId}  →  { date, name, des?, burstIcon?, owner }
  *   trips/{autoId}            →  { name, flag, startDate, endDate, highlights, destinations, owner }
+ *   users/{uid}               →  { role: 'admin', email? }
  *
  * Required composite indexes (firestore.indexes.json):
  *   timeline_events: owner ASC + date ASC
@@ -150,6 +154,22 @@ async function migrateTrips() {
 }
 
 // ---------------------------------------------------------------------------
+// Admin user
+// ---------------------------------------------------------------------------
+
+async function migrateAdminUser(uid: string) {
+    log(`Granting admin role to uid: ${uid}`);
+    const ref = db.collection('users').doc(uid);
+    const snap = await ref.get();
+    if (snap.exists && snap.data()?.role === 'admin') {
+        log('  ~ skipped — already admin');
+        return;
+    }
+    await ref.set({ role: 'admin' }, { merge: true });
+    log('  ✓ users/' + uid + ' → { role: "admin" }');
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -158,9 +178,15 @@ async function main() {
     log(`Service account: ${serviceAccountPath}`);
     console.log();
 
-    await migrateTimelineEvents();
+    // await migrateTimelineEvents();
     console.log();
-    await migrateTrips();
+    // await migrateTrips();
+
+    const adminUid = process.env.ADMIN_UID;
+    if (adminUid) {
+        console.log();
+        await migrateAdminUser(adminUid);
+    }
 
     console.log();
     log('All done!');

@@ -47,7 +47,7 @@ const yearSx =
 
 export function HomePage() {
     const { timeline: datingTimeline, refetch } = useTimeline();
-    const { user } = useAuth();
+    const { isAdmin } = useAuth();
     const years = Object.keys(datingTimeline)
         .map(Number)
         .sort((a, b) => a - b);
@@ -198,14 +198,14 @@ export function HomePage() {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineDot
-                                        onClick={user ? (e) => setDotMenu({ anchor: e.currentTarget, event }) : undefined}
+                                        onClick={isAdmin ? (e) => setDotMenu({ anchor: e.currentTarget, event }) : undefined}
                                         sx={{
                                             backgroundColor: ferrariTokens.colors.carbon,
                                             borderColor: ferrariTokens.colors.goldLight,
                                             boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
-                                            cursor: user ? 'pointer' : 'default',
+                                            cursor: isAdmin ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                                            ...(user && {
+                                            ...(isAdmin && {
                                                 '&:hover': {
                                                     borderColor: ferrariTokens.colors.red,
                                                     boxShadow: `0 0 10px ${ferrariTokens.colors.redGlow}`,
@@ -291,7 +291,7 @@ export function HomePage() {
                 </Alert>
             </Snackbar>
 
-            {user && (
+            {isAdmin && (
                 <AddEventFab onClick={() => setCreateDialogOpen(true)} />
             )}
 

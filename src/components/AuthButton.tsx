@@ -13,7 +13,7 @@ import { ferrariTokens } from '@/theme';
 import { useAuth } from '@/hooks/useAuth';
 
 export function AuthButton() {
-    const { user, loading, signIn, signOut } = useAuth();
+    const { user, loading, isAdmin, signIn, signOut } = useAuth();
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
 
     if (loading) {
@@ -65,23 +65,40 @@ export function AuthButton() {
 
     return (
         <Box sx={containerSx}>
-            <IconButton size="small" onClick={(e) => setAnchor(e.currentTarget)} sx={{ p: 0 }}>
-                <Avatar
-                    src={user.photoURL ?? undefined}
-                    alt={user.displayName ?? 'User'}
-                    sx={{
-                        width: 28,
-                        height: 28,
-                        border: `1.5px solid ${ferrariTokens.colors.gold}`,
-                        boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
-                        fontSize: '0.75rem',
-                        bgcolor: ferrariTokens.colors.surface,
-                        color: ferrariTokens.colors.gold,
-                    }}
-                >
-                    {user.displayName?.[0] ?? '?'}
-                </Avatar>
-            </IconButton>
+            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                <IconButton size="small" onClick={(e) => setAnchor(e.currentTarget)} sx={{ p: 0 }}>
+                    <Avatar
+                        src={user.photoURL ?? undefined}
+                        alt={user.displayName ?? 'User'}
+                        sx={{
+                            width: 28,
+                            height: 28,
+                            border: `1.5px solid ${isAdmin ? ferrariTokens.colors.red : ferrariTokens.colors.gold}`,
+                            boxShadow: `0 0 8px ${isAdmin ? ferrariTokens.colors.redGlow : ferrariTokens.colors.goldGlow}`,
+                            fontSize: '0.75rem',
+                            bgcolor: ferrariTokens.colors.surface,
+                            color: isAdmin ? ferrariTokens.colors.red : ferrariTokens.colors.gold,
+                        }}
+                    >
+                        {user.displayName?.[0] ?? '?'}
+                    </Avatar>
+                </IconButton>
+                {isAdmin && (
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            bottom: -4,
+                            right: -4,
+                            width: 12,
+                            height: 12,
+                            borderRadius: '50%',
+                            backgroundColor: ferrariTokens.colors.red,
+                            border: `1.5px solid ${ferrariTokens.colors.black}`,
+                            boxShadow: `0 0 6px ${ferrariTokens.colors.redGlow}`,
+                        }}
+                    />
+                )}
+            </Box>
 
             <Menu
                 anchorEl={anchor}
@@ -122,6 +139,18 @@ export function AuthButton() {
                         }}
                     >
                         {user.email}
+                    </Typography>
+                    <Typography
+                        sx={{
+                            fontFamily: ferrariTokens.fonts.display,
+                            fontSize: '0.65rem',
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: isAdmin ? ferrariTokens.colors.red : ferrariTokens.colors.subtle,
+                            mt: 0.75,
+                        }}
+                    >
+                        {isAdmin ? '● Admin' : '○ Viewer'}
                     </Typography>
                 </Box>
                 <MenuItem
