@@ -47,13 +47,16 @@ export function AuthButton() {
                         backgroundColor: ferrariTokens.colors.black,
                         borderRadius: '4px',
                         height: 28,
+                        boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
                         transition: 'all 0.2s ease',
                         '&:hover': {
-                            borderColor: ferrariTokens.colors.goldLight,
+                            backgroundColor: `${ferrariTokens.colors.black} !important`,
+                            borderColor: ferrariTokens.colors.gold,
+                            color: ferrariTokens.colors.gold,
+                            transform: 'scale(1.08)',
+                            boxShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}`,
                         },
-                        '&.MuiChip-root:hover': {
-                            backgroundColor: `${ferrariTokens.colors.goldGlow} !important`,
-                        },
+                        '& .MuiTouchRipple-root': { display: 'none' },
                     }}
                 />
             </Box>
