@@ -224,7 +224,7 @@ export function CreateEventDialog({ open, onClose, onCreated }: Props) {
                         },
                     }}
                 >
-                    {saving ? 'Saving…' : 'Add Event'}
+                    {saving ? 'Saving…' : 'Thêm'}
                 </Button>
             </DialogActions>
         </Dialog>

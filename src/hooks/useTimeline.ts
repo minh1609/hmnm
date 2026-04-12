@@ -55,6 +55,7 @@ export function useTimeline(): UseTimelineResult {
                 const events: TimelineEvent[] = snap.docs.map((doc) => {
                     const d = doc.data();
                     const event: TimelineEvent = {
+                        id: doc.id,
                         date: toDate(d.date),
                         name: d.name as string,
                         owner: d.owner as string,

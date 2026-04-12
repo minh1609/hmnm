@@ -28,6 +28,8 @@ export interface Trip {
 }
 
 export interface TimelineEvent {
+    /** Firestore document ID — present for documents fetched from Firestore, absent for static data */
+    id?: string;
     /** Firestore index */
     date: Date;
     name: string;

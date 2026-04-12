@@ -9,7 +9,9 @@ import { FallingObjects } from '@/components/FallingObjects';
 import { IconBurst } from '@/components/IconBurst';
 import FerrariTooltip from '@/components/FerrariTooltip';
 import { CreateEventDialog } from '@/components/CreateEventDialog';
+import { DeleteEventDialog } from '@/components/DeleteEventDialog';
 import { AddEventFab } from '@/components/AddEventFab';
+import { YearDescription } from '@/components/YearDescription';
 import { ferrariTokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
@@ -21,6 +23,7 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import { Alert, Box, Chip, Snackbar, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
+import type { TimelineEvent } from '@/types';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 
 const yearSx =
@@ -55,6 +58,7 @@ export function HomePage() {
 
     const [swipeAlert, setSwipeAlert] = useState<string | null>(null);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
+    const [deleteEvent, setDeleteEvent] = useState<TimelineEvent | null>(null);
     const touchStartX = useRef<number | null>(null);
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -142,36 +146,7 @@ export function HomePage() {
                     </Box>
                 </Box>
 
-                {datingTimeline[selectedYear].description && (
-                    <Box
-                        ref={descRef}
-                        className="year-desc-enter"
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: 0.5,
-                            mt: 1.5,
-                            mb: 0.5,
-                        }}
-                    >
-                        <Typography
-                            sx={() => ({
-                                fontFamily: ferrariTokens.fonts.display,
-                                fontWeight: 700,
-                                fontSize: '1.6rem',
-                                lineHeight: 1.1,
-                                letterSpacing: '0.14em',
-                                textTransform: 'uppercase',
-                                color: '#ffffff',
-                                textShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}, 0 2px 4px rgba(0,0,0,0.5)`,
-                                userSelect: 'none',
-                            })}
-                        >
-                            🏁 {datingTimeline[selectedYear].description}
-                        </Typography>
-                    </Box>
-                )}
+                <YearDescription ref={descRef} description={datingTimeline[selectedYear].description} />
             </Box>
 
             <Box
@@ -219,10 +194,20 @@ export function HomePage() {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineDot
+                                        onClick={user ? () => setDeleteEvent(event) : undefined}
                                         sx={{
                                             backgroundColor: ferrariTokens.colors.carbon,
                                             borderColor: ferrariTokens.colors.goldLight,
                                             boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
+                                            cursor: user ? 'pointer' : 'default',
+                                            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                                            ...(user && {
+                                                '&:hover': {
+                                                    borderColor: ferrariTokens.colors.red,
+                                                    boxShadow: `0 0 10px ${ferrariTokens.colors.redGlow}`,
+                                                    transform: 'scale(1.3)',
+                                                },
+                                            }),
                                         }}
                                     />
                                     <TimelineConnector
@@ -310,6 +295,12 @@ export function HomePage() {
                 open={createDialogOpen}
                 onClose={() => setCreateDialogOpen(false)}
                 onCreated={refetch}
+            />
+
+            <DeleteEventDialog
+                event={deleteEvent}
+                onClose={() => setDeleteEvent(null)}
+                onDeleted={refetch}
             />
         </>
     );
