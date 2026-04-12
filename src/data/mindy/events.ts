@@ -11,17 +11,12 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2025-09-01T12:00:00'),
                 name: 'First Met',
-                des: ['Chiang Mai Thai restaurant', 'Em mặc áo khoác trắng, makeup hơi lỗi, vẫn cute 😍'],
+                des: 'Chiang Mai Thai restaurant\nEm mặc áo khoác trắng, makeup hơi lỗi, vẫn cute 😍',
             },
             {
                 date: new Date('2025-09-27T12:00:00'),
                 name: 'Đi chơi nguyên ngày, và cũng lần đầu giận nhau',
-                des: [
-                    'Marathon 🏃‍➡️ ở Downsview park',
-                    'Lần đầu ăn Ramen 🍜',
-                    'Xem Conjuring',
-                    'Giận nhau và đến TnT ăn mì lạnh',
-                ],
+                des: 'Marathon 🏃‍➡️ ở Downsview park\nLần đầu ăn Ramen 🍜\nXem Conjuring\nGiận nhau và đến TnT ăn mì lạnh',
             },
             {
                 date: new Date('2025-10-03T12:00:00'),
@@ -45,21 +40,12 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2025-11-01T12:00:00'),
                 name: 'Kelso Conservation Area',
-                des: [
-                    'Chairlift 🚡 dài nhất Bắc Mỹ',
-                    'Đi Square One lần đầu, ăn xiên 🍖',
-                    'Về còn khen anh nữa luôn',
-                    'Ngày cuối cùng ấm áp ☀️ để đi chơi',
-                ],
+                des: 'Chairlift 🚡 dài nhất Bắc Mỹ\nĐi Square One lần đầu, ăn xiên 🍖\nVề còn khen anh nữa luôn\nNgày cuối cùng ấm áp ☀️ để đi chơi',
             },
             {
                 date: new Date('2025-11-09T12:00:00'),
                 name: 'Birthday 🎂 và Tuyết đầu mùa ❄️',
-                des: [
-                    'Không biết mong ước của hai đứa có thành thật hông',
-                    'Hôm đấy còn giận vì anh đòi đến nhà chơi',
-                    'Đi nặn gốm, mỗi đứa 1 cái bát 🐧',
-                ],
+                des: 'Không biết mong ước của hai đứa có thành thật hông\nHôm đấy còn giận vì anh đòi đến nhà chơi\nĐi nặn gốm, mỗi đứa 1 cái bát 🐧',
                 burstIcon: '🎂',
             },
             {
@@ -75,12 +61,12 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2025-12-16T12:00:00'),
                 name: 'Bữa cơm đầu ở nhà em 🏠',
-                des: ['Chả trứng, canh rau, thịt heo quay', 'Lần đầu em nấu sau bao lâu'],
+                des: 'Chả trứng, canh rau, thịt heo quay\nLần đầu em nấu sau bao lâu',
             },
             {
                 date: new Date('2025-12-24T12:00:00'),
                 name: 'Chirstmas 🎄',
-                des: ['Bánh cuốn', 'First 💋', '1 bị quà 🎁 đem về '],
+                des: 'Bánh cuốn\nFirst 💋\n1 bị quà 🎁 đem về ',
                 burstIcon: '💋',
             },
             {
@@ -117,16 +103,13 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2026-02-14T12:00:00'),
                 name: 'Valentine 💝 remote',
-                des: ['🧁 🎂, 1 macaron, 🌷', '🧋 🍪'],
+                des: '🧁 🎂, 1 macaron, 🌷\n🧋 🍪',
                 burstIcon: '❤️',
             },
             {
                 date: new Date('2026-02-17T12:00:00'),
                 name: 'TẾT 🧧 ✨',
-                des: [
-                    'Mừng tuổi anh $100 luôn, nhìu nhất từ trước tới giờ 🤑',
-                    'Anh giấu em đồng xu 🪙  2000 trong phòng trước lúc anh bay, ngạc nhiên hông?',
-                ],
+                des: 'Mừng tuổi anh $100 luôn, nhiu nhất từ trước tới giờ 🤑\nAnh giấu em đồng xu 🪙  2000 trong phòng trước lúc anh bay, ngạc nhiên hông?',
                 burstIcon: '🧧',
             },
             {
@@ -154,11 +137,7 @@ export const datingTimeline: Record<number, TimelineYear> = {
             {
                 date: new Date('2026-03-20T12:00:00'),
                 name: 'Bắt đầu 3 ngày chay tịnh 🥗',
-                des: [
-                    'Cảm ơn các cụ phù hộ lấy Job Offer 📃',
-                    'Ăn Bean Curd, nhưng mua nhầm sauce có tôm khô',
-                    '💤 🏠',
-                ],
+                des: 'Cảm ơn các cụ phù hộ lấy Job Offer 📃\nĂn Bean Curd, nhưng mua nhầm sauce có tôm khô\n💤 🏠',
                 burstIcon: '🍑',
             },
             {

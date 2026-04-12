@@ -240,20 +240,7 @@ export function HomePage() {
                                         {event.des && (
                                             <FerrariTooltip
                                                 title={
-                                                    Array.isArray(event.des) ? (
-                                                        <ul
-                                                            style={{
-                                                                margin: '2px 0',
-                                                                paddingLeft: '1.2em',
-                                                            }}
-                                                        >
-                                                            {event.des.map((item, i) => (
-                                                                <li key={i}>{item}</li>
-                                                            ))}
-                                                        </ul>
-                                                    ) : (
-                                                        event.des
-                                                    )
+                                                    <span style={{ whiteSpace: 'pre-line' }}>{event.des}</span>
                                                 }
                                                 placement="top"
                                             >

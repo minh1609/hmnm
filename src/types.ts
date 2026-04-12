@@ -26,7 +26,7 @@ export interface Trip {
 export interface TimelineEvent {
     date: Date;
     name: string;
-    des?: string | string[];
+    des?: string;
     burstIcon?: string;
 }
 

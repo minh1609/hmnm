@@ -23,7 +23,7 @@ function toDate(val: unknown): Date {
  *     events: Array<{
  *       date: Timestamp,
  *       name: string,
- *       des?: string | string[],
+ *       des?: string,
  *       burstIcon?: string
  *     }>
  *
@@ -44,7 +44,7 @@ export function useTimeline(): Record<number, TimelineYear> {
                         events: (d.events as Record<string, unknown>[]).map((e) => ({
                             date: toDate(e.date),
                             name: e.name as string,
-                            ...(e.des != null && { des: e.des as string | string[] }),
+                            ...(e.des != null && { des: e.des as string }),
                             ...(e.burstIcon != null && { burstIcon: e.burstIcon as string }),
                         })),
                     };
