@@ -10,6 +10,7 @@ import { IconBurst } from '@/components/IconBurst';
 import FerrariTooltip from '@/components/FerrariTooltip';
 import { CreateEventDialog } from '@/components/CreateEventDialog';
 import { DeleteEventDialog } from '@/components/DeleteEventDialog';
+import { GfNoteDialog } from '@/components/GfNoteDialog';
 import { AddEventFab } from '@/components/AddEventFab';
 import { YearDescription } from '@/components/YearDescription';
 import { ferrariTokens } from '@/theme';
@@ -47,7 +48,7 @@ const yearSx =
 
 export function HomePage() {
     const { timeline: datingTimeline, refetch } = useTimeline();
-    const { isAdmin } = useAuth();
+    const { isAdmin, isGf } = useAuth();
     const years = Object.keys(datingTimeline)
         .map(Number)
         .sort((a, b) => a - b);
@@ -63,6 +64,7 @@ export function HomePage() {
     const [deleteEvent, setDeleteEvent] = useState<TimelineEvent | null>(null);
     const [editEvent, setEditEvent] = useState<TimelineEvent | null>(null);
     const [dotMenu, setDotMenu] = useState<{ anchor: HTMLElement; event: TimelineEvent } | null>(null);
+    const [gfNoteEvent, setGfNoteEvent] = useState<TimelineEvent | null>(null);
     const touchStartX = useRef<number | null>(null);
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -198,16 +200,22 @@ export function HomePage() {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineDot
-                                        onClick={isAdmin ? (e) => setDotMenu({ anchor: e.currentTarget, event }) : undefined}
+                                        onClick={
+                                            isAdmin
+                                                ? (e) => setDotMenu({ anchor: e.currentTarget, event })
+                                                : isGf
+                                                  ? () => setGfNoteEvent(event)
+                                                  : undefined
+                                        }
                                         sx={{
                                             backgroundColor: ferrariTokens.colors.carbon,
                                             borderColor: ferrariTokens.colors.goldLight,
                                             boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
-                                            cursor: isAdmin ? 'pointer' : 'default',
+                                            cursor: isAdmin || isGf ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                                            ...(isAdmin && {
+                                            ...((isAdmin || isGf) && {
                                                 '&:hover': {
-                                                    borderColor: ferrariTokens.colors.red,
+                                            borderColor: ferrariTokens.colors.red,
                                                     boxShadow: `0 0 10px ${ferrariTokens.colors.redGlow}`,
                                                     transform: 'scale(1.3)',
                                                 },
@@ -233,26 +241,36 @@ export function HomePage() {
                                         })}
                                     >
                                         {index % 2 == 0 && event.name}
-                                        {event.des && (
+                                        {(event.des || event.gfNote) && (
                                             <FerrariTooltip
-                                                title={<span style={{ whiteSpace: 'pre-line' }}>{event.des}</span>}
+                                                title={
+                                                    <>
+                                                        {event.des && (
+                                                            <span style={{ whiteSpace: 'pre-line' }}>{event.des}</span>
+                                                        )}
+                                                        {event.des && event.gfNote && <br />}
+                                                        {event.gfNote && (
+                                                            <span style={{ whiteSpace: 'pre-line', color: ferrariTokens.colors.red }}>
+                                                                {event.gfNote}
+                                                            </span>
+                                                        )}
+                                                    </>
+                                                }
                                                 placement="top"
                                             >
-                                                {
-                                                    <LightbulbIcon
-                                                        sx={{
-                                                            color: 'white',
-                                                            fontSize: '1.1rem',
-                                                            mb: '-2px',
-                                                            mx: 0.5,
-                                                            transition: 'transform 0.2s ease',
-                                                            '&:hover': {
-                                                                transform: 'scale(1.35)',
-                                                                color: 'gold',
-                                                            },
-                                                        }}
-                                                    />
-                                                }
+                                                <LightbulbIcon
+                                                    sx={{
+                                                        color: 'white',
+                                                        fontSize: '1.1rem',
+                                                        mb: '-2px',
+                                                        mx: 0.5,
+                                                        transition: 'transform 0.2s ease',
+                                                        '&:hover': {
+                                                            transform: 'scale(1.35)',
+                                                            color: 'gold',
+                                                        },
+                                                    }}
+                                                />
                                             </FerrariTooltip>
                                         )}
                                         {index % 2 == 1 && event.name}
@@ -368,6 +386,12 @@ export function HomePage() {
                 event={deleteEvent}
                 onClose={() => setDeleteEvent(null)}
                 onDeleted={refetch}
+            />
+
+            <GfNoteDialog
+                event={gfNoteEvent}
+                onClose={() => setGfNoteEvent(null)}
+                onSaved={refetch}
             />
         </>
     );

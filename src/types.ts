@@ -37,6 +37,8 @@ export interface TimelineEvent {
     burstIcon?: string;
     /** Firestore index */
     owner: string;
+    /** Note added by gf role — only editable by gf */
+    gfNote?: string;
 }
 
 export interface TimelineYear {

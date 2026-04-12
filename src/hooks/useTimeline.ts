@@ -55,6 +55,7 @@ export function useTimeline(): UseTimelineResult {
                     };
                     if (d.des != null) event.des = d.des as string | string[];
                     if (d.burstIcon != null) event.burstIcon = d.burstIcon as string;
+                    if (d.gfNote != null) event.gfNote = d.gfNote as string;
                     return event;
                 });
                 console.log(`[useTimeline] fetched ${events.length} events from Firestore`);
