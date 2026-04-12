@@ -17,17 +17,24 @@ export interface TripDestination {
 export interface Trip {
     name: string;
     flag: string;
+    /** Firestore index */
     startDate: Date;
+    /** Firestore index */
     endDate: Date;
     highlights: string[];
     destinations: TripDestination[];
+    /** Firestore index */
+    owner: string;
 }
 
 export interface TimelineEvent {
+    /** Firestore index */
     date: Date;
     name: string;
-    des?: string;
+    des?: string | string[];
     burstIcon?: string;
+    /** Firestore index */
+    owner: string;
 }
 
 export interface TimelineYear {

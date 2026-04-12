@@ -39,7 +39,9 @@ const yearSx =
 
 export function HomePage() {
     const datingTimeline = useTimeline();
-    const years = Object.keys(datingTimeline).map(Number).sort((a, b) => a - b);
+    const years = Object.keys(datingTimeline)
+        .map(Number)
+        .sort((a, b) => a - b);
 
     const [selectedYear, setSelectedYear] = useState(years[years.length - 1]);
     const [slideDir, setSlideDir] = useState<'left' | 'right'>('left');
@@ -239,9 +241,7 @@ export function HomePage() {
                                         {index % 2 == 0 && event.name}
                                         {event.des && (
                                             <FerrariTooltip
-                                                title={
-                                                    <span style={{ whiteSpace: 'pre-line' }}>{event.des}</span>
-                                                }
+                                                title={<span style={{ whiteSpace: 'pre-line' }}>{event.des}</span>}
                                                 placement="top"
                                             >
                                                 {

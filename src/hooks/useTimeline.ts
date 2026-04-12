@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, type Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, type Timestamp } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { datingTimeline as staticTimeline } from '@/data';
-import type { TimelineYear } from '@/types';
+import { timelineEvents as staticEvents, yearDescriptions as staticYearDescriptions } from '@/data';
+import type { TimelineEvent, TimelineYear } from '@/types';
 
-// Firestore stores dates as Timestamp objects; convert them back to Date.
 function toDate(val: unknown): Date {
     if (val != null && typeof (val as Timestamp).toDate === 'function') {
         return (val as Timestamp).toDate();
@@ -12,44 +11,54 @@ function toDate(val: unknown): Date {
     return val as Date;
 }
 
+function groupByYear(
+    events: TimelineEvent[],
+    descriptions: Record<number, string>,
+): Record<number, TimelineYear> {
+    const result: Record<number, TimelineYear> = {};
+    for (const event of events) {
+        const year = event.date.getFullYear();
+        if (!result[year]) {
+            result[year] = { description: descriptions[year] ?? '', events: [] };
+        }
+        result[year].events.push(event);
+    }
+    return result;
+}
+
 /**
- * Reads the `timeline` collection from Firestore.
+ * Reads flat `timeline_events` documents from Firestore (owner == 'mindy', ordered by date).
+ * Falls back to static data if the collection is empty or unreachable.
  *
- * Expected Firestore document layout:
- *   Collection: "timeline"
- *   Document ID: year as string, e.g. "2025"
- *   Fields:
- *     description: string
- *     events: Array<{
- *       date: Timestamp,
- *       name: string,
- *       des?: string,
- *       burstIcon?: string
- *     }>
- *
- * Falls back to the static data file if the collection is empty or unreachable.
+ * Firestore document fields: { date, name, des?, burstIcon?, owner }
  */
 export function useTimeline(): Record<number, TimelineYear> {
-    const [timeline, setTimeline] = useState<Record<number, TimelineYear>>(staticTimeline);
+    const [timeline, setTimeline] = useState<Record<number, TimelineYear>>(() =>
+        groupByYear(staticEvents, staticYearDescriptions),
+    );
 
     useEffect(() => {
-        getDocs(collection(db, 'timeline'))
+        const q = query(
+            collection(db, 'timeline_events'),
+            where('owner', '==', 'mindy'),
+            orderBy('date', 'asc'),
+        );
+
+        getDocs(q)
             .then((snap) => {
                 if (snap.empty) return;
-                const result: Record<number, TimelineYear> = {};
-                snap.forEach((doc) => {
+                const events: TimelineEvent[] = snap.docs.map((doc) => {
                     const d = doc.data();
-                    result[Number(doc.id)] = {
-                        description: d.description as string,
-                        events: (d.events as Record<string, unknown>[]).map((e) => ({
-                            date: toDate(e.date),
-                            name: e.name as string,
-                            ...(e.des != null && { des: e.des as string }),
-                            ...(e.burstIcon != null && { burstIcon: e.burstIcon as string }),
-                        })),
+                    const event: TimelineEvent = {
+                        date: toDate(d.date),
+                        name: d.name as string,
+                        owner: d.owner as string,
                     };
+                    if (d.des != null) event.des = d.des as string | string[];
+                    if (d.burstIcon != null) event.burstIcon = d.burstIcon as string;
+                    return event;
                 });
-                setTimeline(result);
+                setTimeline(groupByYear(events, staticYearDescriptions));
             })
             .catch(() => {});
     }, []);

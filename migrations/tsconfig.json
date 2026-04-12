@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "jsx": "react-jsx",
+        "baseUrl": "..",
+        "paths": {
+            "@/*": ["src/*"]
+        },
+        "skipLibCheck": true,
+        "strict": true,
+        "noEmit": true
+    },
+    "include": [".", "../src/types.ts", "../src/data/**/*"]
+}

@@ -5,4 +5,4 @@ const profiles = { mindy } satisfies Record<string, typeof mindy>;
 
 const data = profiles[activeProfile];
 
-export const { datingTimeline, trips, IMAGE_FILES, ICONS } = data;
+export const { timelineEvents, yearDescriptions, trips, IMAGE_FILES, ICONS } = data;
