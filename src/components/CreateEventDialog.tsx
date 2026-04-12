@@ -51,7 +51,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
         } else if (open && !editEvent) {
             reset();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open, editEvent]);
 
     const reset = () => {
@@ -78,7 +78,9 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
         setError(null);
 
         try {
-            const parsedDate = new Date(date);
+            // Append local noon to avoid UTC midnight parsing, which shifts the date
+            // back by one day in timezones west of UTC (e.g. Canada UTC-4/UTC-5).
+            const parsedDate = new Date(`${date}T12:00:00`);
             const data: Record<string, unknown> = {
                 date: Timestamp.fromDate(parsedDate),
                 name: name.trim(),

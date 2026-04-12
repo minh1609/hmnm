@@ -12,10 +12,7 @@ function toDate(val: unknown): Date {
     return val as Date;
 }
 
-function groupByYear(
-    events: TimelineEvent[],
-    descriptions: Record<number, string>,
-): Record<number, TimelineYear> {
+function groupByYear(events: TimelineEvent[], descriptions: Record<number, string>): Record<number, TimelineYear> {
     const result: Record<number, TimelineYear> = {};
     for (const event of events) {
         const year = event.date.getFullYear();
@@ -38,17 +35,13 @@ export interface UseTimelineResult {
  * Firestore document fields: { date, name, des?, burstIcon?, owner }
  */
 export function useTimeline(): UseTimelineResult {
-    const [timeline, setTimeline] = useState<Record<number, TimelineYear>>(
-        () => groupByYear(staticTimelineEvents, staticYearDescriptions),
+    const [timeline, setTimeline] = useState<Record<number, TimelineYear>>(() =>
+        groupByYear(staticTimelineEvents, staticYearDescriptions)
     );
     const [tick, setTick] = useState(0);
 
     useEffect(() => {
-        const q = query(
-            collection(db, 'timeline_events'),
-            where('owner', '==', activeProfile),
-            orderBy('date', 'asc'),
-        );
+        const q = query(collection(db, 'timeline_events'), where('owner', '==', activeProfile), orderBy('date', 'asc'));
 
         getDocs(q)
             .then((snap) => {
