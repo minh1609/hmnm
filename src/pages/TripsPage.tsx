@@ -3,7 +3,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FlightIcon from '@mui/icons-material/Flight';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useNavigate } from 'react-router-dom';
-import { trips } from '@/data';
+import { useTrips } from '@/hooks/useTrips';
 import { ferrariTokens } from '@/theme';
 
 function formatDateRange(start: Date, end: Date): string {
@@ -18,6 +18,7 @@ function durationDays(start: Date, end: Date): number {
 
 export function TripsPage() {
     const navigate = useNavigate();
+    const trips = useTrips();
     const { colors: c, fonts: f } = ferrariTokens;
 
     return (

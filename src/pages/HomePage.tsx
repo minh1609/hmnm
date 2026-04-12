@@ -1,7 +1,7 @@
 import '@/App.css';
 import { useRef, useState } from 'react';
-import { datingTimeline } from '@/data';
 import { getSeason } from '@/utils';
+import { useTimeline } from '@/hooks/useTimeline';
 
 import { JourneyCounter } from '@/components/JourneyCounter';
 import { FallingObjects } from '@/components/FallingObjects';
@@ -19,8 +19,6 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import { Alert, Box, Chip, Snackbar, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
-
-const years = Object.keys(datingTimeline).map(Number);
 
 const yearSx =
     (active: boolean): SxProps<Theme> =>
@@ -40,6 +38,9 @@ const yearSx =
     });
 
 export function HomePage() {
+    const datingTimeline = useTimeline();
+    const years = Object.keys(datingTimeline).map(Number).sort((a, b) => a - b);
+
     const [selectedYear, setSelectedYear] = useState(years[years.length - 1]);
     const [slideDir, setSlideDir] = useState<'left' | 'right'>('left');
     const prevYearRef = useRef(years[0]);

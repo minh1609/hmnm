@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import { ferrariTokens } from '@/theme';
-import { trips } from '@/data';
+import { useTrips } from '@/hooks/useTrips';
 
 const FIRST_DATE = new Date('2025-08-26T00:00:00');
-const TRIPS_TAKEN = trips.length;
 
 function getCounterValues() {
     const now = new Date();
@@ -135,6 +134,7 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
 
 export function JourneyCounter() {
     const [values, setValues] = useState(getCounterValues());
+    const trips = useTrips();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -183,7 +183,7 @@ export function JourneyCounter() {
                 <StatCard value={values.days} label="Days Shared" />
                 <StatCard value={values.hoursToday} label="Hours Today" live />
                 <StatCard value={values.minutesPast} label="Minutes Past" live />
-                <StatCard value={TRIPS_TAKEN} label="Trips Taken" onClick={() => navigate('/trips')} />
+                <StatCard value={trips.length} label="Trips Taken" onClick={() => navigate('/trips')} />
             </Box>
         </Box>
     );
