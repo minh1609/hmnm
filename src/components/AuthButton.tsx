@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -27,43 +27,42 @@ export function AuthButton() {
     if (!user) {
         return (
             <Box sx={containerSx}>
-                <Button
+                <Chip
+                    icon={
+                        <LoginIcon
+                            sx={{ fontSize: '0.9rem !important', color: `${ferrariTokens.colors.gold} !important` }}
+                        />
+                    }
+                    label="Sign in"
                     size="small"
-                    startIcon={<LoginIcon sx={{ fontSize: '1rem !important' }} />}
                     onClick={signIn}
+                    variant="outlined"
                     sx={{
                         fontFamily: ferrariTokens.fonts.display,
                         fontSize: '0.7rem',
                         letterSpacing: '0.1em',
                         textTransform: 'uppercase',
-                        color: ferrariTokens.colors.muted,
-                        borderColor: ferrariTokens.colors.border,
-                        border: `1px solid ${ferrariTokens.colors.border}`,
-                        px: 1.5,
-                        py: 0.5,
-                        borderRadius: '2px',
-                        minWidth: 0,
+                        color: ferrariTokens.colors.gold,
+                        borderColor: ferrariTokens.colors.gold,
+                        backgroundColor: ferrariTokens.colors.black,
+                        borderRadius: '4px',
+                        height: 28,
                         transition: 'all 0.2s ease',
                         '&:hover': {
-                            color: ferrariTokens.colors.gold,
-                            borderColor: ferrariTokens.colors.gold,
-                            backgroundColor: 'transparent',
+                            borderColor: ferrariTokens.colors.goldLight,
+                        },
+                        '&.MuiChip-root:hover': {
+                            backgroundColor: `${ferrariTokens.colors.goldGlow} !important`,
                         },
                     }}
-                >
-                    Sign in
-                </Button>
+                />
             </Box>
         );
     }
 
     return (
         <Box sx={containerSx}>
-            <IconButton
-                size="small"
-                onClick={(e) => setAnchor(e.currentTarget)}
-                sx={{ p: 0 }}
-            >
+            <IconButton size="small" onClick={(e) => setAnchor(e.currentTarget)} sx={{ p: 0 }}>
                 <Avatar
                     src={user.photoURL ?? undefined}
                     alt={user.displayName ?? 'User'}
@@ -123,7 +122,10 @@ export function AuthButton() {
                     </Typography>
                 </Box>
                 <MenuItem
-                    onClick={() => { setAnchor(null); signOut(); }}
+                    onClick={() => {
+                        setAnchor(null);
+                        signOut();
+                    }}
                     sx={{
                         fontFamily: ferrariTokens.fonts.display,
                         fontSize: '0.75rem',
