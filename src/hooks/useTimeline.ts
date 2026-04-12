@@ -27,15 +27,21 @@ function groupByYear(
     return result;
 }
 
+export interface UseTimelineResult {
+    timeline: Record<number, TimelineYear>;
+    refetch: () => void;
+}
+
 /**
  * Reads flat `timeline_events` documents from Firestore (owner == activeProfile, ordered by date).
  *
  * Firestore document fields: { date, name, des?, burstIcon?, owner }
  */
-export function useTimeline(): Record<number, TimelineYear> {
+export function useTimeline(): UseTimelineResult {
     const [timeline, setTimeline] = useState<Record<number, TimelineYear>>(
         () => groupByYear(staticTimelineEvents, staticYearDescriptions),
     );
+    const [tick, setTick] = useState(0);
 
     useEffect(() => {
         const q = query(
@@ -65,7 +71,9 @@ export function useTimeline(): Record<number, TimelineYear> {
             .catch((err) => {
                 console.error('[useTimeline] failed to fetch timeline_events:', err);
             });
-    }, []);
+    }, [tick]);
 
-    return timeline;
+    const refetch = () => setTick((t) => t + 1);
+
+    return { timeline, refetch };
 }

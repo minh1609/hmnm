@@ -2,11 +2,14 @@ import '@/App.css';
 import { useRef, useState } from 'react';
 import { getSeason } from '@/utils';
 import { useTimeline } from '@/hooks/useTimeline';
+import { useAuth } from '@/hooks/useAuth';
 
 import { JourneyCounter } from '@/components/JourneyCounter';
 import { FallingObjects } from '@/components/FallingObjects';
 import { IconBurst } from '@/components/IconBurst';
 import FerrariTooltip from '@/components/FerrariTooltip';
+import { CreateEventDialog } from '@/components/CreateEventDialog';
+import { AddEventFab } from '@/components/AddEventFab';
 import { ferrariTokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
@@ -38,7 +41,8 @@ const yearSx =
     });
 
 export function HomePage() {
-    const datingTimeline = useTimeline();
+    const { timeline: datingTimeline, refetch } = useTimeline();
+    const { user } = useAuth();
     const years = Object.keys(datingTimeline)
         .map(Number)
         .sort((a, b) => a - b);
@@ -50,6 +54,7 @@ export function HomePage() {
     const [kissBurst, setKissBurst] = useState<{ x: number; y: number; icon: string } | null>(null);
 
     const [swipeAlert, setSwipeAlert] = useState<string | null>(null);
+    const [createDialogOpen, setCreateDialogOpen] = useState(false);
     const touchStartX = useRef<number | null>(null);
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -296,6 +301,16 @@ export function HomePage() {
                     {swipeAlert}
                 </Alert>
             </Snackbar>
+
+            {user && (
+                <AddEventFab onClick={() => setCreateDialogOpen(true)} />
+            )}
+
+            <CreateEventDialog
+                open={createDialogOpen}
+                onClose={() => setCreateDialogOpen(false)}
+                onCreated={refetch}
+            />
         </>
     );
 }
