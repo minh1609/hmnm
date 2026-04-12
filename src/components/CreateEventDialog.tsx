@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Dialog,
     DialogTitle,
@@ -12,24 +12,47 @@ import {
     Alert,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import EditIcon from '@mui/icons-material/Edit';
+import { collection, addDoc, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { activeProfile } from '@/config';
 import { ferrariTokens } from '@/theme';
+import type { TimelineEvent } from '@/types';
 
 interface Props {
     open: boolean;
     onClose: () => void;
     onCreated: () => void;
+    /** When provided, the dialog operates in edit mode */
+    editEvent?: TimelineEvent | null;
 }
 
-export function CreateEventDialog({ open, onClose, onCreated }: Props) {
+export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props) {
+    const isEditing = Boolean(editEvent);
+
     const [date, setDate] = useState('');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [burstIcon, setBurstIcon] = useState('');
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (open && editEvent) {
+            const d = editEvent.date;
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            setDate(`${yyyy}-${mm}-${dd}`);
+            setName(editEvent.name);
+            setDescription(Array.isArray(editEvent.des) ? editEvent.des.join('\n') : (editEvent.des ?? ''));
+            setBurstIcon(editEvent.burstIcon ?? '');
+            setError(null);
+        } else if (open && !editEvent) {
+            reset();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open, editEvent]);
 
     const reset = () => {
         setDate('');
@@ -56,15 +79,22 @@ export function CreateEventDialog({ open, onClose, onCreated }: Props) {
 
         try {
             const parsedDate = new Date(date);
-            const doc: Record<string, unknown> = {
+            const data: Record<string, unknown> = {
                 date: Timestamp.fromDate(parsedDate),
                 name: name.trim(),
                 owner: activeProfile,
+                des: description.trim() || null,
+                burstIcon: burstIcon.trim() || null,
             };
-            if (description.trim()) doc.des = description.trim();
-            if (burstIcon.trim()) doc.burstIcon = burstIcon.trim();
 
-            await addDoc(collection(db, 'timeline_events'), doc);
+            if (isEditing && editEvent?.id) {
+                await updateDoc(doc(db, 'timeline_events', editEvent.id), data);
+            } else {
+                if (!data.des) delete data.des;
+                if (!data.burstIcon) delete data.burstIcon;
+                await addDoc(collection(db, 'timeline_events'), data);
+            }
+
             reset();
             onCreated();
             onClose();
@@ -106,8 +136,8 @@ export function CreateEventDialog({ open, onClose, onCreated }: Props) {
                     gap: 1,
                 }}
             >
-                <AddIcon sx={{ fontSize: '1.3rem' }} />
-                Kỉ niệm mới
+                {isEditing ? <EditIcon sx={{ fontSize: '1.3rem' }} /> : <AddIcon sx={{ fontSize: '1.3rem' }} />}
+                {isEditing ? 'Sửa kỉ niệm' : 'Kỉ niệm mới'}
             </DialogTitle>
 
             <DialogContent sx={{ pt: '24px !important', pb: 1 }}>
@@ -206,6 +236,8 @@ export function CreateEventDialog({ open, onClose, onCreated }: Props) {
                     startIcon={
                         saving ? (
                             <CircularProgress size={14} thickness={3} sx={{ color: ferrariTokens.colors.black }} />
+                        ) : isEditing ? (
+                            <EditIcon />
                         ) : (
                             <AddIcon />
                         )
@@ -224,7 +256,7 @@ export function CreateEventDialog({ open, onClose, onCreated }: Props) {
                         },
                     }}
                 >
-                    {saving ? 'Saving…' : 'Thêm'}
+                    {saving ? 'Saving…' : isEditing ? 'Lưu' : 'Thêm'}
                 </Button>
             </DialogActions>
         </Dialog>

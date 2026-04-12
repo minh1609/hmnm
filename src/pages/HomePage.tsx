@@ -21,7 +21,9 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import { Alert, Box, Chip, Snackbar, Typography } from '@mui/material';
+import { Alert, Box, Chip, Snackbar, Typography, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import type { SxProps, Theme } from '@mui/material';
 import type { TimelineEvent } from '@/types';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
@@ -59,6 +61,8 @@ export function HomePage() {
     const [swipeAlert, setSwipeAlert] = useState<string | null>(null);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
     const [deleteEvent, setDeleteEvent] = useState<TimelineEvent | null>(null);
+    const [editEvent, setEditEvent] = useState<TimelineEvent | null>(null);
+    const [dotMenu, setDotMenu] = useState<{ anchor: HTMLElement; event: TimelineEvent } | null>(null);
     const touchStartX = useRef<number | null>(null);
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -194,7 +198,7 @@ export function HomePage() {
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
                                     <TimelineDot
-                                        onClick={user ? () => setDeleteEvent(event) : undefined}
+                                        onClick={user ? (e) => setDotMenu({ anchor: e.currentTarget, event }) : undefined}
                                         sx={{
                                             backgroundColor: ferrariTokens.colors.carbon,
                                             borderColor: ferrariTokens.colors.goldLight,
@@ -291,9 +295,72 @@ export function HomePage() {
                 <AddEventFab onClick={() => setCreateDialogOpen(true)} />
             )}
 
+            <Menu
+                open={dotMenu !== null}
+                anchorEl={dotMenu?.anchor}
+                onClose={() => setDotMenu(null)}
+                PaperProps={{
+                    sx: {
+                        backgroundColor: ferrariTokens.colors.carbon,
+                        border: `1px solid ${ferrariTokens.colors.border}`,
+                        borderRadius: 1.5,
+                        backgroundImage: 'none',
+                        minWidth: 140,
+                    },
+                }}
+            >
+                <MenuItem
+                    onClick={() => {
+                        setEditEvent(dotMenu!.event);
+                        setDotMenu(null);
+                    }}
+                    sx={{
+                        fontFamily: ferrariTokens.fonts.display,
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        fontSize: '0.8rem',
+                        color: ferrariTokens.colors.gold,
+                        '&:hover': { backgroundColor: 'rgba(197,160,80,0.12)' },
+                    }}
+                >
+                    <ListItemIcon sx={{ minWidth: 32, color: ferrariTokens.colors.gold }}>
+                        <EditIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Edit</ListItemText>
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        setDeleteEvent(dotMenu!.event);
+                        setDotMenu(null);
+                    }}
+                    sx={{
+                        fontFamily: ferrariTokens.fonts.display,
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        fontSize: '0.8rem',
+                        color: ferrariTokens.colors.red,
+                        '&:hover': { backgroundColor: 'rgba(218,41,28,0.12)' },
+                    }}
+                >
+                    <ListItemIcon sx={{ minWidth: 32, color: ferrariTokens.colors.red }}>
+                        <DeleteOutlineIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Delete</ListItemText>
+                </MenuItem>
+            </Menu>
+
             <CreateEventDialog
                 open={createDialogOpen}
                 onClose={() => setCreateDialogOpen(false)}
+                onCreated={refetch}
+            />
+
+            <CreateEventDialog
+                open={editEvent !== null}
+                editEvent={editEvent}
+                onClose={() => setEditEvent(null)}
                 onCreated={refetch}
             />
 
