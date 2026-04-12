@@ -43,7 +43,7 @@ export const timelineEvents: TimelineEvent[] = [
     {
         date: new Date('2025-10-30T12:00:00'),
         name: 'Halloween 🎃',
-        des: 'Ăn Mochi Donut 🍩 ở Sherway, thấy custome Halloween của em',
+        des: 'Ăn Mochi Donut 🍩 ở Sherway, thấy costume Halloween của em',
         owner: 'mindy',
     },
     {

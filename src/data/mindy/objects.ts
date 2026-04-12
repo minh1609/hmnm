@@ -12,7 +12,7 @@ export const ICONS: Icon[] = [
     {
         symbol: '🧋',
         color: 'inherit',
-        label: 'Creme Burlee @ Machi Machi, Cream Cheese @ Matcha Matcha, Pure Latte @Chayam',
+        label: 'Creme Burlee @ Machi Machi, Cream Cheese @ Matcha Matcha, Pure Latte @ Chayan',
     },
     { symbol: '🧁', color: 'inherit', label: 'Vava Designer cake, Farmboy' },
 ];
