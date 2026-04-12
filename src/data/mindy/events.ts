@@ -25,7 +25,7 @@ export const timelineEvents: TimelineEvent[] = [
     },
     {
         date: new Date('2025-10-03T12:00:00'),
-        name: 'Humber College in Lakeshore',
+        name: 'Humber Polytechnic in Lakeshore',
         owner: 'mindy',
     },
     {
@@ -157,7 +157,7 @@ export const timelineEvents: TimelineEvent[] = [
     {
         date: new Date('2026-03-20T12:00:00'),
         name: 'Bắt đầu 3 ngày chay tịnh 🥗',
-        des: 'Cảm ơn các cụ phù hộ lấy Job Offer 📃\nĂn Bean Curd, nhưng mua nhầm sauce có tôm khô\n💤 🏠',
+        des: 'Cảm ơn các cụ phù hộ lấy Job Offer 📃\nĂn beancurd, nhưng mua nhầm sauce có tôm khô\n💤 🏠',
         burstIcon: '🍑',
         owner: 'mindy',
     },
