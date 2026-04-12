@@ -67,7 +67,15 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
     }
 }
 
-createRoot(document.getElementById('root')!).render(
+const container = document.getElementById('root')!;
+// Reuse the existing root during HMR hot reloads to avoid the
+// "container already passed to createRoot" warning.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const root = (container as any).__reactRoot ?? createRoot(container);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(container as any).__reactRoot = root;
+
+root.render(
     <StrictMode>
         <ErrorBoundary>
             <HashRouter>
