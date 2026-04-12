@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, orderBy, type Timestamp } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { trips as staticTrips } from '@/data';
 import type { Trip } from '@/types';
 
 function toDate(val: unknown): Date {
@@ -13,19 +12,17 @@ function toDate(val: unknown): Date {
 
 /**
  * Reads the `trips` collection from Firestore (owner == 'mindy', ordered by startDate).
- * Falls back to the static data file if the collection is empty or unreachable.
  *
  * Firestore document fields: { name, flag, startDate, endDate, highlights, destinations, owner }
  */
 export function useTrips(): Trip[] {
-    const [trips, setTrips] = useState<Trip[]>(staticTrips);
+    const [trips, setTrips] = useState<Trip[]>([]);
 
     useEffect(() => {
         const q = query(collection(db, 'trips'), where('owner', '==', 'mindy'), orderBy('startDate', 'asc'));
 
         getDocs(q)
             .then((snap) => {
-                if (snap.empty) return;
                 const result: Trip[] = snap.docs.map((doc) => {
                     const d = doc.data();
                     return {
@@ -38,9 +35,12 @@ export function useTrips(): Trip[] {
                         owner: d.owner as string,
                     } satisfies Trip;
                 });
+                console.log(`[useTrips] fetched ${result.length} trips from Firestore`);
                 setTrips(result);
             })
-            .catch(() => {});
+            .catch((err) => {
+                console.error('[useTrips] failed to fetch trips:', err);
+            });
     }, []);
 
     return trips;

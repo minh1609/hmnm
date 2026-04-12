@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, orderBy, type Timestamp } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { timelineEvents as staticEvents, yearDescriptions as staticYearDescriptions } from '@/data';
+import { timelineEvents as staticTimelineEvents, yearDescriptions as staticYearDescriptions } from '@/data';
 import type { TimelineEvent, TimelineYear } from '@/types';
 import { activeProfile } from '@/config';
 
@@ -29,13 +29,12 @@ function groupByYear(
 
 /**
  * Reads flat `timeline_events` documents from Firestore (owner == activeProfile, ordered by date).
- * Falls back to static data if the collection is empty or unreachable.
  *
  * Firestore document fields: { date, name, des?, burstIcon?, owner }
  */
 export function useTimeline(): Record<number, TimelineYear> {
-    const [timeline, setTimeline] = useState<Record<number, TimelineYear>>(() =>
-        groupByYear(staticEvents, staticYearDescriptions),
+    const [timeline, setTimeline] = useState<Record<number, TimelineYear>>(
+        () => groupByYear(staticTimelineEvents, staticYearDescriptions),
     );
 
     useEffect(() => {
@@ -47,7 +46,6 @@ export function useTimeline(): Record<number, TimelineYear> {
 
         getDocs(q)
             .then((snap) => {
-                if (snap.empty) return;
                 const events: TimelineEvent[] = snap.docs.map((doc) => {
                     const d = doc.data();
                     const event: TimelineEvent = {
@@ -59,9 +57,14 @@ export function useTimeline(): Record<number, TimelineYear> {
                     if (d.burstIcon != null) event.burstIcon = d.burstIcon as string;
                     return event;
                 });
-                setTimeline(groupByYear(events, staticYearDescriptions));
+                console.log(`[useTimeline] fetched ${events.length} events from Firestore`);
+                if (events.length > 0) {
+                    setTimeline(groupByYear(events, staticYearDescriptions));
+                }
             })
-            .catch(() => {});
+            .catch((err) => {
+                console.error('[useTimeline] failed to fetch timeline_events:', err);
+            });
     }, []);
 
     return timeline;

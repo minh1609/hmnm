@@ -8,11 +8,14 @@ export const IMAGE_FILES: ImageFile[] = [
 export const ICONS: Icon[] = [
     // Emojis — color value is unused, emojis render in their own colors
     { symbol: '🍉', color: 'inherit', label: '5 in summer 2025 and more in 2026' },
-    { symbol: '🍪 ', color: 'inherit', label: 'Chocolate only' },
+    { symbol: '🍪 ', color: 'inherit', label: 'Dark Chocolate Soft only' },
+    //meat, chicken feet, canolle
+    //brooklyn pizza veggie
+
     {
         symbol: '🧋',
         color: 'inherit',
-        label: 'Creme Burlee @ Machi Machi, Cream Cheese @ Matcha Matcha, Pure Latte @ Chayan',
+        label: 'Creme Burlee @ Machi Machi, Cream Cheese @ Matcha Matcha, Pure Latte @ Chayan, ',
     },
     { symbol: '🧁', color: 'inherit', label: 'Vava Designer cake, Farmboy' },
 ];
