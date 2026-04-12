@@ -17,6 +17,15 @@ import { collection, addDoc, doc, updateDoc, Timestamp } from 'firebase/firestor
 import { db } from '@/firebase';
 import { activeProfile } from '@/config';
 import { ferrariTokens } from '@/theme';
+import {
+    dialogPaperSx,
+    dialogTitleSx,
+    dialogActionsSx,
+    cancelButtonSx,
+    primaryButtonSx,
+    textFieldSx,
+    errorAlertSx,
+} from '@/styles/dialogStyles';
 import type { TimelineEvent } from '@/types';
 
 interface Props {
@@ -114,30 +123,9 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
             onClose={handleClose}
             maxWidth="sm"
             fullWidth
-            PaperProps={{
-                sx: {
-                    backgroundColor: ferrariTokens.colors.carbon,
-                    border: `1px solid ${ferrariTokens.colors.gold}`,
-                    borderRadius: 2,
-                    backgroundImage: 'none',
-                },
-            }}
+            PaperProps={{ sx: dialogPaperSx(ferrariTokens.colors.gold) }}
         >
-            <DialogTitle
-                sx={{
-                    fontFamily: ferrariTokens.fonts.display,
-                    fontWeight: 700,
-                    fontSize: '1.4rem',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: ferrariTokens.colors.gold,
-                    borderBottom: `1px solid ${ferrariTokens.colors.border}`,
-                    pb: 1.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                }}
-            >
+            <DialogTitle sx={dialogTitleSx(ferrariTokens.colors.gold)}>
                 {isEditing ? <EditIcon sx={{ fontSize: '1.3rem' }} /> : <AddIcon sx={{ fontSize: '1.3rem' }} />}
                 {isEditing ? 'Sửa kỉ niệm' : 'Kỉ niệm mới'}
             </DialogTitle>
@@ -145,14 +133,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
             <DialogContent sx={{ pt: '24px !important', pb: 1 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                     {error && (
-                        <Alert
-                            severity="error"
-                            sx={{
-                                backgroundColor: ferrariTokens.colors.redDeep,
-                                color: ferrariTokens.colors.white,
-                                '& .MuiAlert-icon': { color: ferrariTokens.colors.goldLight },
-                            }}
-                        >
+                        <Alert severity="error" sx={errorAlertSx}>
                             {error}
                         </Alert>
                     )}
@@ -209,25 +190,11 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                 </Box>
             </DialogContent>
 
-            <DialogActions
-                sx={{
-                    px: 3,
-                    py: 2,
-                    borderTop: `1px solid ${ferrariTokens.colors.border}`,
-                    gap: 1,
-                }}
-            >
+            <DialogActions sx={dialogActionsSx}>
                 <Button
                     onClick={handleClose}
                     disabled={saving}
-                    sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        color: ferrariTokens.colors.muted,
-                        '&:hover': { color: ferrariTokens.colors.white },
-                    }}
+                    sx={cancelButtonSx}
                 >
                     Cancel
                 </Button>
@@ -244,19 +211,11 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                             <AddIcon />
                         )
                     }
-                    sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        backgroundColor: ferrariTokens.colors.gold,
-                        color: ferrariTokens.colors.black,
-                        '&:hover': { backgroundColor: ferrariTokens.colors.goldLight },
-                        '&.Mui-disabled': {
-                            backgroundColor: ferrariTokens.colors.subtle,
-                            color: ferrariTokens.colors.muted,
-                        },
-                    }}
+                    sx={primaryButtonSx(
+                            ferrariTokens.colors.gold,
+                            ferrariTokens.colors.goldLight,
+                            ferrariTokens.colors.black,
+                        )}
                 >
                     {saving ? 'Saving…' : isEditing ? 'Lưu' : 'Thêm'}
                 </Button>
@@ -265,25 +224,4 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
     );
 }
 
-const inputSx = {
-    '& .MuiOutlinedInput-root': {
-        fontFamily: ferrariTokens.fonts.sans,
-        color: ferrariTokens.colors.white,
-        '& fieldset': { borderColor: ferrariTokens.colors.border },
-        '&:hover fieldset': { borderColor: ferrariTokens.colors.gold },
-        '&.Mui-focused fieldset': { borderColor: ferrariTokens.colors.gold },
-    },
-    '& .MuiInputLabel-root': {
-        fontFamily: ferrariTokens.fonts.display,
-        fontWeight: 700,
-        letterSpacing: '0.06em',
-        textTransform: 'uppercase',
-        fontSize: '0.8rem',
-        color: ferrariTokens.colors.muted,
-        '&.Mui-focused': { color: ferrariTokens.colors.gold },
-    },
-    '& .MuiInputBase-input::placeholder': {
-        color: ferrariTokens.colors.subtle,
-        opacity: 1,
-    },
-};
+const inputSx = textFieldSx(ferrariTokens.colors.gold);

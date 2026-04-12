@@ -13,6 +13,14 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { ferrariTokens } from '@/theme';
+import {
+    dialogPaperSx,
+    dialogTitleSx,
+    dialogActionsSx,
+    cancelButtonSx,
+    primaryButtonSx,
+    errorAlertSx,
+} from '@/styles/dialogStyles';
 import type { TimelineEvent } from '@/types';
 
 interface Props {
@@ -61,45 +69,16 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
             onClose={handleClose}
             maxWidth="xs"
             fullWidth
-            PaperProps={{
-                sx: {
-                    backgroundColor: ferrariTokens.colors.carbon,
-                    border: `1px solid ${ferrariTokens.colors.redDeep}`,
-                    borderRadius: 2,
-                    backgroundImage: 'none',
-                },
-            }}
+            PaperProps={{ sx: dialogPaperSx(ferrariTokens.colors.redDeep) }}
         >
-            <DialogTitle
-                sx={{
-                    fontFamily: ferrariTokens.fonts.display,
-                    fontWeight: 700,
-                    fontSize: '1.3rem',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: ferrariTokens.colors.red,
-                    borderBottom: `1px solid ${ferrariTokens.colors.border}`,
-                    pb: 1.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                }}
-            >
+            <DialogTitle sx={dialogTitleSx(ferrariTokens.colors.red)}>
                 <DeleteOutlineIcon sx={{ fontSize: '1.3rem' }} />
                 Xoá kỉ niệm
             </DialogTitle>
 
             <DialogContent sx={{ pt: '20px !important', pb: 1 }}>
                 {error && (
-                    <Alert
-                        severity="error"
-                        sx={{
-                            mb: 2,
-                            backgroundColor: ferrariTokens.colors.redDeep,
-                            color: ferrariTokens.colors.white,
-                            '& .MuiAlert-icon': { color: ferrariTokens.colors.goldLight },
-                        }}
-                    >
+                    <Alert severity="error" sx={errorAlertSx}>
                         {error}
                     </Alert>
                 )}
@@ -141,25 +120,11 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                 </Typography>
             </DialogContent>
 
-            <DialogActions
-                sx={{
-                    px: 3,
-                    py: 2,
-                    borderTop: `1px solid ${ferrariTokens.colors.border}`,
-                    gap: 1,
-                }}
-            >
+            <DialogActions sx={dialogActionsSx}>
                 <Button
                     onClick={handleClose}
                     disabled={deleting}
-                    sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        color: ferrariTokens.colors.muted,
-                        '&:hover': { color: ferrariTokens.colors.white },
-                    }}
+                    sx={cancelButtonSx}
                 >
                     Huỷ
                 </Button>
@@ -174,19 +139,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                             <DeleteOutlineIcon />
                         )
                     }
-                    sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        backgroundColor: ferrariTokens.colors.red,
-                        color: ferrariTokens.colors.white,
-                        '&:hover': { backgroundColor: ferrariTokens.colors.redBright },
-                        '&.Mui-disabled': {
-                            backgroundColor: ferrariTokens.colors.subtle,
-                            color: ferrariTokens.colors.muted,
-                        },
-                    }}
+                    sx={primaryButtonSx(ferrariTokens.colors.red, ferrariTokens.colors.redBright)}
                 >
                     {deleting ? 'Đang xoá…' : 'Xoá'}
                 </Button>

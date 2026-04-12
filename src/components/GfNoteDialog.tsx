@@ -13,6 +13,15 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { ferrariTokens } from '@/theme';
+import {
+    dialogPaperSx,
+    dialogTitleSx,
+    dialogActionsSx,
+    cancelButtonSx,
+    primaryButtonSx,
+    textFieldSx,
+    errorAlertSx,
+} from '@/styles/dialogStyles';
 import type { TimelineEvent } from '@/types';
 
 interface Props {
@@ -62,45 +71,16 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
             onClose={handleClose}
             maxWidth="sm"
             fullWidth
-            PaperProps={{
-                sx: {
-                    backgroundColor: ferrariTokens.colors.carbon,
-                    border: `1px solid ${ferrariTokens.colors.red}`,
-                    borderRadius: 2,
-                    backgroundImage: 'none',
-                },
-            }}
+            PaperProps={{ sx: dialogPaperSx(ferrariTokens.colors.red) }}
         >
-            <DialogTitle
-                sx={{
-                    fontFamily: ferrariTokens.fonts.display,
-                    fontWeight: 700,
-                    fontSize: '1.2rem',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: ferrariTokens.colors.red,
-                    borderBottom: `1px solid ${ferrariTokens.colors.border}`,
-                    pb: 1.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                }}
-            >
+            <DialogTitle sx={dialogTitleSx(ferrariTokens.colors.red)}>
                 <FavoriteIcon sx={{ fontSize: '1.2rem' }} />
                 {event?.name}
             </DialogTitle>
 
             <DialogContent sx={{ pt: '24px !important', pb: 1 }}>
                 {error && (
-                    <Alert
-                        severity="error"
-                        sx={{
-                            mb: 2,
-                            backgroundColor: ferrariTokens.colors.redDeep,
-                            color: ferrariTokens.colors.white,
-                            '& .MuiAlert-icon': { color: ferrariTokens.colors.goldLight },
-                        }}
-                    >
+                    <Alert severity="error" sx={errorAlertSx}>
                         {error}
                     </Alert>
                 )}
@@ -112,50 +92,15 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                     multiline
                     minRows={3}
                     placeholder="Add your personal note about this moment…"
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            fontFamily: ferrariTokens.fonts.sans,
-                            color: ferrariTokens.colors.white,
-                            '& fieldset': { borderColor: ferrariTokens.colors.border },
-                            '&:hover fieldset': { borderColor: ferrariTokens.colors.red },
-                            '&.Mui-focused fieldset': { borderColor: ferrariTokens.colors.red },
-                        },
-                        '& .MuiInputLabel-root': {
-                            fontFamily: ferrariTokens.fonts.display,
-                            fontWeight: 700,
-                            letterSpacing: '0.06em',
-                            textTransform: 'uppercase',
-                            fontSize: '0.8rem',
-                            color: ferrariTokens.colors.muted,
-                            '&.Mui-focused': { color: ferrariTokens.colors.red },
-                        },
-                        '& .MuiInputBase-input::placeholder': {
-                            color: ferrariTokens.colors.subtle,
-                            opacity: 1,
-                        },
-                    }}
+                    sx={textFieldSx(ferrariTokens.colors.red)}
                 />
             </DialogContent>
 
-            <DialogActions
-                sx={{
-                    px: 3,
-                    py: 2,
-                    borderTop: `1px solid ${ferrariTokens.colors.border}`,
-                    gap: 1,
-                }}
-            >
+            <DialogActions sx={dialogActionsSx}>
                 <Button
                     onClick={handleClose}
                     disabled={saving}
-                    sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        color: ferrariTokens.colors.muted,
-                        '&:hover': { color: ferrariTokens.colors.white },
-                    }}
+                    sx={cancelButtonSx}
                 >
                     Cancel
                 </Button>
@@ -170,21 +115,9 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                             <FavoriteIcon />
                         )
                     }
-                    sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        backgroundColor: ferrariTokens.colors.red,
-                        color: ferrariTokens.colors.white,
-                        '&:hover': { backgroundColor: ferrariTokens.colors.redDeep },
-                        '&.Mui-disabled': {
-                            backgroundColor: ferrariTokens.colors.subtle,
-                            color: ferrariTokens.colors.muted,
-                        },
-                    }}
+                    sx={primaryButtonSx(ferrariTokens.colors.red, ferrariTokens.colors.redDeep)}
                 >
-                    {saving ? 'Saving…' : 'Lưu'}
+                    {saving ? 'Saving…' : 'Save'}
                 </Button>
             </DialogActions>
         </Dialog>

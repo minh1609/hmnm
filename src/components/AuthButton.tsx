@@ -13,7 +13,7 @@ import { ferrariTokens } from '@/theme';
 import { useAuth } from '@/hooks/useAuth';
 
 export function AuthButton() {
-    const { user, loading, isAdmin, signIn, signOut } = useAuth();
+    const { user, loading, role, isAdmin, signIn, signOut } = useAuth();
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
 
     if (loading) {
@@ -140,18 +140,23 @@ export function AuthButton() {
                     >
                         {user.email}
                     </Typography>
-                    <Typography
+                    <Chip
+                        label={role ?? 'viewer'}
+                        size="small"
                         sx={{
-                            fontFamily: ferrariTokens.fonts.display,
-                            fontSize: '0.65rem',
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: isAdmin ? ferrariTokens.colors.red : ferrariTokens.colors.subtle,
                             mt: 0.75,
+                            height: 18,
+                            fontFamily: ferrariTokens.fonts.display,
+                            fontSize: '0.6rem',
+                            letterSpacing: '0.1em',
+                            textTransform: 'uppercase',
+                            color: roleColor(role),
+                            borderColor: roleColor(role),
+                            backgroundColor: 'transparent',
+                            '& .MuiChip-label': { px: 0.75 },
                         }}
-                    >
-                        {isAdmin ? '● Admin' : '○ Viewer'}
-                    </Typography>
+                        variant="outlined"
+                    />
                 </Box>
                 <MenuItem
                     onClick={() => {
@@ -176,6 +181,14 @@ export function AuthButton() {
         </Box>
     );
 }
+
+const roleColor = (role: string | null) => {
+    switch (role) {
+        case 'admin': return ferrariTokens.colors.red;
+        case 'gf':    return ferrariTokens.colors.gold;
+        default:      return ferrariTokens.colors.subtle;
+    }
+};
 
 const containerSx = {
     position: 'fixed',

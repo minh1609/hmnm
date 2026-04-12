@@ -12,6 +12,7 @@ import { auth, db } from '@/firebase';
 export interface AuthState {
     user: User | null;
     loading: boolean;
+    role: string | null;
     isAdmin: boolean;
     isGf: boolean;
     signIn: () => Promise<void>;
@@ -21,6 +22,7 @@ export interface AuthState {
 export function useAuth(): AuthState {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [role, setRole] = useState<string | null>(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isGf, setIsGf] = useState(false);
 
@@ -30,14 +32,17 @@ export function useAuth(): AuthState {
             if (u) {
                 try {
                     const snap = await getDoc(doc(db, 'users', u.uid));
-                    const role = snap.exists() ? snap.data()?.role : undefined;
-                    setIsAdmin(role === 'admin');
-                    setIsGf(role === 'gf');
+                    const r = snap.exists() ? (snap.data()?.role as string | undefined) : undefined;
+                    setRole(r ?? null);
+                    setIsAdmin(r === 'admin');
+                    setIsGf(r === 'gf');
                 } catch {
+                    setRole(null);
                     setIsAdmin(false);
                     setIsGf(false);
                 }
             } else {
+                setRole(null);
                 setIsAdmin(false);
                 setIsGf(false);
             }
@@ -55,5 +60,5 @@ export function useAuth(): AuthState {
         await firebaseSignOut(auth);
     };
 
-    return { user, loading, isAdmin, isGf, signIn, signOut };
+    return { user, loading, role, isAdmin, isGf, signIn, signOut };
 }
