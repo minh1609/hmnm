@@ -107,10 +107,10 @@ export function CreateEventDialog({ open, onClose, onCreated }: Props) {
                 }}
             >
                 <AddIcon sx={{ fontSize: '1.3rem' }} />
-                New Timeline Event
+                Kỉ niệm mới
             </DialogTitle>
 
-            <DialogContent sx={{ pt: 3, pb: 1 }}>
+            <DialogContent sx={{ pt: '24px !important', pb: 1 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                     {error && (
                         <Alert

@@ -2,6 +2,12 @@
  * Seed Firestore with timeline events and trips.
  * Objects (IMAGE_FILES, ICONS) are static — not migrated.
  *
+ * Safe / additive migration: existing documents are NEVER deleted.
+ * A static event is skipped when Firestore already has an event with the
+ * same date (YYYY-MM-DD) AND name.
+ * A static trip is skipped when Firestore already has a trip with the
+ * same startDate (YYYY-MM-DD).
+ *
  * Usage:
  *   1. Download your Firebase service account key from:
  *      Firebase Console → Project Settings → Service Accounts → Generate new private key
@@ -53,24 +59,14 @@ function toTimestamp(date: Date): Timestamp {
     return Timestamp.fromDate(date);
 }
 
-function log(msg: string) {
-    console.log(`[migrate] ${msg}`);
+/** Returns a YYYY-MM-DD string for a Date or Firestore Timestamp. */
+function toDateKey(value: Date | Timestamp): string {
+    const d = value instanceof Date ? value : value.toDate();
+    return d.toISOString().slice(0, 10);
 }
 
-/** Delete every document in a collection in batches of 400. */
-async function clearCollection(name: string): Promise<void> {
-    const col = db.collection(name);
-    let deleted = 0;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-        const snap = await col.limit(400).get();
-        if (snap.empty) break;
-        const batch = db.batch();
-        snap.docs.forEach((d) => batch.delete(d.ref));
-        await batch.commit();
-        deleted += snap.size;
-    }
-    log(`  ✗ cleared ${deleted} existing docs from "${name}"`);
+function log(msg: string) {
+    console.log(`[migrate] ${msg}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -79,12 +75,30 @@ async function clearCollection(name: string): Promise<void> {
 
 async function migrateTimelineEvents() {
     log('Migrating timeline events…');
-    await clearCollection('timeline_events');
     const col = db.collection('timeline_events');
 
-    let total = 0;
+    // Build a set of existing (dateKey, name) pairs so we can skip duplicates.
+    const existingSnap = await col.where('owner', '==', 'mindy').get();
+    const existingKeys = new Set<string>();
+    for (const doc of existingSnap.docs) {
+        const data = doc.data();
+        const dateKey = toDateKey(data.date as Timestamp);
+        existingKeys.add(`${dateKey}::${data.name as string}`);
+    }
+    log(`  found ${existingKeys.size} existing event(s) in Firestore`);
+
+    let added = 0;
+    let skipped = 0;
     for (const event of timelineEvents) {
         const { date, name, des, burstIcon, owner } = event;
+        const key = `${toDateKey(date)}::${name}`;
+
+        if (existingKeys.has(key)) {
+            log(`  ~ skipped  "${name}" (${toDateKey(date)}) — already exists`);
+            skipped++;
+            continue;
+        }
+
         const doc: Record<string, unknown> = {
             date: toTimestamp(date),
             name,
@@ -94,25 +108,45 @@ async function migrateTimelineEvents() {
         if (burstIcon !== undefined) doc.burstIcon = burstIcon;
 
         const ref = await col.add(doc);
-        log(`  ✓ event "${name}"  (id: ${ref.id})`);
-        total++;
+        log(`  ✓ added    "${name}"  (id: ${ref.id})`);
+        added++;
     }
-    log(`  → ${total} events written`);
+    log(`  → ${added} event(s) added, ${skipped} skipped`);
 }
 
 async function migrateTrips() {
     log('Migrating trips…');
-    await clearCollection('trips');
     const col = db.collection('trips');
 
+    // Build a set of existing startDate keys.
+    const existingSnap = await col.where('owner', '==', 'mindy').get();
+    const existingKeys = new Set<string>();
+    for (const doc of existingSnap.docs) {
+        const data = doc.data();
+        existingKeys.add(toDateKey(data.startDate as Timestamp));
+    }
+    log(`  found ${existingKeys.size} existing trip(s) in Firestore`);
+
+    let added = 0;
+    let skipped = 0;
     for (const trip of trips) {
+        const key = toDateKey(trip.startDate);
+
+        if (existingKeys.has(key)) {
+            log(`  ~ skipped  "${trip.name}" (${key}) — already exists`);
+            skipped++;
+            continue;
+        }
+
         const ref = await col.add({
             ...trip,
             startDate: toTimestamp(trip.startDate),
             endDate: toTimestamp(trip.endDate),
         });
-        log(`  ✓ trip "${trip.name}"  (id: ${ref.id})`);
+        log(`  ✓ added    "${trip.name}"  (id: ${ref.id})`);
+        added++;
     }
+    log(`  → ${added} trip(s) added, ${skipped} skipped`);
 }
 
 // ---------------------------------------------------------------------------
@@ -120,7 +154,7 @@ async function migrateTrips() {
 // ---------------------------------------------------------------------------
 
 async function main() {
-    log('Starting migration');
+    log('Starting migration (additive — existing data is preserved)');
     log(`Service account: ${serviceAccountPath}`);
     console.log();
 

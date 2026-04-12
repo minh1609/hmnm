@@ -20,8 +20,9 @@ export function AddEventFab({ onClick }: Props) {
                     px: 2.5,
                     gap: 1,
                     borderRadius: '999px',
-                    backgroundColor: ferrariTokens.colors.gold,
-                    color: ferrariTokens.colors.black,
+                    backgroundColor: ferrariTokens.colors.black,
+                    color: ferrariTokens.colors.gold,
+                    border: `1px solid ${ferrariTokens.colors.gold}`,
                     boxShadow: `0 6px 16px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.3), 0 0 24px ${ferrariTokens.colors.goldGlow}`,
                     animation: 'fabFloat 3s ease-in-out infinite',
                     '@keyframes fabFloat': {
@@ -30,7 +31,7 @@ export function AddEventFab({ onClick }: Props) {
                     },
                     transition: 'transform 2s ease, box-shadow 0.5s ease, background-color 0.5s ease',
                     '&:hover': {
-                        backgroundColor: ferrariTokens.colors.goldLight,
+                        backgroundColor: ferrariTokens.colors.carbon,
                         boxShadow: `0 10px 28px rgba(0,0,0,0.55), 0 4px 10px rgba(0,0,0,0.35), 0 0 36px ${ferrariTokens.colors.goldGlow}`,
                         animation: 'none',
                         transform: 'translateY(-4px) scale(1.05)',
