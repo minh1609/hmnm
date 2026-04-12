@@ -14,16 +14,20 @@ src/
 ├── App.tsx              # Router: wraps Routes with page transition animation class
 ├── main.tsx             # Entry: BrowserRouter + ThemeProvider + CssBaseline
 ├── config.ts            # Central config: activeProfile, fallingObjects, iconBurst settings
+├── firebase.ts          # Firebase init — exports app, analytics, db (Firestore)
 ├── types.ts             # Shared TypeScript interfaces (ImageFile, Icon, Trip, TimelineEvent, …)
 ├── theme.ts             # ferrariTokens + MUI theme
 ├── utils.tsx            # getSeason() → SeasonInfo (icon + colors)
 ├── App.css              # Slide/enter/fade animations (CSS classes)
 ├── index.css            # Global reset + CSS custom properties + fallingDrift keyframe
+├── hooks/
+│   ├── useTimeline.ts   # Firestore-backed timeline hook; falls back to static data
+│   └── useTrips.ts      # Firestore-backed trips hook; falls back to static data
 ├── data/
 │   ├── index.ts         # Re-exports from the active profile (driven by config.activeProfile)
 │   └── mindy/           # Profile folder — currently the only / active profile
-│       ├── index.ts     # Barrel: re-exports datingTimeline, trips, IMAGE_FILES, ICONS
-│       ├── events.ts    # datingTimeline data (Record<number, TimelineYear>)
+│       ├── index.ts     # Barrel: re-exports timelineEvents, yearDescriptions, trips, IMAGE_FILES, ICONS
+│       ├── events.ts    # timelineEvents (TimelineEvent[]) + yearDescriptions (Record<number, string>)
 │       ├── trips.ts     # trips array (Trip[])
 │       └── objects.ts   # IMAGE_FILES (ImageFile[]) + ICONS (Icon[])
 ├── pages/
@@ -46,7 +50,45 @@ public/
 - **Vite 8** with `@rolldown/plugin-babel` + `babel-plugin-react-compiler`
 - **MUI v7** (`@mui/material`, `@mui/lab`, `@mui/icons-material`) + Emotion
 - **React Router v7** (`react-router-dom`) — routes: `/` (HomePage), `/trips` (TripsPage)
+- **Firebase** (`firebase/app`, `firebase/firestore`, `firebase/analytics`) — Firestore as live data source
 - Path alias: `@/` → `src/`
+
+## Firebase (`src/firebase.ts`)
+
+Initialises Firebase and exports three values used throughout the app:
+
+```ts
+export const app;       // FirebaseApp
+export const analytics; // Analytics
+export const db;        // Firestore instance — import wherever Firestore is needed
+```
+
+Project ID: `pet1609-cf0d7`. Import `db` from `@/firebase`.
+
+## Hooks (`src/hooks/`)
+
+Both hooks follow the same pattern: initialise state with static fallback data, fire a one-shot Firestore query on mount, and update state only if the collection returns documents. Errors are swallowed silently so the static data always shows.
+
+### `useTimeline` (`src/hooks/useTimeline.ts`)
+
+```ts
+export function useTimeline(): Record<number, TimelineYear>
+```
+
+- Queries `timeline_events` collection: `where('owner', '==', 'mindy')`, `orderBy('date', 'asc')`.
+- Converts Firestore `Timestamp` fields to `Date` via local `toDate()`.
+- Groups the flat event list into `Record<number, TimelineYear>` using `groupByYear(events, staticYearDescriptions)`.
+- Falls back to the static `timelineEvents` + `yearDescriptions` from `@/data` if collection is empty or unreachable.
+
+### `useTrips` (`src/hooks/useTrips.ts`)
+
+```ts
+export function useTrips(): Trip[]
+```
+
+- Queries `trips` collection: `where('owner', '==', 'mindy')`, `orderBy('startDate', 'asc')`.
+- Converts Firestore `Timestamp` fields (`startDate`, `endDate`) to `Date` via local `toDate()`.
+- Falls back to the static `trips` array from `@/data` if collection is empty or unreachable.
 
 ## Routing (`src/App.tsx`)
 
@@ -182,6 +224,7 @@ export interface TimelineEvent {
     name: string;            // Event title — shown in UPPERCASE via CSS
     des?: string | string[]; // Optional detail(s) shown in FerrariTooltip via LightbulbIcon
     burstIcon?: string;      // Optional emoji — clicking the date Chip triggers IconBurst
+    owner: string;           // Firestore filter key (e.g. 'mindy')
 }
 
 export interface TimelineYear {
@@ -201,6 +244,7 @@ export interface Trip {
     endDate: Date;
     highlights: string[]; // Bullet points shown in card body
     destinations: TripDestination[];
+    owner: string;        // Firestore filter key (e.g. 'mindy')
 }
 ```
 
@@ -215,29 +259,32 @@ import { activeProfile } from '@/config';
 import * as mindy from '@/data/mindy';
 
 const profiles = { mindy } satisfies Record<string, typeof mindy>;
-export const { datingTimeline, trips, IMAGE_FILES, ICONS } = profiles[activeProfile];
+export const { timelineEvents, yearDescriptions, trips, IMAGE_FILES, ICONS } = profiles[activeProfile];
 ```
 
-To add a new profile: create a folder `src/data/<name>/` with an `index.ts` that exports the four required values, add the import to `src/data/index.ts`, and set `activeProfile` in `config.ts`.
+To add a new profile: create a folder `src/data/<name>/` with an `index.ts` that exports the five required values, add the import to `src/data/index.ts`, and set `activeProfile` in `config.ts`.
 
 ### Profile folder layout (`src/data/mindy/`)
 
-| File         | Export            | Type                            |
-| ------------ | ----------------- | ------------------------------- |
-| `events.ts`  | `datingTimeline`  | `Record<number, TimelineYear>`  |
-| `trips.ts`   | `trips`           | `Trip[]`                        |
-| `objects.ts` | `IMAGE_FILES`     | `ImageFile[]`                   |
-|              | `ICONS`           | `Icon[]`                        |
+| File         | Export               | Type                            |
+| ------------ | -------------------- | ------------------------------- |
+| `events.ts`  | `timelineEvents`     | `TimelineEvent[]`               |
+|              | `yearDescriptions`   | `Record<number, string>`        |
+| `trips.ts`   | `trips`              | `Trip[]`                        |
+| `objects.ts` | `IMAGE_FILES`        | `ImageFile[]`                   |
+|              | `ICONS`              | `Icon[]`                        |
 
 ### Timeline events (`events.ts`)
 
-Events are keyed by year in `datingTimeline: Record<number, TimelineYear>`.  
-Years are derived dynamically — just add a new key to include a new year tab.
+Events are a **flat array** `timelineEvents: TimelineEvent[]` sorted by date.  
+Year descriptions are a separate `yearDescriptions: Record<number, string>` map keyed by year.  
+The `useTimeline` hook groups events by year at runtime using `groupByYear(events, yearDescriptions)`.  
+Each event must include `owner: 'mindy'` to match the Firestore query filter.
 
 ### Trips (`trips.ts`)
 
-To add a new trip: append a `Trip` object to the `trips` array.  
-`TRIPS_TAKEN` in `JourneyCounter.tsx` is now `trips.length` — it updates automatically; **no manual increment needed**.
+To add a new trip: append a `Trip` object (including `owner: 'mindy'`) to the `trips` array.  
+`TRIPS_TAKEN` in `JourneyCounter.tsx` is `trips.length` — it updates automatically; **no manual increment needed**.
 
 ### Falling objects (`objects.ts`)
 
@@ -343,6 +390,8 @@ Retrigger without remount: remove class → force reflow (`offsetHeight`) → re
 - All shared interfaces go in `src/types.ts`; import from `@/types`.
 - All tunable constants (counts, sizes, timings) go in `src/config.ts`; never hardcode magic numbers in components.
 - All data (events, trips, particles) lives in the active profile folder under `src/data/`; components import from `@/data`.
+- Always include `owner: 'mindy'` on every `TimelineEvent` and `Trip` object — it is required by the Firestore query filter.
+- Use `useTimeline()` and `useTrips()` hooks in pages/components instead of importing static data directly.
 
 ## Dev commands
 

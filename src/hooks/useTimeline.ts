@@ -3,6 +3,7 @@ import { collection, getDocs, query, where, orderBy, type Timestamp } from 'fire
 import { db } from '@/firebase';
 import { timelineEvents as staticEvents, yearDescriptions as staticYearDescriptions } from '@/data';
 import type { TimelineEvent, TimelineYear } from '@/types';
+import { activeProfile } from '@/config';
 
 function toDate(val: unknown): Date {
     if (val != null && typeof (val as Timestamp).toDate === 'function') {
@@ -27,7 +28,7 @@ function groupByYear(
 }
 
 /**
- * Reads flat `timeline_events` documents from Firestore (owner == 'mindy', ordered by date).
+ * Reads flat `timeline_events` documents from Firestore (owner == activeProfile, ordered by date).
  * Falls back to static data if the collection is empty or unreachable.
  *
  * Firestore document fields: { date, name, des?, burstIcon?, owner }
@@ -40,7 +41,7 @@ export function useTimeline(): Record<number, TimelineYear> {
     useEffect(() => {
         const q = query(
             collection(db, 'timeline_events'),
-            where('owner', '==', 'mindy'),
+            where('owner', '==', activeProfile),
             orderBy('date', 'asc'),
         );
 

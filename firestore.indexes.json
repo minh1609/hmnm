@@ -15,14 +15,6 @@
                 { "fieldPath": "owner", "order": "ASCENDING" },
                 { "fieldPath": "startDate", "order": "ASCENDING" }
             ]
-        },
-        {
-            "collectionGroup": "trips",
-            "queryScope": "COLLECTION",
-            "fields": [
-                { "fieldPath": "owner", "order": "ASCENDING" },
-                { "fieldPath": "endDate", "order": "ASCENDING" }
-            ]
         }
     ],
     "fieldOverrides": []

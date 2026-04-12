@@ -21,11 +21,7 @@ export function useTrips(): Trip[] {
     const [trips, setTrips] = useState<Trip[]>(staticTrips);
 
     useEffect(() => {
-        const q = query(
-            collection(db, 'trips'),
-            where('owner', '==', 'mindy'),
-            orderBy('startDate', 'asc'),
-        );
+        const q = query(collection(db, 'trips'), where('owner', '==', 'mindy'), orderBy('startDate', 'asc'));
 
         getDocs(q)
             .then((snap) => {
