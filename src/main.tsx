@@ -11,6 +11,7 @@ import './firebase';
 import App from './App.tsx';
 import theme from './theme';
 import { ferrariTokens } from './theme';
+import { AuthButton } from './components/AuthButton';
 
 const AppShell = ({ children }: { children: ReactNode }) => (
     <Box
@@ -82,6 +83,7 @@ root.render(
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     <Suspense fallback={<SuspenseFallback />}>
+                        <AuthButton />
                         <App />
                     </Suspense>
                 </ThemeProvider>
