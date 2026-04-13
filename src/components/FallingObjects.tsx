@@ -25,6 +25,7 @@ type ImageParticle = {
     delay: number;
     opacity: number;
     drift: number;
+    rotationEnd: number;
 };
 
 type IconParticle = {
@@ -39,6 +40,7 @@ type IconParticle = {
     delay: number;
     opacity: number;
     drift: number;
+    rotationEnd: number;
 };
 
 type Particle = ImageParticle | IconParticle;
@@ -61,6 +63,7 @@ function baseParticle(id: number) {
         delay: rand(p.delayMin, p.delayMax),
         opacity: rand(p.opacityMin, p.opacityMax),
         drift: rand(p.driftMin, p.driftMax),
+        rotationEnd: Math.random() < 0.5 ? 360 : -360,
     };
 }
 
@@ -105,6 +108,7 @@ export function FallingObjects() {
                     animation: `fallingDrift ${p.duration}s ${p.delay}s linear infinite`,
                     animationPlayState: isHovered ? 'paused' : 'running',
                     '--drift': `${p.drift}px`,
+                    '--rotationEnd': `${p.rotationEnd}deg`,
                     pointerEvents: 'auto' as const,
                     cursor: 'default',
                     transition: 'opacity 0.2s ease',

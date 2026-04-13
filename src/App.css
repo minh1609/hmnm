@@ -267,7 +267,7 @@
         opacity: 1;
     }
     100% {
-        transform: translateY(115vh) translateX(var(--drift)) rotate(360deg);
+        transform: translateY(115vh) translateX(var(--drift)) rotate(var(--rotationEnd));
         opacity: 0;
     }
 }
