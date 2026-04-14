@@ -28,6 +28,10 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow write: if false;
     }
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if true;
+    }
     match /{document=**} {
       allow read, write: if false;
     }

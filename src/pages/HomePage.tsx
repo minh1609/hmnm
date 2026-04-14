@@ -208,14 +208,14 @@ export function HomePage() {
                                                   : undefined
                                         }
                                         sx={{
-                                            backgroundColor: ferrariTokens.colors.carbon,
+                                            backgroundColor: event.gfNote ? 'white' : ferrariTokens.colors.carbon,
                                             borderColor: ferrariTokens.colors.goldLight,
                                             boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
                                             cursor: isAdmin || isGf ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             ...((isAdmin || isGf) && {
                                                 '&:hover': {
-                                            borderColor: ferrariTokens.colors.red,
+                                                    borderColor: ferrariTokens.colors.red,
                                                     boxShadow: `0 0 10px ${ferrariTokens.colors.redGlow}`,
                                                     transform: 'scale(1.3)',
                                                 },
@@ -250,7 +250,12 @@ export function HomePage() {
                                                         )}
                                                         {event.des && event.gfNote && <br />}
                                                         {event.gfNote && (
-                                                            <span style={{ whiteSpace: 'pre-line', color: ferrariTokens.colors.red }}>
+                                                            <span
+                                                                style={{
+                                                                    whiteSpace: 'pre-line',
+                                                                    color: ferrariTokens.colors.red,
+                                                                }}
+                                                            >
                                                                 {event.gfNote}
                                                             </span>
                                                         )}
@@ -265,6 +270,9 @@ export function HomePage() {
                                                         mb: '-2px',
                                                         mx: 0.5,
                                                         transition: 'transform 0.2s ease',
+                                                        ...(event.gfNote && {
+                                                            filter: `drop-shadow(0 0 4px ${ferrariTokens.colors.gold}) drop-shadow(0 0 12px ${ferrariTokens.colors.gold}) drop-shadow(0 0 28px ${ferrariTokens.colors.goldLight}) drop-shadow(0 0 48px ${ferrariTokens.colors.goldLight})`,
+                                                        }),
                                                         '&:hover': {
                                                             transform: 'scale(1.35)',
                                                             color: 'gold',
@@ -309,9 +317,7 @@ export function HomePage() {
                 </Alert>
             </Snackbar>
 
-            {isAdmin && (
-                <AddEventFab onClick={() => setCreateDialogOpen(true)} />
-            )}
+            {isAdmin && <AddEventFab onClick={() => setCreateDialogOpen(true)} />}
 
             <Menu
                 open={dotMenu !== null}
@@ -369,11 +375,7 @@ export function HomePage() {
                 </MenuItem>
             </Menu>
 
-            <CreateEventDialog
-                open={createDialogOpen}
-                onClose={() => setCreateDialogOpen(false)}
-                onCreated={refetch}
-            />
+            <CreateEventDialog open={createDialogOpen} onClose={() => setCreateDialogOpen(false)} onCreated={refetch} />
 
             <CreateEventDialog
                 open={editEvent !== null}
@@ -382,17 +384,9 @@ export function HomePage() {
                 onCreated={refetch}
             />
 
-            <DeleteEventDialog
-                event={deleteEvent}
-                onClose={() => setDeleteEvent(null)}
-                onDeleted={refetch}
-            />
+            <DeleteEventDialog event={deleteEvent} onClose={() => setDeleteEvent(null)} onDeleted={refetch} />
 
-            <GfNoteDialog
-                event={gfNoteEvent}
-                onClose={() => setGfNoteEvent(null)}
-                onSaved={refetch}
-            />
+            <GfNoteDialog event={gfNoteEvent} onClose={() => setGfNoteEvent(null)} onSaved={refetch} />
         </>
     );
 }

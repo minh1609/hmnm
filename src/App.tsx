@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { HomePage } from '@/pages/HomePage';
 import { TripsPage } from '@/pages/TripsPage';
+import { WybmgfPage } from '@/pages/WybmgfPage';
 
 function App() {
     const location = useLocation();
@@ -11,6 +12,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/trips" element={<TripsPage />} />
+                <Route path="/wybmgf" element={<WybmgfPage />} />
             </Routes>
         </div>
     );
