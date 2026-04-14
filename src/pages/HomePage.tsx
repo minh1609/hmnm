@@ -61,7 +61,6 @@ export function HomePage() {
 
     const [bursts, setBursts] = useState<{ id: number; x: number; y: number; icon: string | string[] }[]>([]);
     const burstIdRef = useRef(0);
-    const lastWeatherBurstMs = useRef(0);
 
     const [swipeAlert, setSwipeAlert] = useState<string | null>(null);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -105,14 +104,6 @@ export function HomePage() {
             ...prev,
             { id, x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, icon: burstIcon },
         ]);
-    };
-
-    const handleWeatherChipHover = (e: React.MouseEvent, weatherEmojis: string[]) => {
-        const now = Date.now();
-        if (now - lastWeatherBurstMs.current < 700) return;
-        lastWeatherBurstMs.current = now;
-        const id = ++burstIdRef.current;
-        setBursts((prev) => [...prev, { id, x: e.clientX, y: e.clientY, icon: weatherEmojis }]);
     };
 
     const handleYearSelect = (year: number) => {
@@ -224,18 +215,16 @@ export function HomePage() {
                                             })
                                             .replace(/\//g, '-')}
                                         onClick={(e) => handleChipClick(e, event.burstIcon)}
-                                        onMouseEnter={(e) => handleWeatherChipHover(e, season.weatherEmojis)}
                                         sx={{
                                             backgroundColor: season.bgColor,
                                             color: season.color,
                                             fontWeight: 600,
                                             borderRadius: '8px',
                                             cursor: event.burstIcon ? 'pointer' : 'default',
-                                            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                                            transition: 'transform 0.15s ease',
                                             '&:hover': {
                                                 backgroundColor: season.bgColor,
                                                 transform: 'scale(1.12)',
-                                                boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
                                             },
                                             '& .MuiChip-icon': {
                                                 color: season.color,
