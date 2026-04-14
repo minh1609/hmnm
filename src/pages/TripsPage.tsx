@@ -24,9 +24,7 @@ export function TripsPage() {
             <Box sx={{ minHeight: '100vh', pb: 6 }}>
                 <PageHeader
                     title="Trips Together"
-                    titleIcon={
-                        <FlightIcon sx={{ color: c.white, fontSize: '1.6rem', transform: 'rotate(-45deg)' }} />
-                    }
+                    titleIcon={<FlightIcon sx={{ color: c.white, fontSize: '1.6rem', transform: 'rotate(-45deg)' }} />}
                     right={
                         <Typography
                             sx={{

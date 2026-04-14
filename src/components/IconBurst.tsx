@@ -13,7 +13,8 @@ export function IconBurst({ x, y, icon, onDone }: Props) {
     useEffect(() => {
         const timer = setTimeout(onDone, iconBurst.durationMs);
         return () => clearTimeout(timer);
-    }, [onDone]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const particles = Array.from({ length: iconBurst.count }, (_, i) => {
         const angle = (i / iconBurst.count) * 2 * Math.PI + (Math.random() - 0.5) * iconBurst.angleJitter;

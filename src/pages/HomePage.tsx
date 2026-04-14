@@ -58,7 +58,8 @@ export function HomePage() {
     const [slideDir, setSlideDir] = useState<'left' | 'right'>('left');
     const prevYearRef = useRef(years[0]);
 
-    const [kissBurst, setKissBurst] = useState<{ x: number; y: number; icon: string } | null>(null);
+    const [bursts, setBursts] = useState<{ id: number; x: number; y: number; icon: string }[]>([]);
+    const burstIdRef = useRef(0);
 
     const [swipeAlert, setSwipeAlert] = useState<string | null>(null);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -97,7 +98,11 @@ export function HomePage() {
     const handleChipClick = (e: React.MouseEvent, burstIcon?: string) => {
         if (!burstIcon) return;
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-        setKissBurst({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, icon: burstIcon });
+        const id = ++burstIdRef.current;
+        setBursts((prev) => [
+            ...prev,
+            { id, x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, icon: burstIcon },
+        ]);
     };
 
     const handleYearSelect = (year: number) => {
@@ -324,9 +329,15 @@ export function HomePage() {
                 </Timeline>
             </Box>
 
-            {kissBurst && (
-                <IconBurst x={kissBurst.x} y={kissBurst.y} icon={kissBurst.icon} onDone={() => setKissBurst(null)} />
-            )}
+            {bursts.map((b) => (
+                <IconBurst
+                    key={b.id}
+                    x={b.x}
+                    y={b.y}
+                    icon={b.icon}
+                    onDone={() => setBursts((prev) => prev.filter((burst) => burst.id !== b.id))}
+                />
+            ))}
 
             <Snackbar
                 open={swipeAlert !== null}
