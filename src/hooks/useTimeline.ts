@@ -53,7 +53,7 @@ export function useTimeline(): UseTimelineResult {
                         name: d.name as string,
                         owner: d.owner as string,
                     };
-                    if (d.des != null) event.des = d.des as string | string[];
+                    if (d.des != null) event.des = d.des as string;
                     if (d.burstIcon != null) event.burstIcon = d.burstIcon as string;
                     if (d.gfNote != null) event.gfNote = d.gfNote as string;
                     return event;

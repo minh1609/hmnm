@@ -58,9 +58,9 @@ public/
 Initialises Firebase and exports three values used throughout the app:
 
 ```ts
-export const app;       // FirebaseApp
+export const app; // FirebaseApp
 export const analytics; // Analytics
-export const db;        // Firestore instance — import wherever Firestore is needed
+export const db; // Firestore instance — import wherever Firestore is needed
 ```
 
 Project ID: `pet1609-cf0d7`. Import `db` from `@/firebase`.
@@ -72,7 +72,7 @@ Both hooks follow the same pattern: initialise state with static fallback data, 
 ### `useTimeline` (`src/hooks/useTimeline.ts`)
 
 ```ts
-export function useTimeline(): Record<number, TimelineYear>
+export function useTimeline(): Record<number, TimelineYear>;
 ```
 
 - Queries `timeline_events` collection: `where('owner', '==', 'mindy')`, `orderBy('date', 'asc')`.
@@ -83,7 +83,7 @@ export function useTimeline(): Record<number, TimelineYear>
 ### `useTrips` (`src/hooks/useTrips.ts`)
 
 ```ts
-export function useTrips(): Trip[]
+export function useTrips(): Trip[];
 ```
 
 - Queries `trips` collection: `where('owner', '==', 'mindy')`, `orderBy('startDate', 'asc')`.
@@ -100,11 +100,11 @@ const routeOrder: Record<string, number> = { '/': 0, '/trips': 1 };
 
 Animation classes applied to the wrapping `<div key={location.key}>`:
 
-| Class                  | Trigger                                      |
-| ---------------------- | -------------------------------------------- |
-| `page-enter-fade`      | Default / initial load (currently always)    |
-| `page-enter-forward`   | Navigating to higher-order route (commented) |
-| `page-enter-backward`  | Navigating to lower-order route (commented)  |
+| Class                 | Trigger                                      |
+| --------------------- | -------------------------------------------- |
+| `page-enter-fade`     | Default / initial load (currently always)    |
+| `page-enter-forward`  | Navigating to higher-order route (commented) |
+| `page-enter-backward` | Navigating to lower-order route (commented)  |
 
 ## Design tokens — `ferrariTokens` (`src/theme.ts`)
 
@@ -178,14 +178,14 @@ Determines which folder under `src/data/` is the active data source. The profile
 All tunable parameters for the `FallingObjects` ambient particle system:
 
 ```ts
-fallingObjects.imageCount      // number of image particles
-fallingObjects.iconCount       // number of emoji/icon particles
-fallingObjects.particle.leftMin / leftMax     // horizontal spread (% of viewport)
-fallingObjects.particle.sizeMin / sizeMax     // particle size in px
-fallingObjects.particle.durationMin / durationMax  // fall duration in seconds
-fallingObjects.particle.delayMin / delayMax   // stagger delay in seconds (≤ 0)
-fallingObjects.particle.opacityMin / opacityMax    // idle translucency
-fallingObjects.particle.driftMin / driftMax   // horizontal sway in px
+fallingObjects.imageCount; // number of image particles
+fallingObjects.iconCount; // number of emoji/icon particles
+fallingObjects.particle.leftMin / leftMax; // horizontal spread (% of viewport)
+fallingObjects.particle.sizeMin / sizeMax; // particle size in px
+fallingObjects.particle.durationMin / durationMax; // fall duration in seconds
+fallingObjects.particle.delayMin / delayMax; // stagger delay in seconds (≤ 0)
+fallingObjects.particle.opacityMin / opacityMax; // idle translucency
+fallingObjects.particle.driftMin / driftMax; // horizontal sway in px
 ```
 
 ### `iconBurst`
@@ -193,14 +193,14 @@ fallingObjects.particle.driftMin / driftMax   // horizontal sway in px
 All tunable parameters for the `IconBurst` click effect:
 
 ```ts
-iconBurst.count          // number of emoji particles per burst
-iconBurst.durationMs     // how long the burst stays on screen (ms); matches CSS animation
-iconBurst.angleJitter    // random angle spread per particle (radians)
-iconBurst.distanceMin    // minimum travel distance from origin (px)
-iconBurst.distanceExtra  // extra random distance on top of min (px)
-iconBurst.maxDelay       // max per-particle stagger delay (seconds)
-iconBurst.sizeBase       // base emoji font-size (rem)
-iconBurst.sizeExtra      // max extra font-size added randomly (rem)
+iconBurst.count; // number of emoji particles per burst
+iconBurst.durationMs; // how long the burst stays on screen (ms); matches CSS animation
+iconBurst.angleJitter; // random angle spread per particle (radians)
+iconBurst.distanceMin; // minimum travel distance from origin (px)
+iconBurst.distanceExtra; // extra random distance on top of min (px)
+iconBurst.maxDelay; // max per-particle stagger delay (seconds)
+iconBurst.sizeBase; // base emoji font-size (rem)
+iconBurst.sizeExtra; // max extra font-size added randomly (rem)
 ```
 
 ## Types (`src/types.ts`)
@@ -209,42 +209,42 @@ All shared interfaces live here. Import from `@/types`.
 
 ```ts
 export interface ImageFile {
-    file: string;   // filename inside public/particles/
-    label: string;  // shown in FerrariTooltip on hover
+    file: string; // filename inside public/particles/
+    label: string; // shown in FerrariTooltip on hover
 }
 
 export interface Icon {
     symbol: string; // emoji or text symbol
-    color: string;  // CSS color (ignored for emojis, which render in their own colors)
-    label: string;  // shown in FerrariTooltip on hover
+    color: string; // CSS color (ignored for emojis, which render in their own colors)
+    label: string; // shown in FerrariTooltip on hover
 }
 
 export interface TimelineEvent {
-    date: Date;              // Use new Date('YYYY-MM-DDTHH:mm:ss')
-    name: string;            // Event title — shown in UPPERCASE via CSS
-    des?: string | string[]; // Optional detail(s) shown in FerrariTooltip via LightbulbIcon
-    burstIcon?: string;      // Optional emoji — clicking the date Chip triggers IconBurst
-    owner: string;           // Firestore filter key (e.g. 'mindy')
+    date: Date; // Use new Date('YYYY-MM-DDTHH:mm:ss')
+    name: string; // Event title — shown in UPPERCASE via CSS
+    des?: string; // Optional detail(s) shown in FerrariTooltip via LightbulbIcon
+    burstIcon?: string; // Optional emoji — clicking the date Chip triggers IconBurst
+    owner: string; // Firestore filter key (e.g. 'mindy')
 }
 
 export interface TimelineYear {
-    description: string;  // Shown above the timeline (Barlow Condensed, uppercase)
+    description: string; // Shown above the timeline (Barlow Condensed, uppercase)
     events: TimelineEvent[];
 }
 
 export interface TripDestination {
     name: string;
-    googleMapLink?: string;  // If present, destination renders as clickable link
+    googleMapLink?: string; // If present, destination renders as clickable link
 }
 
 export interface Trip {
     name: string;
-    flag: string;         // Country flag emoji
+    flag: string; // Country flag emoji
     startDate: Date;
     endDate: Date;
     highlights: string[]; // Bullet points shown in card body
     destinations: TripDestination[];
-    owner: string;        // Firestore filter key (e.g. 'mindy')
+    owner: string; // Firestore filter key (e.g. 'mindy')
 }
 ```
 
@@ -266,13 +266,13 @@ To add a new profile: create a folder `src/data/<name>/` with an `index.ts` that
 
 ### Profile folder layout (`src/data/mindy/`)
 
-| File         | Export               | Type                            |
-| ------------ | -------------------- | ------------------------------- |
-| `events.ts`  | `timelineEvents`     | `TimelineEvent[]`               |
-|              | `yearDescriptions`   | `Record<number, string>`        |
-| `trips.ts`   | `trips`              | `Trip[]`                        |
-| `objects.ts` | `IMAGE_FILES`        | `ImageFile[]`                   |
-|              | `ICONS`              | `Icon[]`                        |
+| File         | Export             | Type                     |
+| ------------ | ------------------ | ------------------------ |
+| `events.ts`  | `timelineEvents`   | `TimelineEvent[]`        |
+|              | `yearDescriptions` | `Record<number, string>` |
+| `trips.ts`   | `trips`            | `Trip[]`                 |
+| `objects.ts` | `IMAGE_FILES`      | `ImageFile[]`            |
+|              | `ICONS`            | `Icon[]`                 |
 
 ### Timeline events (`events.ts`)
 
@@ -354,15 +354,15 @@ Renders emoji particles via `createPortal` that burst outward from `(x, y)` coor
 
 ## Animations (`src/App.css`)
 
-| CSS class              | Effect                                        |
-| ---------------------- | --------------------------------------------- |
-| `timeline-slide-left`  | Slide in from right when advancing year       |
-| `timeline-slide-right` | Slide in from left when going back            |
-| `year-desc-enter`      | Fade + slide up for year description text     |
-| `page-enter-fade`      | Fade in for page transitions (always active)  |
-| `page-enter-forward`   | Slide in from right for forward navigation    |
-| `page-enter-backward`  | Slide in from left for backward navigation    |
-| `burst-particle`       | Outward burst animation using `--bx`/`--by`   |
+| CSS class              | Effect                                       |
+| ---------------------- | -------------------------------------------- |
+| `timeline-slide-left`  | Slide in from right when advancing year      |
+| `timeline-slide-right` | Slide in from left when going back           |
+| `year-desc-enter`      | Fade + slide up for year description text    |
+| `page-enter-fade`      | Fade in for page transitions (always active) |
+| `page-enter-forward`   | Slide in from right for forward navigation   |
+| `page-enter-backward`  | Slide in from left for backward navigation   |
+| `burst-particle`       | Outward burst animation using `--bx`/`--by`  |
 
 Retrigger without remount: remove class → force reflow (`offsetHeight`) → re-add class.
 

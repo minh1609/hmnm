@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, orderBy, type Timestamp } from 'firebase/firestore';
 import { db } from '@/firebase';
+import { activeProfile } from '@/config';
 import type { Trip } from '@/types';
 
 function toDate(val: unknown): Date {
@@ -11,7 +12,7 @@ function toDate(val: unknown): Date {
 }
 
 /**
- * Reads the `trips` collection from Firestore (owner == 'mindy', ordered by startDate).
+ * Reads the `trips` collection from Firestore (owner == activeProfile, ordered by startDate).
  *
  * Firestore document fields: { name, flag, startDate, endDate, highlights, destinations, owner }
  */
@@ -19,7 +20,7 @@ export function useTrips(): Trip[] {
     const [trips, setTrips] = useState<Trip[]>([]);
 
     useEffect(() => {
-        const q = query(collection(db, 'trips'), where('owner', '==', 'mindy'), orderBy('startDate', 'asc'));
+        const q = query(collection(db, 'trips'), where('owner', '==', activeProfile), orderBy('startDate', 'asc'));
 
         getDocs(q)
             .then((snap) => {

@@ -33,7 +33,7 @@ export interface TimelineEvent {
     /** Firestore index */
     date: Date;
     name: string;
-    des?: string | string[];
+    des?: string;
     burstIcon?: string;
     /** Firestore index */
     owner: string;
