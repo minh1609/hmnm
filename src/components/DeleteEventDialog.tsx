@@ -12,6 +12,7 @@ import {
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
+import { invalidateTimelineCache } from '@/hooks/useTimeline';
 import { ferrariTokens } from '@/theme';
 import {
     dialogPaperSx,
@@ -47,6 +48,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
 
         try {
             await deleteDoc(doc(db, 'timeline_events', event.id));
+            invalidateTimelineCache();
             onDeleted();
             onClose();
         } catch (err) {

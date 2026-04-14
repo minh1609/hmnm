@@ -24,6 +24,13 @@ function groupByYear(events: TimelineEvent[], descriptions: Record<number, strin
     return result;
 }
 
+let _timelineCache: TimelineEvent[] | null = null;
+
+/** Call this after any write to timeline_events so the next refetch hits Firestore. */
+export function invalidateTimelineCache() {
+    _timelineCache = null;
+}
+
 export interface UseTimelineResult {
     timeline: Record<number, TimelineYear>;
     refetch: () => void;
@@ -33,18 +40,30 @@ export interface UseTimelineResult {
  * Reads flat `timeline_events` documents from Firestore (owner == activeProfile, ordered by date).
  *
  * Firestore document fields: { date, name, des?, burstIcon?, owner }
+ *
+ * Results are held in a module-level cache for the tab session. Call
+ * `invalidateTimelineCache()` before `refetch()` to force a fresh network read.
  */
 export function useTimeline(): UseTimelineResult {
     const [timeline, setTimeline] = useState<Record<number, TimelineYear>>(() =>
-        groupByYear(staticTimelineEvents, staticYearDescriptions)
+        _timelineCache
+            ? groupByYear(_timelineCache, staticYearDescriptions)
+            : groupByYear(staticTimelineEvents, staticYearDescriptions)
     );
     const [tick, setTick] = useState(0);
 
     useEffect(() => {
+        if (_timelineCache) {
+            console.log(`[useTimeline] serving ${_timelineCache.length} events from memory cache`);
+            setTimeline(groupByYear(_timelineCache, staticYearDescriptions));
+            return;
+        }
+
         const q = query(collection(db, 'timeline_events'), where('owner', '==', activeProfile), orderBy('date', 'asc'));
 
         getDocs(q)
             .then((snap) => {
+                const source = snap.metadata.fromCache ? 'Firestore IndexedDB cache' : 'Firestore network';
                 const events: TimelineEvent[] = snap.docs.map((doc) => {
                     const d = doc.data();
                     const event: TimelineEvent = {
@@ -58,8 +77,9 @@ export function useTimeline(): UseTimelineResult {
                     if (d.gfNote != null) event.gfNote = d.gfNote as string;
                     return event;
                 });
-                console.log(`[useTimeline] fetched ${events.length} events from Firestore`);
+                console.log(`[useTimeline] fetched ${events.length} events from ${source}`);
                 if (events.length > 0) {
+                    _timelineCache = events;
                     setTimeline(groupByYear(events, staticYearDescriptions));
                 }
             })

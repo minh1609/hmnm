@@ -16,6 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { collection, addDoc, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { activeProfile } from '@/config';
+import { invalidateTimelineCache } from '@/hooks/useTimeline';
 import { ferrariTokens } from '@/theme';
 import {
     dialogPaperSx,
@@ -106,6 +107,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                 await addDoc(collection(db, 'timeline_events'), data);
             }
 
+            invalidateTimelineCache();
             reset();
             onCreated();
             onClose();

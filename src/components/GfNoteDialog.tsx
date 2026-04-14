@@ -12,6 +12,7 @@ import {
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
+import { invalidateTimelineCache } from '@/hooks/useTimeline';
 import { ferrariTokens } from '@/theme';
 import {
     dialogPaperSx,
@@ -55,6 +56,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
             await updateDoc(doc(db, 'timeline_events', event.id), {
                 gfNote: note.trim() || null,
             });
+            invalidateTimelineCache();
             onSaved();
             onClose();
         } catch (err) {

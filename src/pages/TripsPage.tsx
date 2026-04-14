@@ -18,7 +18,7 @@ function durationDays(start: Date, end: Date): number {
 
 export function TripsPage() {
     const navigate = useNavigate();
-    const trips = useTrips();
+    const { trips } = useTrips();
     const { colors: c, fonts: f } = ferrariTokens;
 
     return (

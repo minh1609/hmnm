@@ -134,7 +134,7 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
 
 export function JourneyCounter() {
     const [values, setValues] = useState(getCounterValues());
-    const trips = useTrips();
+    const { trips } = useTrips();
     const navigate = useNavigate();
 
     useEffect(() => {
