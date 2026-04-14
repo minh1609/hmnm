@@ -17,54 +17,48 @@ export function AuthButton() {
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
 
     if (loading) {
-        return (
-            <Box sx={containerSx}>
-                <CircularProgress size={18} thickness={3} sx={{ color: ferrariTokens.colors.gold }} />
-            </Box>
-        );
+        return <CircularProgress size={18} thickness={3} sx={{ color: ferrariTokens.colors.gold }} />;
     }
 
     if (!user) {
         return (
-            <Box sx={containerSx}>
-                <Chip
-                    icon={
-                        <LoginIcon
-                            sx={{ fontSize: '0.9rem !important', color: `${ferrariTokens.colors.gold} !important` }}
-                        />
-                    }
-                    label="Sign in"
-                    size="small"
-                    onClick={signIn}
-                    variant="outlined"
-                    sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontSize: '0.7rem',
-                        letterSpacing: '0.1em',
-                        textTransform: 'uppercase',
-                        color: ferrariTokens.colors.gold,
+            <Chip
+                icon={
+                    <LoginIcon
+                        sx={{ fontSize: '0.9rem !important', color: `${ferrariTokens.colors.gold} !important` }}
+                    />
+                }
+                label="Sign in"
+                size="small"
+                onClick={signIn}
+                variant="outlined"
+                sx={{
+                    fontFamily: ferrariTokens.fonts.display,
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: ferrariTokens.colors.gold,
+                    borderColor: ferrariTokens.colors.gold,
+                    backgroundColor: ferrariTokens.colors.black,
+                    borderRadius: '4px',
+                    height: 28,
+                    boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                        backgroundColor: `${ferrariTokens.colors.black} !important`,
                         borderColor: ferrariTokens.colors.gold,
-                        backgroundColor: ferrariTokens.colors.black,
-                        borderRadius: '4px',
-                        height: 28,
-                        boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
-                        transition: 'all 0.2s ease',
-                        '&:hover': {
-                            backgroundColor: `${ferrariTokens.colors.black} !important`,
-                            borderColor: ferrariTokens.colors.gold,
-                            color: ferrariTokens.colors.gold,
-                            transform: 'scale(1.08)',
-                            boxShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}`,
-                        },
-                        '& .MuiTouchRipple-root': { display: 'none' },
-                    }}
-                />
-            </Box>
+                        color: ferrariTokens.colors.gold,
+                        transform: 'scale(1.08)',
+                        boxShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}`,
+                    },
+                    '& .MuiTouchRipple-root': { display: 'none' },
+                }}
+            />
         );
     }
 
     return (
-        <Box sx={containerSx}>
+        <>
             <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                 <IconButton size="small" onClick={(e) => setAnchor(e.currentTarget)} sx={{ p: 0 }}>
                     <Avatar
@@ -104,6 +98,7 @@ export function AuthButton() {
                 anchorEl={anchor}
                 open={Boolean(anchor)}
                 onClose={() => setAnchor(null)}
+                disableScrollLock
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 slotProps={{
@@ -178,7 +173,7 @@ export function AuthButton() {
                     Sign out
                 </MenuItem>
             </Menu>
-        </Box>
+        </>
     );
 }
 
@@ -190,11 +185,3 @@ const roleColor = (role: string | null) => {
     }
 };
 
-const containerSx = {
-    position: 'fixed',
-    top: 12,
-    right: 14,
-    zIndex: 9999,
-    display: 'flex',
-    alignItems: 'center',
-} as const;

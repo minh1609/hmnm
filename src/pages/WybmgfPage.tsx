@@ -6,6 +6,7 @@ import { db } from '@/firebase';
 import { ferrariTokens } from '@/theme';
 import { YesCelebration } from '@/components/YesCelebration';
 import { PageHeader } from '@/components/PageHeader';
+import { AuthButton } from '@/components/AuthButton';
 
 interface Question {
     question: string;
@@ -93,7 +94,12 @@ export function WybmgfPage() {
         <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: c.black }}>
             <PageHeader
                 title="A Question for You"
-                right={<FavoriteIcon sx={{ color: c.gold, fontSize: '1.4rem' }} />}
+                right={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <FavoriteIcon sx={{ color: c.gold, fontSize: '1.4rem' }} />
+                        <AuthButton />
+                    </Box>
+                }
             />
 
             {/* Progress bar */}

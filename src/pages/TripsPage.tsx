@@ -4,6 +4,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useTrips } from '@/hooks/useTrips';
 import { ferrariTokens } from '@/theme';
 import { PageHeader } from '@/components/PageHeader';
+import { AuthButton } from '@/components/AuthButton';
 
 function formatDateRange(start: Date, end: Date): string {
     const opts: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -26,18 +27,21 @@ export function TripsPage() {
                     title="Trips Together"
                     titleIcon={<FlightIcon sx={{ color: c.white, fontSize: '1.6rem', transform: 'rotate(-45deg)' }} />}
                     right={
-                        <Typography
-                            sx={{
-                                fontFamily: f.display,
-                                fontWeight: 700,
-                                letterSpacing: '0.12em',
-                                textTransform: 'uppercase',
-                                color: 'white',
-                                textAlign: 'right',
-                            }}
-                        >
-                            {trips.length} trip{trips.length !== 1 ? 's' : ''}
-                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <Typography
+                                sx={{
+                                    fontFamily: f.display,
+                                    fontWeight: 700,
+                                    letterSpacing: '0.12em',
+                                    textTransform: 'uppercase',
+                                    color: 'white',
+                                    textAlign: 'right',
+                                }}
+                            >
+                                {trips.length} trip{trips.length !== 1 ? 's' : ''}
+                            </Typography>
+                            <AuthButton />
+                        </Box>
                     }
                 />
 

@@ -14,6 +14,7 @@ import { GfNoteDialog } from '@/components/GfNoteDialog';
 import { AddEventFab } from '@/components/AddEventFab';
 import { YearDescription } from '@/components/YearDescription';
 import { PageHeader } from '@/components/PageHeader';
+import { AuthButton } from '@/components/AuthButton';
 import { ferrariTokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
@@ -58,8 +59,9 @@ export function HomePage() {
     const [slideDir, setSlideDir] = useState<'left' | 'right'>('left');
     const prevYearRef = useRef(years[0]);
 
-    const [bursts, setBursts] = useState<{ id: number; x: number; y: number; icon: string }[]>([]);
+    const [bursts, setBursts] = useState<{ id: number; x: number; y: number; icon: string | string[] }[]>([]);
     const burstIdRef = useRef(0);
+    const lastWeatherBurstMs = useRef(0);
 
     const [swipeAlert, setSwipeAlert] = useState<string | null>(null);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -105,6 +107,14 @@ export function HomePage() {
         ]);
     };
 
+    const handleWeatherChipHover = (e: React.MouseEvent, weatherEmojis: string[]) => {
+        const now = Date.now();
+        if (now - lastWeatherBurstMs.current < 700) return;
+        lastWeatherBurstMs.current = now;
+        const id = ++burstIdRef.current;
+        setBursts((prev) => [...prev, { id, x: e.clientX, y: e.clientY, icon: weatherEmojis }]);
+    };
+
     const handleYearSelect = (year: number) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         if (year === selectedYear) return;
@@ -144,24 +154,27 @@ export function HomePage() {
                     showBack={false}
                     sticky={false}
                     right={
-                        import.meta.env.DEV ? (
-                            <Box
-                                sx={{
-                                    backgroundColor: 'warning.main',
-                                    color: 'warning.contrastText',
-                                    px: 1.5,
-                                    py: 0.25,
-                                    borderRadius: '4px',
-                                    fontFamily: ferrariTokens.fonts.display,
-                                    fontWeight: 700,
-                                    fontSize: '0.7rem',
-                                    letterSpacing: '0.1em',
-                                    textTransform: 'uppercase',
-                                }}
-                            >
-                                Dev Mode
-                            </Box>
-                        ) : undefined
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            {import.meta.env.DEV && (
+                                <Box
+                                    sx={{
+                                        backgroundColor: 'warning.main',
+                                        color: 'warning.contrastText',
+                                        px: 1.5,
+                                        py: 0.25,
+                                        borderRadius: '4px',
+                                        fontFamily: ferrariTokens.fonts.display,
+                                        fontWeight: 700,
+                                        fontSize: '0.7rem',
+                                        letterSpacing: '0.1em',
+                                        textTransform: 'uppercase',
+                                    }}
+                                >
+                                    Dev Mode
+                                </Box>
+                            )}
+                            <AuthButton />
+                        </Box>
                     }
                 />
                 <JourneyCounter />
@@ -211,6 +224,7 @@ export function HomePage() {
                                             })
                                             .replace(/\//g, '-')}
                                         onClick={(e) => handleChipClick(e, event.burstIcon)}
+                                        onMouseEnter={(e) => handleWeatherChipHover(e, season.weatherEmojis)}
                                         sx={{
                                             backgroundColor: season.bgColor,
                                             color: season.color,
@@ -273,8 +287,10 @@ export function HomePage() {
                                             transition: 'color 1s ease, text-shadow 1.2s ease',
                                             '&:hover': {
                                                 color: 'white',
-                                                textShadow: '0 0 6px rgba(255,255,255,0.9), 0 0 18px rgba(255,255,255,0.7), 0 0 40px rgba(255,255,255,0.45), 0 0 70px rgba(255,255,255,0.25)',
-                                                animation: 'eventNameBreathe 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite',
+                                                textShadow:
+                                                    '0 0 6px rgba(255,255,255,0.9), 0 0 18px rgba(255,255,255,0.7), 0 0 40px rgba(255,255,255,0.45), 0 0 70px rgba(255,255,255,0.25)',
+                                                animation:
+                                                    'eventNameBreathe 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite',
                                                 transformOrigin: 'center',
                                             },
                                         })}

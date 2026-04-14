@@ -5,8 +5,13 @@ import { iconBurst } from '@/config';
 interface Props {
     x: number;
     y: number;
-    icon: string;
+    icon: string | string[];
     onDone: () => void;
+}
+
+function pickIcon(icon: string | string[]): string {
+    if (Array.isArray(icon)) return icon[Math.floor(Math.random() * icon.length)];
+    return icon;
 }
 
 export function IconBurst({ x, y, icon, onDone }: Props) {
@@ -39,7 +44,7 @@ export function IconBurst({ x, y, icon, onDone }: Props) {
                     } as React.CSSProperties
                 }
             >
-                {icon}
+                {pickIcon(icon)}
             </span>
         );
     });
