@@ -13,6 +13,7 @@ import { DeleteEventDialog } from '@/components/DeleteEventDialog';
 import { GfNoteDialog } from '@/components/GfNoteDialog';
 import { AddEventFab } from '@/components/AddEventFab';
 import { YearDescription } from '@/components/YearDescription';
+import { PageHeader } from '@/components/PageHeader';
 import { ferrariTokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
@@ -123,11 +124,6 @@ export function HomePage() {
 
     return (
         <>
-            {import.meta.env.DEV && (
-                <Box sx={{ textAlign: 'center', backgroundColor: 'warning.main', color: 'warning.contrastText', py: 0.5 }}>
-                    <span>DEV MODE</span>
-                </Box>
-            )}
             <FallingObjects />
 
             <Box
@@ -138,6 +134,31 @@ export function HomePage() {
                     backgroundColor: ferrariTokens.colors.red,
                 }}
             >
+                <PageHeader
+                    title="The Journey So Far ..."
+                    showBack={false}
+                    sticky={false}
+                    right={
+                        import.meta.env.DEV ? (
+                            <Box
+                                sx={{
+                                    backgroundColor: 'warning.main',
+                                    color: 'warning.contrastText',
+                                    px: 1.5,
+                                    py: 0.25,
+                                    borderRadius: '4px',
+                                    fontFamily: ferrariTokens.fonts.display,
+                                    fontWeight: 700,
+                                    fontSize: '0.7rem',
+                                    letterSpacing: '0.1em',
+                                    textTransform: 'uppercase',
+                                }}
+                            >
+                                Dev Mode
+                            </Box>
+                        ) : undefined
+                    }
+                />
                 <JourneyCounter />
 
                 <Box
@@ -243,6 +264,14 @@ export function HomePage() {
                                             letterSpacing: '0.06em',
                                             color: 'white',
                                             cursor: 'default',
+                                            display: 'inline-block',
+                                            transition: 'color 1s ease, text-shadow 1.2s ease',
+                                            '&:hover': {
+                                                color: 'white',
+                                                textShadow: '0 0 6px rgba(255,255,255,0.9), 0 0 18px rgba(255,255,255,0.7), 0 0 40px rgba(255,255,255,0.45), 0 0 70px rgba(255,255,255,0.25)',
+                                                animation: 'eventNameBreathe 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite',
+                                                transformOrigin: 'center',
+                                            },
                                         })}
                                     >
                                         {index % 2 == 0 && event.name}

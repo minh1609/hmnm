@@ -132,7 +132,12 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
     );
 }
 
-export function JourneyCounter() {
+interface JourneyCounterProps {
+    /** Optional heading rendered above the stat cards. Omit to hide the title entirely. */
+    title?: string;
+}
+
+export function JourneyCounter({ title }: JourneyCounterProps) {
     const [values, setValues] = useState(getCounterValues());
     const { trips } = useTrips();
     const navigate = useNavigate();
@@ -150,9 +155,10 @@ export function JourneyCounter() {
                 alignItems: 'center',
                 gap: 2,
                 px: 2,
-                mt: 5,
+                mt: title ? 5 : 2,
             }}
         >
+            {title && (
             <Typography
                 sx={(theme) => ({
                     fontFamily: ferrariTokens.fonts.display,
@@ -166,8 +172,9 @@ export function JourneyCounter() {
                     userSelect: 'none',
                 })}
             >
-                The Journey So Far ...
+                {title}
             </Typography>
+            )}
 
             <Box
                 sx={{
