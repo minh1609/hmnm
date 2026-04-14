@@ -123,6 +123,11 @@ export function HomePage() {
 
     return (
         <>
+            {import.meta.env.DEV && (
+                <Box sx={{ textAlign: 'center', backgroundColor: 'warning.main', color: 'warning.contrastText', py: 0.5 }}>
+                    <span>DEV MODE</span>
+                </Box>
+            )}
             <FallingObjects />
 
             <Box
