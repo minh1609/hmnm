@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "migrate": "tsx --tsconfig migrations/tsconfig.json migrations/seed-firestore.ts"
+    "migrate": "tsx --tsconfig migrations/tsconfig.json migrations/seed-firestore.ts",
+    "db:export": "tsx --tsconfig migrations/tsconfig.json migrations/export-firestore.ts",
+    "db:import": "tsx --tsconfig migrations/tsconfig.json migrations/import-firestore.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

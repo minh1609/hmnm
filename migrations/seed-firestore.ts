@@ -1,87 +1,39 @@
 /**
- * Seed Firestore with timeline events and trips.
+ * Seed Firestore from static source data in src/data/.
  * Objects (IMAGE_FILES, ICONS) are static — not migrated.
  *
- * Safe / additive migration: existing documents are NEVER deleted.
+ * Safe / additive — existing documents are NEVER deleted.
  * A static event is skipped when Firestore already has an event with the
  * same date (YYYY-MM-DD) AND name.
  * A static trip is skipped when Firestore already has a trip with the
  * same startDate (YYYY-MM-DD).
  *
  * Usage:
- *   1. Download your Firebase service account key from:
- *      Firebase Console → Project Settings → Service Accounts → Generate new private key
- *   2. Save it as  migrations/service-account.json  (already git-ignored)
- *   3. Run:
- *        npm run migrate
- *      or with a custom path:
- *        SERVICE_ACCOUNT=./path/to/key.json npm run migrate
+ *   npm run migrate
  *
- * To grant admin role to a user (find their UID in Firebase Console → Authentication):
- *   ADMIN_UID=<uid> npm run migrate
+ * Options (env vars):
+ *   SERVICE_ACCOUNT   Path to service-account JSON (default: migrations/service-account.json)
+ *   ADMIN_UID         Firebase UID to grant the admin role
  *
  * Firestore schema written:
- *   timeline_events/{autoId}  →  { date, name, des?, burstIcon?, owner }
+ *   timeline_events/{autoId}  →  { date, name, des?, burstIcon?, gfNote?, owner }
  *   trips/{autoId}            →  { name, flag, startDate, endDate, highlights, destinations, owner }
- *   users/{uid}               →  { role: 'admin', email? }
- *
- * Required composite indexes (firestore.indexes.json):
- *   timeline_events: owner ASC + date ASC
- *   trips:           owner ASC + startDate ASC
+ *   users/{uid}               →  { role: 'admin' }
  */
 
-import { initializeApp, cert, type ServiceAccount } from 'firebase-admin/app';
-import { getFirestore, Timestamp } from 'firebase-admin/firestore';
-import { readFileSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
+import { Timestamp } from 'firebase-admin/firestore';
+import { db, log, toTimestamp, toDateKey, serviceAccountPath } from './lib/admin.js';
 import { timelineEvents } from '@/data/mindy/events';
 import { trips } from '@/data/mindy/trips';
-
-// ---------------------------------------------------------------------------
-// Bootstrap
-// ---------------------------------------------------------------------------
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const serviceAccountPath = process.env.SERVICE_ACCOUNT
-    ? resolve(process.env.SERVICE_ACCOUNT)
-    : resolve(__dirname, 'service-account.json');
-
-const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf-8')) as ServiceAccount;
-
-initializeApp({ credential: cert(serviceAccount) });
-
-const db = getFirestore();
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function toTimestamp(date: Date): Timestamp {
-    return Timestamp.fromDate(date);
-}
-
-/** Returns a YYYY-MM-DD string for a Date or Firestore Timestamp. */
-function toDateKey(value: Date | Timestamp): string {
-    const d = value instanceof Date ? value : value.toDate();
-    return d.toISOString().slice(0, 10);
-}
-
-function log(msg: string) {
-    console.log(`[migrate] ${msg}`);
-}
 
 // ---------------------------------------------------------------------------
 // Runners
 // ---------------------------------------------------------------------------
 
 async function migrateTimelineEvents() {
-    log('Migrating timeline events…');
+    log('seed', 'Migrating timeline events…');
     const col = db.collection('timeline_events');
 
-    // Build a set of existing (dateKey, name) pairs so we can skip duplicates.
     const existingSnap = await col.where('owner', '==', 'mindy').get();
     const existingKeys = new Set<string>();
     for (const doc of existingSnap.docs) {
@@ -89,7 +41,7 @@ async function migrateTimelineEvents() {
         const dateKey = toDateKey(data.date as Timestamp);
         existingKeys.add(`${dateKey}::${data.name as string}`);
     }
-    log(`  found ${existingKeys.size} existing event(s) in Firestore`);
+    log('seed', `  found ${existingKeys.size} existing event(s) in Firestore`);
 
     let added = 0;
     let skipped = 0;
@@ -98,38 +50,33 @@ async function migrateTimelineEvents() {
         const key = `${toDateKey(date)}::${name}`;
 
         if (existingKeys.has(key)) {
-            log(`  ~ skipped  "${name}" (${toDateKey(date)}) — already exists`);
+            log('seed', `  ~ skipped  "${name}" (${toDateKey(date)}) — already exists`);
             skipped++;
             continue;
         }
 
-        const doc: Record<string, unknown> = {
-            date: toTimestamp(date),
-            name,
-            owner,
-        };
+        const doc: Record<string, unknown> = { date: toTimestamp(date), name, owner };
         if (des !== undefined) doc.des = des;
         if (burstIcon !== undefined) doc.burstIcon = burstIcon;
 
         const ref = await col.add(doc);
-        log(`  ✓ added    "${name}"  (id: ${ref.id})`);
+        log('seed', `  ✓ added    "${name}"  (id: ${ref.id})`);
         added++;
     }
-    log(`  → ${added} event(s) added, ${skipped} skipped`);
+    log('seed', `  → ${added} event(s) added, ${skipped} skipped`);
 }
 
 async function migrateTrips() {
-    log('Migrating trips…');
+    log('seed', 'Migrating trips…');
     const col = db.collection('trips');
 
-    // Build a set of existing startDate keys.
     const existingSnap = await col.where('owner', '==', 'mindy').get();
     const existingKeys = new Set<string>();
     for (const doc of existingSnap.docs) {
         const data = doc.data();
         existingKeys.add(toDateKey(data.startDate as Timestamp));
     }
-    log(`  found ${existingKeys.size} existing trip(s) in Firestore`);
+    log('seed', `  found ${existingKeys.size} existing trip(s) in Firestore`);
 
     let added = 0;
     let skipped = 0;
@@ -137,7 +84,7 @@ async function migrateTrips() {
         const key = toDateKey(trip.startDate);
 
         if (existingKeys.has(key)) {
-            log(`  ~ skipped  "${trip.name}" (${key}) — already exists`);
+            log('seed', `  ~ skipped  "${trip.name}" (${key}) — already exists`);
             skipped++;
             continue;
         }
@@ -147,26 +94,22 @@ async function migrateTrips() {
             startDate: toTimestamp(trip.startDate),
             endDate: toTimestamp(trip.endDate),
         });
-        log(`  ✓ added    "${trip.name}"  (id: ${ref.id})`);
+        log('seed', `  ✓ added    "${trip.name}"  (id: ${ref.id})`);
         added++;
     }
-    log(`  → ${added} trip(s) added, ${skipped} skipped`);
+    log('seed', `  → ${added} trip(s) added, ${skipped} skipped`);
 }
 
-// ---------------------------------------------------------------------------
-// Admin user
-// ---------------------------------------------------------------------------
-
 async function migrateAdminUser(uid: string) {
-    log(`Granting admin role to uid: ${uid}`);
+    log('seed', `Granting admin role to uid: ${uid}`);
     const ref = db.collection('users').doc(uid);
     const snap = await ref.get();
     if (snap.exists && snap.data()?.role === 'admin') {
-        log('  ~ skipped — already admin');
+        log('seed', '  ~ skipped — already admin');
         return;
     }
     await ref.set({ role: 'admin' }, { merge: true });
-    log('  ✓ users/' + uid + ' → { role: "admin" }');
+    log('seed', `  ✓ users/${uid} → { role: "admin" }`);
 }
 
 // ---------------------------------------------------------------------------
@@ -174,13 +117,13 @@ async function migrateAdminUser(uid: string) {
 // ---------------------------------------------------------------------------
 
 async function main() {
-    log('Starting migration (additive — existing data is preserved)');
-    log(`Service account: ${serviceAccountPath}`);
+    log('seed', 'Starting migration (additive — existing data is preserved)');
+    log('seed', `Service account: ${serviceAccountPath}`);
     console.log();
 
-    // await migrateTimelineEvents();
+    await migrateTimelineEvents();
     console.log();
-    // await migrateTrips();
+    await migrateTrips();
 
     const adminUid = process.env.ADMIN_UID;
     if (adminUid) {
@@ -189,10 +132,10 @@ async function main() {
     }
 
     console.log();
-    log('All done!');
+    log('seed', 'All done!');
 }
 
 main().catch((err) => {
-    console.error('[migrate] ERROR:', err);
+    console.error('[seed] ERROR:', err);
     process.exit(1);
 });
