@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Box, Typography, IconButton, Snackbar, Alert, LinearProgress } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Typography, Snackbar, Alert, LinearProgress } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { ferrariTokens } from '@/theme';
 import { YesCelebration } from '@/components/YesCelebration';
+import { PageHeader } from '@/components/PageHeader';
 
 interface Question {
     question: string;
@@ -39,7 +38,6 @@ const QUESTIONS: Question[] = [
 ];
 
 export function WybmgfPage() {
-    const navigate = useNavigate();
     const { colors: c, fonts: f } = ferrariTokens;
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -93,59 +91,10 @@ export function WybmgfPage() {
 
     return (
         <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: c.black }}>
-            {/* Header */}
-            <Box
-                sx={{
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 100,
-                    backgroundColor: c.red,
-                    px: { xs: 2, sm: 4 },
-                    py: 2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 2,
-                    borderBottom: `1px solid ${c.redDeep}`,
-                    boxShadow: `0 2px 16px rgba(0,0,0,0.5)`,
-                }}
-            >
-                <IconButton
-                    onClick={() => navigate('/')}
-                    sx={{
-                        color: c.white,
-                        border: `1px solid ${c.white}`,
-                        borderRadius: '4px',
-                        p: 0.75,
-                        '&:hover': { '& .MuiSvgIcon-root': { transform: 'scale(1.35)' } },
-                    }}
-                >
-                    <ArrowBackIcon fontSize="small" sx={{ transition: 'transform 0.18s ease' }} />
-                </IconButton>
-
-                <Box sx={{ flex: 1 }}>
-                    <Typography
-                        variant="h3"
-                        sx={{
-                            fontFamily: f.display,
-                            fontSize: { xs: '1.15rem', sm: '1.4rem' },
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: c.white,
-                            lineHeight: 1,
-                        }}
-                    >
-                        A Question for You
-                    </Typography>
-                    <Typography
-                        variant="caption"
-                        sx={{ color: c.gold, fontFamily: f.display, letterSpacing: '0.1em', opacity: 0.9 }}
-                    >
-                        {showYesCelebration ? 'Complete ✓' : `${currentIndex + 1} / ${QUESTIONS.length}`}
-                    </Typography>
-                </Box>
-
-                <FavoriteIcon sx={{ color: c.gold, fontSize: '1.4rem' }} />
-            </Box>
+            <PageHeader
+                title="A Question for You"
+                right={<FavoriteIcon sx={{ color: c.gold, fontSize: '1.4rem' }} />}
+            />
 
             {/* Progress bar */}
             <LinearProgress
@@ -198,6 +147,18 @@ export function WybmgfPage() {
                     >
                         {/* Question */}
                         <Box sx={{ px: { xs: 2.5, sm: 4 }, pt: { xs: 3, sm: 4 }, pb: 2 }}>
+                            <Typography
+                                sx={{
+                                    fontFamily: f.mono,
+                                    fontSize: { xs: '0.7rem', sm: '0.75rem' },
+                                    color: c.gold,
+                                    letterSpacing: '0.1em',
+                                    textTransform: 'uppercase',
+                                    mb: 1,
+                                }}
+                            >
+                                {showYesCelebration ? 'Complete ✓' : `${currentIndex + 1} / ${QUESTIONS.length}`}
+                            </Typography>
                             <Typography
                                 sx={{
                                     fontFamily: f.display,

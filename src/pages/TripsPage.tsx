@@ -1,10 +1,9 @@
-import { Box, Typography, IconButton } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Typography } from '@mui/material';
 import FlightIcon from '@mui/icons-material/Flight';
 import PlaceIcon from '@mui/icons-material/Place';
-import { useNavigate } from 'react-router-dom';
 import { useTrips } from '@/hooks/useTrips';
 import { ferrariTokens } from '@/theme';
+import { PageHeader } from '@/components/PageHeader';
 
 function formatDateRange(start: Date, end: Date): string {
     const opts: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -17,72 +16,19 @@ function durationDays(start: Date, end: Date): number {
 }
 
 export function TripsPage() {
-    const navigate = useNavigate();
     const { trips } = useTrips();
     const { colors: c, fonts: f } = ferrariTokens;
 
     return (
         <>
             <Box sx={{ minHeight: '100vh', pb: 6 }}>
-                {/* Header */}
-                <Box
-                    sx={{
-                        position: 'sticky',
-                        top: 0,
-                        zIndex: 100,
-                        backgroundColor: c.red,
-                        px: { xs: 2, sm: 4 },
-                        py: 2,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                        borderBottom: `1px solid ${c.redDeep}`,
-                        boxShadow: `0 2px 16px rgba(0,0,0,0.5)`,
-                    }}
-                >
-                    <IconButton
-                        onClick={() => navigate('/')}
-                        sx={{
-                            color: c.white,
-                            border: `1px solid ${c.white}`,
-                            borderRadius: '4px',
-                            p: 0.75,
-                            '&:hover': {
-                                '& .MuiSvgIcon-root': {
-                                    transform: 'scale(1.35)',
-                                },
-                            },
-                        }}
-                    >
-                        <ArrowBackIcon fontSize="small" sx={{ transition: 'transform 0.18s ease' }} />
-                    </IconButton>
-
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <FlightIcon
-                            sx={{
-                                color: c.white,
-                                fontSize: '1.6rem',
-                                transform: 'rotate(-45deg)',
-                            }}
-                        />
+                <PageHeader
+                    title="Trips Together"
+                    titleIcon={
+                        <FlightIcon sx={{ color: c.white, fontSize: '1.6rem', transform: 'rotate(-45deg)' }} />
+                    }
+                    right={
                         <Typography
-                            sx={{
-                                fontFamily: f.display,
-                                fontWeight: 900,
-                                fontSize: { xs: '1.6rem', sm: '2.2rem' },
-                                letterSpacing: '0.14em',
-                                textTransform: 'uppercase',
-                                color: c.white,
-                                textShadow: `0 0 20px ${c.goldGlow}`,
-                                lineHeight: 1,
-                            }}
-                        >
-                            Trips Together
-                        </Typography>
-                    </Box>
-
-                    <Box sx={{ ml: 'auto' }}>
-                        <Box
                             sx={{
                                 fontFamily: f.display,
                                 fontWeight: 700,
@@ -93,9 +39,9 @@ export function TripsPage() {
                             }}
                         >
                             {trips.length} trip{trips.length !== 1 ? 's' : ''}
-                        </Box>
-                    </Box>
-                </Box>
+                        </Typography>
+                    }
+                />
 
                 {/* Trip cards */}
                 <Box
