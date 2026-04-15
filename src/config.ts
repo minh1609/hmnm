@@ -1,3 +1,9 @@
+// ── Routing ───────────────────────────────────────────────────────────────────
+
+/** Target path for the `/redirect` route. */
+// http://localhost:5173/hmnm/#/redirect
+export const redirectTarget = '/';
+
 // ── Data Profile ──────────────────────────────────────────────────────────────
 
 /**
