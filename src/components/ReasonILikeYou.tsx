@@ -3,20 +3,15 @@ import { Box, Typography } from '@mui/material';
 import { ferrariTokens } from '@/theme';
 
 const REASONS = [
-    'funny',
-    'caring',
-    'beautiful',
-    'kind',
-    'smart',
-    'warm',
-    'genuine',
-    'adventurous',
-    'loving',
-    'silly',
-    'thoughtful',
-    'radiant',
-    'strong',
-    'sweet',
+    'nhí nháu',
+    'ngon',
+    'ngoan',
+    'chếch chi',
+    'quan tâm',
+    'ấm áp',
+    'mặt trời nhỏ',
+    'dui tính',
+    'hay làm trò',
 ];
 
 const INTERVAL_MS = 5000;

@@ -44,9 +44,7 @@
     --accent-bg: var(--ferrari-gold-glow);
     --accent-border: var(--ferrari-gold-glow);
     --gold: var(--ferrari-gold);
-    --shadow:
-        rgba(0, 0, 0, 0.4) 0 10px 20px -4px,
-        rgba(200, 168, 75, 0.12) 0 4px 8px -2px;
+    --shadow: rgba(0, 0, 0, 0.4) 0 10px 20px -4px, rgba(200, 168, 75, 0.12) 0 4px 8px -2px;
 
     /* Fonts */
     --sans: 'Titillium Web', 'Arial Narrow', Arial, sans-serif;
@@ -74,7 +72,6 @@
     max-width: 100%;
     margin: 0 auto;
     text-align: center;
-    border-inline: 1px solid var(--border);
     min-height: 100svh;
     display: flex;
     flex-direction: column;
