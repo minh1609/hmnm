@@ -107,7 +107,7 @@ export function WybmgfPage() {
 
     return (
         <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: c.cream }}>
-            <PageHeader title="A Question for You" />
+            <PageHeader title="Questions for You" />
 
             {/* Progress bar */}
             <LinearProgress

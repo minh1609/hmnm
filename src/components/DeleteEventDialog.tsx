@@ -59,11 +59,13 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
         }
     };
 
-    const dateLabel = event?.date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    }).replace(/\//g, '-');
+    const dateLabel = event?.date
+        .toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        })
+        .replace(/\//g, '-');
 
     return (
         <Dialog
@@ -71,11 +73,12 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
             onClose={handleClose}
             maxWidth="xs"
             fullWidth
+            disableScrollLock
             PaperProps={{ sx: dialogPaperSx(tokens.colors.border) }}
         >
             <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
                 <DeleteOutlineIcon sx={{ fontSize: '1.3rem' }} />
-                Xoá kỉ niệm
+                Delete
             </DialogTitle>
 
             <DialogContent sx={{ pt: '20px !important', pb: 1 }}>
@@ -93,7 +96,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                         lineHeight: 1.6,
                     }}
                 >
-                    Xoá kỉ niệm{' '}
+                    Delete{' '}
                     <Typography
                         component="span"
                         sx={{
@@ -107,27 +110,21 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                     </Typography>
                     {dateLabel && (
                         <>
-                            {' '}(
-                            <Typography
-                                component="span"
-                                sx={{ color: tokens.colors.brown, fontWeight: 600 }}
-                            >
+                            {' '}
+                            (
+                            <Typography component="span" sx={{ color: tokens.colors.brown, fontWeight: 600 }}>
                                 {dateLabel}
                             </Typography>
                             )
                         </>
                     )}
-                    ? Không lấy lại được đâu nha.
+                    ? This cannot be undone.
                 </Typography>
             </DialogContent>
 
             <DialogActions sx={dialogActionsSx}>
-                <Button
-                    onClick={handleClose}
-                    disabled={deleting}
-                    sx={cancelButtonSx}
-                >
-                    Huỷ
+                <Button onClick={handleClose} disabled={deleting} sx={cancelButtonSx}>
+                    Cancel
                 </Button>
                 <Button
                     onClick={handleDelete}
@@ -142,7 +139,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                     }
                     sx={primaryButtonSx(tokens.colors.burgundy, tokens.colors.burgundyLight)}
                 >
-                    {deleting ? 'Đang xoá…' : 'Xoá'}
+                    {deleting ? 'Deleting…' : 'Delete'}
                 </Button>
             </DialogActions>
         </Dialog>

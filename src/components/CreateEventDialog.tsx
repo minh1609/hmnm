@@ -125,11 +125,12 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
             onClose={handleClose}
             maxWidth="sm"
             fullWidth
+            disableScrollLock
             PaperProps={{ sx: dialogPaperSx(tokens.colors.burgundy) }}
         >
             <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
                 {isEditing ? <EditIcon sx={{ fontSize: '1.3rem' }} /> : <AddIcon sx={{ fontSize: '1.3rem' }} />}
-                {isEditing ? 'Sửa kỉ niệm' : 'Kỉ niệm mới'}
+                {isEditing ? 'Edit Memory' : 'New Memory'}
             </DialogTitle>
 
             <DialogContent sx={{ pt: '24px !important', pb: 1 }}>
@@ -218,7 +219,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                         tokens.colors.burgundyLight,
                     )}
                 >
-                    {saving ? 'Saving…' : isEditing ? 'Lưu' : 'Thêm'}
+                    {saving ? 'Saving…' : isEditing ? 'Save' : 'Add'}
                 </Button>
             </DialogActions>
         </Dialog>

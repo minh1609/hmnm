@@ -73,6 +73,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
             onClose={handleClose}
             maxWidth="sm"
             fullWidth
+            disableScrollLock
             PaperProps={{ sx: dialogPaperSx(tokens.colors.rose) }}
         >
             <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
