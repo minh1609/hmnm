@@ -14,14 +14,11 @@ interface PageHeaderProps {
     sticky?: boolean;
 }
 
-export function PageHeader({
-    title,
-    onBack,
-    showBack = true,
-    sticky = true,
-}: PageHeaderProps) {
+export function PageHeader({ title, onBack, showBack = true, sticky = true }: PageHeaderProps) {
     const navigate = useNavigate();
-    const { tokens: { colors: c, fonts: f } } = useTheme();
+    const {
+        tokens: { colors: c, fonts: f },
+    } = useTheme();
 
     return (
         <Box

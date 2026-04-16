@@ -3,6 +3,7 @@ import type { ImageFile, Icon } from '@/types';
 export const IMAGE_FILES: ImageFile[] = [
     { file: 'pen.png', label: 'Favourite animal' },
     { file: 'fer.png', label: 'Charles Leclerc - 16' },
+    { file: 'flower.png', label: 'Jasmine từ trà đến nước hoa' },
 ];
 
 export const ICONS: Icon[] = [
@@ -21,4 +22,5 @@ export const ICONS: Icon[] = [
         label: 'Creme Burlee @ Machi Machi, Cream Cheese @ Matcha Matcha, Pure Latte @ Chayan',
     },
     { symbol: '🧁', color: 'inherit', label: 'Vava Designer cake, Farmboy' },
+    { symbol: '🍽️', color: 'inherit', label: 'Hi Bowl, Gyubee' },
 ];

@@ -317,14 +317,16 @@
     will-change: transform, opacity;
 }
 
-@keyframes eventNameBreathe {
-    0% {
+@keyframes breathe {
+    0%,
+    100% {
         transform: scale(1);
     }
-    42% {
-        transform: scale(1.04);
+    45%,
+    50% {
+        transform: scale(1.12);
     }
-    100% {
+    95% {
         transform: scale(1);
     }
 }
@@ -429,7 +431,7 @@
     border-radius: 50%;
     background: radial-gradient(
         ellipse at center,
-        rgba(212, 165, 165, 0.40) 0%,
+        rgba(212, 165, 165, 0.4) 0%,
         rgba(157, 41, 51, 0.12) 40%,
         transparent 70%
     );

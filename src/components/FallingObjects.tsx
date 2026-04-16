@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTheme, alpha } from '@mui/material/styles';
 import CustomTooltip from '@/components/CustomTooltip';
 
 import { IMAGE_FILES, ICONS } from '@/data';
@@ -85,6 +86,7 @@ const PARTICLES: Particle[] = [
 ];
 
 export function FallingObjects() {
+    const theme = useTheme();
     const [hoveredId, setHoveredId] = useState<number | null>(null);
 
     return createPortal(
@@ -112,6 +114,7 @@ export function FallingObjects() {
                     pointerEvents: 'auto' as const,
                     cursor: 'default',
                     transition: 'opacity 0.2s ease',
+                    filter: `drop-shadow(0 3px 8px ${alpha(theme.palette.primary.main, 0.55)})`,
                 } as React.CSSProperties;
 
                 if (p.kind === 'image') {

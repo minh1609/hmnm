@@ -12,6 +12,7 @@ import { CreateEventDialog } from '@/components/CreateEventDialog';
 import { DeleteEventDialog } from '@/components/DeleteEventDialog';
 import { GfNoteDialog } from '@/components/GfNoteDialog';
 import { AddEventFab } from '@/components/AddEventFab';
+import { ScrollToTopFab } from '@/components/ScrollToTopFab';
 import { YearDescription } from '@/components/YearDescription';
 import { PageHeader } from '@/components/PageHeader';
 import { useTheme } from '@mui/material/styles';
@@ -134,6 +135,9 @@ export function HomePage() {
         <>
             <FallingObjects />
 
+            <PageHeader title="The Journey So Far ..." showBack={false} />
+            <JourneyCounter />
+
             <Box
                 sx={{
                     position: 'sticky',
@@ -142,13 +146,6 @@ export function HomePage() {
                     backgroundColor: c.cream,
                 }}
             >
-                <PageHeader
-                    title="The Journey So Far ..."
-                    showBack={false}
-                    sticky={false}
-                />
-                <JourneyCounter />
-
                 <Box
                     sx={{
                         display: 'flex',
@@ -254,6 +251,7 @@ export function HomePage() {
                                             transition: 'color 0.3s ease',
                                             '&:hover': {
                                                 color: c.burgundy,
+                                                animation: 'breathe 4.5s ease-in-out infinite',
                                             },
                                         })}
                                     >
@@ -343,6 +341,7 @@ export function HomePage() {
             </Snackbar>
 
             {isAdmin && <AddEventFab onClick={() => setCreateDialogOpen(true)} />}
+            <ScrollToTopFab />
 
             <Menu
                 open={dotMenu !== null}
