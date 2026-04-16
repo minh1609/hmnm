@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, Typography, Snackbar, Alert, LinearProgress } from '@mui/material';
 import { doc, getDoc, collection, serverTimestamp, Timestamp, runTransaction } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 import { YesCelebration } from '@/components/YesCelebration';
 import { PageHeader } from '@/components/PageHeader';
+
 interface Question {
     question: string;
     options: string[];
@@ -36,7 +37,7 @@ const QUESTIONS: Question[] = [
 ];
 
 export function WybmgfPage() {
-    const { colors: c, fonts: f } = tokens;
+    const { tokens: { colors: c, fonts: f } } = useTheme();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showYesCelebration, setShowYesCelebration] = useState(false);

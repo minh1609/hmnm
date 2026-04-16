@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 import { useTrips } from '@/hooks/useTrips';
 
 const FIRST_DATE = new Date('2025-08-26T00:00:00');
@@ -25,7 +25,7 @@ interface StatCardProps {
 }
 
 function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
-    const { colors: c, fonts: f } = tokens;
+    const { tokens: { colors: c, fonts: f } } = useTheme();
     return (
         <Box
             onClick={onClick}
@@ -140,6 +140,7 @@ export function JourneyCounter({ title }: JourneyCounterProps) {
     const [values, setValues] = useState(getCounterValues());
     const { trips } = useTrips();
     const navigate = useNavigate();
+    const { tokens: { colors: c, fonts: f } } = useTheme();
 
     useEffect(() => {
         const timer = setInterval(() => setValues(getCounterValues()), 30000);
@@ -160,12 +161,12 @@ export function JourneyCounter({ title }: JourneyCounterProps) {
             {title && (
                 <Typography
                     sx={{
-                        fontFamily: tokens.fonts.display,
+                        fontFamily: f.display,
                         fontWeight: 700,
                         fontStyle: 'italic',
                         fontSize: { xs: '2rem', sm: '2.6rem' },
                         lineHeight: 1,
-                        color: tokens.colors.ink,
+                        color: c.ink,
                         letterSpacing: '-0.02em',
                         userSelect: 'none',
                     }}

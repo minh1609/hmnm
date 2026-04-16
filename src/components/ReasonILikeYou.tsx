@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 
 const REASONS = [
     'nhí nháu',
@@ -20,6 +20,7 @@ const FADE_MS = 600;
 export function ReasonILikeYou() {
     const [index, setIndex] = useState(0);
     const [visible, setVisible] = useState(true);
+    const { tokens: { colors: c, fonts: f } } = useTheme();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -44,9 +45,9 @@ export function ReasonILikeYou() {
                 textAlign: 'center',
                 py: 1,
                 px: 2,
-                backgroundColor: `${tokens.colors.creamDark}EE`,
+                backgroundColor: `${c.creamDark}EE`,
                 backdropFilter: 'blur(6px)',
-                borderTop: `1px solid ${tokens.colors.border}`,
+                borderTop: `1px solid ${c.border}`,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
             }}
@@ -54,11 +55,11 @@ export function ReasonILikeYou() {
             <Typography
                 component="span"
                 sx={{
-                    fontFamily: tokens.fonts.sans,
+                    fontFamily: f.sans,
                     fontSize: 'clamp(0.65rem, 1.8vw, 1rem)',
                     fontWeight: 500,
                     letterSpacing: '0.06em',
-                    color: tokens.colors.inkMuted,
+                    color: c.inkMuted,
                     mr: '0.4em',
                 }}
             >
@@ -77,12 +78,12 @@ export function ReasonILikeYou() {
                 <Typography
                     component="span"
                     sx={{
-                        fontFamily: tokens.fonts.display,
+                        fontFamily: f.display,
                         fontStyle: 'italic',
                         fontSize: 'clamp(0.65rem, 1.8vw, 1rem)',
                         fontWeight: 600,
                         letterSpacing: '0.02em',
-                        color: tokens.colors.burgundy,
+                        color: c.burgundy,
                         opacity: visible ? 1 : 0,
                         transform: visible ? 'translateY(0)' : 'translateY(4px)',
                         transition: `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`,

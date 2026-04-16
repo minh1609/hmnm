@@ -1,8 +1,9 @@
 import { Box, Typography } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useTrips } from '@/hooks/useTrips';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 import { PageHeader } from '@/components/PageHeader';
+
 function formatDateRange(start: Date, end: Date): string {
     const opts: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
     return `${start.toLocaleDateString('en-GB', opts)} — ${end.toLocaleDateString('en-GB', opts)}`;
@@ -15,7 +16,7 @@ function durationDays(start: Date, end: Date): number {
 
 export function TripsPage() {
     const { trips } = useTrips();
-    const { colors: c, fonts: f } = tokens;
+    const { tokens: { colors: c, fonts: f } } = useTheme();
 
     return (
         <>

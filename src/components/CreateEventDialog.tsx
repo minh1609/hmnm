@@ -17,7 +17,7 @@ import { collection, addDoc, doc, updateDoc, Timestamp } from 'firebase/firestor
 import { db } from '@/firebase';
 import { activeProfile } from '@/config';
 import { invalidateTimelineCache } from '@/hooks/useTimeline';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 import {
     dialogPaperSx,
     dialogTitleSx,
@@ -39,6 +39,8 @@ interface Props {
 
 export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props) {
     const isEditing = Boolean(editEvent);
+    const theme = useTheme();
+    const { colors: c } = theme.tokens;
 
     const [date, setDate] = useState('');
     const [name, setName] = useState('');
@@ -119,6 +121,8 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
         }
     };
 
+    const inputSx = textFieldSx(theme, c.burgundy);
+
     return (
         <Dialog
             open={open}
@@ -126,9 +130,9 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
             maxWidth="sm"
             fullWidth
             disableScrollLock
-            PaperProps={{ sx: dialogPaperSx(tokens.colors.burgundy) }}
+            PaperProps={{ sx: dialogPaperSx(theme, c.burgundy) }}
         >
-            <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
+            <DialogTitle sx={dialogTitleSx(theme, c.burgundy)}>
                 {isEditing ? <EditIcon sx={{ fontSize: '1.3rem' }} /> : <AddIcon sx={{ fontSize: '1.3rem' }} />}
                 {isEditing ? 'Edit Memory' : 'New Memory'}
             </DialogTitle>
@@ -136,7 +140,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
             <DialogContent sx={{ pt: '24px !important', pb: 1 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                     {error && (
-                        <Alert severity="error" sx={errorAlertSx}>
+                        <Alert severity="error" sx={errorAlertSx(theme)}>
                             {error}
                         </Alert>
                     )}
@@ -185,7 +189,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                         />
                         <Typography
                             variant="body2"
-                            sx={{ mt: 0.5, color: tokens.colors.inkMuted, fontSize: '0.75rem' }}
+                            sx={{ mt: 0.5, color: c.inkMuted, fontSize: '0.75rem' }}
                         >
                             Tap the date chip on the timeline to trigger this icon burst.
                         </Typography>
@@ -193,11 +197,11 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                 </Box>
             </DialogContent>
 
-            <DialogActions sx={dialogActionsSx}>
+            <DialogActions sx={dialogActionsSx(theme)}>
                 <Button
                     onClick={handleClose}
                     disabled={saving}
-                    sx={cancelButtonSx}
+                    sx={cancelButtonSx(theme)}
                 >
                     Cancel
                 </Button>
@@ -207,17 +211,14 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                     variant="contained"
                     startIcon={
                         saving ? (
-                            <CircularProgress size={14} thickness={3} sx={{ color: tokens.colors.white }} />
+                            <CircularProgress size={14} thickness={3} sx={{ color: c.white }} />
                         ) : isEditing ? (
                             <EditIcon />
                         ) : (
                             <AddIcon />
                         )
                     }
-                    sx={primaryButtonSx(
-                        tokens.colors.burgundy,
-                        tokens.colors.burgundyLight,
-                    )}
+                    sx={primaryButtonSx(theme, c.burgundy, c.burgundyLight)}
                 >
                     {saving ? 'Saving…' : isEditing ? 'Save' : 'Add'}
                 </Button>
@@ -225,5 +226,3 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
         </Dialog>
     );
 }
-
-const inputSx = textFieldSx(tokens.colors.burgundy);

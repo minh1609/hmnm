@@ -2,9 +2,15 @@ import { createTheme } from '@mui/material/styles';
 
 /**
  * Refined Heritage design tokens — single source of truth.
- * Use these in MUI's `sx` prop via `theme.palette.*` and `theme.typography.*`.
- * The same raw values are mirrored as CSS custom properties in index.css for
- * non-MUI contexts (plain CSS, keyframe animations, etc.).
+ *
+ * Components access these via `theme.tokens` from `useTheme()` or the sx callback
+ * `(theme) => ({...})`. Never import `tokens` directly in components.
+ *
+ * To swap the entire colour palette: edit `tokens` below — every component that
+ * reads from the theme updates automatically.
+ *
+ * Also update the matching CSS custom properties in index.css for global/animation
+ * contexts (keyframes, pseudo-elements, global resets).
  */
 export const tokens = {
     colors: {
@@ -55,12 +61,24 @@ export const tokens = {
     },
 } as const;
 
-/** Backward-compatible alias — all existing imports stay valid. */
+/** Backward-compatible alias — keeps any migration-script references valid. */
 export const ferrariTokens = tokens;
+
+// Augment the MUI Theme type so every component can reach `theme.tokens`
+// via `useTheme()` or an sx callback — no direct `tokens` import needed.
+declare module '@mui/material/styles' {
+    interface Theme {
+        tokens: typeof tokens;
+    }
+    interface ThemeOptions {
+        tokens?: typeof tokens;
+    }
+}
 
 const { colors: c, fonts: f } = tokens;
 
 const theme = createTheme({
+    tokens,
     palette: {
         mode: 'light',
         primary: {

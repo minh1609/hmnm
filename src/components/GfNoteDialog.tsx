@@ -13,7 +13,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { invalidateTimelineCache } from '@/hooks/useTimeline';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 import {
     dialogPaperSx,
     dialogTitleSx,
@@ -35,6 +35,8 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
     const [note, setNote] = useState('');
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const theme = useTheme();
+    const { colors: c } = theme.tokens;
 
     useEffect(() => {
         if (event) {
@@ -74,16 +76,16 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
             maxWidth="sm"
             fullWidth
             disableScrollLock
-            PaperProps={{ sx: dialogPaperSx(tokens.colors.rose) }}
+            PaperProps={{ sx: dialogPaperSx(theme, c.rose) }}
         >
-            <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
+            <DialogTitle sx={dialogTitleSx(theme, c.burgundy)}>
                 <FavoriteIcon sx={{ fontSize: '1.2rem' }} />
                 {event?.name}
             </DialogTitle>
 
             <DialogContent sx={{ pt: '24px !important', pb: 1 }}>
                 {error && (
-                    <Alert severity="error" sx={errorAlertSx}>
+                    <Alert severity="error" sx={errorAlertSx(theme)}>
                         {error}
                     </Alert>
                 )}
@@ -95,15 +97,15 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                     multiline
                     minRows={3}
                     placeholder="Add your personal note about this moment…"
-                    sx={textFieldSx(tokens.colors.burgundy)}
+                    sx={textFieldSx(theme, c.burgundy)}
                 />
             </DialogContent>
 
-            <DialogActions sx={dialogActionsSx}>
+            <DialogActions sx={dialogActionsSx(theme)}>
                 <Button
                     onClick={handleClose}
                     disabled={saving}
-                    sx={cancelButtonSx}
+                    sx={cancelButtonSx(theme)}
                 >
                     Cancel
                 </Button>
@@ -113,12 +115,12 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                     variant="contained"
                     startIcon={
                         saving ? (
-                            <CircularProgress size={14} thickness={3} sx={{ color: tokens.colors.white }} />
+                            <CircularProgress size={14} thickness={3} sx={{ color: c.white }} />
                         ) : (
                             <FavoriteIcon />
                         )
                     }
-                    sx={primaryButtonSx(tokens.colors.burgundy, tokens.colors.burgundyLight)}
+                    sx={primaryButtonSx(theme, c.burgundy, c.burgundyLight)}
                 >
                     {saving ? 'Saving…' : 'Save'}
                 </Button>

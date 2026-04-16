@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { Box, Typography } from '@mui/material';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 
 interface YearDescriptionProps {
     description?: string;
@@ -8,6 +8,8 @@ interface YearDescriptionProps {
 
 export const YearDescription = forwardRef<HTMLDivElement, YearDescriptionProps>(
     ({ description }, ref) => {
+        const { tokens: { colors: c, fonts: f } } = useTheme();
+
         if (!description) return null;
 
         return (
@@ -25,13 +27,13 @@ export const YearDescription = forwardRef<HTMLDivElement, YearDescriptionProps>(
             >
                 <Typography
                     sx={{
-                        fontFamily: tokens.fonts.display,
+                        fontFamily: f.display,
                         fontWeight: 600,
                         fontStyle: 'italic',
                         fontSize: '1.5rem',
                         lineHeight: 1.2,
                         letterSpacing: '-0.01em',
-                        color: tokens.colors.burgundy,
+                        color: c.burgundy,
                         userSelect: 'none',
                     }}
                 >

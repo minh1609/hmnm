@@ -1,7 +1,7 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 import { AuthButton } from '@/components/AuthButton';
 
 interface PageHeaderProps {
@@ -21,7 +21,7 @@ export function PageHeader({
     sticky = true,
 }: PageHeaderProps) {
     const navigate = useNavigate();
-    const { colors: c, fonts: f } = tokens;
+    const { tokens: { colors: c, fonts: f } } = useTheme();
 
     return (
         <Box

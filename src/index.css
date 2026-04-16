@@ -1,7 +1,11 @@
 /*
- * Refined Heritage CSS custom properties — mirrors tokens in theme.ts.
- * Use these for non-MUI contexts: plain CSS rules, keyframe animations,
- * pseudo-elements, and global resets.
+ * Refined Heritage CSS custom properties — mirrors the `tokens` object in theme.ts.
+ *
+ * These are used for non-MUI contexts where the JS theme isn't accessible:
+ * keyframe animations, pseudo-elements, global resets, and plain CSS rules.
+ *
+ * ⚠️  When you swap the colour palette in theme.ts, update the values here too
+ *     so that global/animation styles stay in sync with the rest of the app.
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600;1,6..72,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');

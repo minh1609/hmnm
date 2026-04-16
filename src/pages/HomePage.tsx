@@ -14,7 +14,7 @@ import { GfNoteDialog } from '@/components/GfNoteDialog';
 import { AddEventFab } from '@/components/AddEventFab';
 import { YearDescription } from '@/components/YearDescription';
 import { PageHeader } from '@/components/PageHeader';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -37,19 +37,22 @@ const yearSx =
         fontWeight: active ? 700 : 400,
         fontStyle: active ? 'normal' : 'italic',
         fontSize: active ? '1.9rem' : '1.25rem',
-        color: active ? tokens.colors.burgundy : tokens.colors.inkMuted,
+        color: active ? theme.tokens.colors.burgundy : theme.tokens.colors.inkMuted,
         letterSpacing: '-0.02em',
         cursor: 'pointer',
         transition: 'all 0.2s ease',
         userSelect: 'none',
-        borderBottom: active ? `2px solid ${tokens.colors.burgundy}` : '2px solid transparent',
+        borderBottom: active ? `2px solid ${theme.tokens.colors.burgundy}` : '2px solid transparent',
         pb: '2px',
-        '&:hover': { color: tokens.colors.burgundy, opacity: 1 },
+        '&:hover': { color: theme.tokens.colors.burgundy, opacity: 1 },
     });
 
 export function HomePage() {
     const { timeline: datingTimeline, refetch } = useTimeline();
     const { isAdmin, isGf } = useAuth();
+    const theme = useTheme();
+    const { colors: c, fonts: f } = theme.tokens;
+
     const years = Object.keys(datingTimeline)
         .map(Number)
         .sort((a, b) => a - b);
@@ -136,7 +139,7 @@ export function HomePage() {
                     position: 'sticky',
                     top: 0,
                     zIndex: 100,
-                    backgroundColor: tokens.colors.cream,
+                    backgroundColor: c.cream,
                 }}
             >
                 <PageHeader
@@ -218,15 +221,15 @@ export function HomePage() {
                                                   : undefined
                                         }
                                         sx={{
-                                            backgroundColor: event.gfNote ? tokens.colors.rose : tokens.colors.surface,
-                                            borderColor: tokens.colors.burgundy,
-                                            boxShadow: `0 0 6px ${tokens.colors.burgundyGlowFaint}`,
+                                            backgroundColor: event.gfNote ? c.rose : c.surface,
+                                            borderColor: c.burgundy,
+                                            boxShadow: `0 0 6px ${c.burgundyGlowFaint}`,
                                             cursor: isAdmin || isGf ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             ...((isAdmin || isGf) && {
                                                 '&:hover': {
-                                                    borderColor: tokens.colors.burgundyLight,
-                                                    boxShadow: `0 0 10px ${tokens.colors.burgundyGlow}`,
+                                                    borderColor: c.burgundyLight,
+                                                    boxShadow: `0 0 10px ${c.burgundyGlow}`,
                                                     transform: 'scale(1.3)',
                                                 },
                                             }),
@@ -234,23 +237,23 @@ export function HomePage() {
                                     />
                                     <TimelineConnector
                                         sx={{
-                                            backgroundColor: tokens.colors.rose,
+                                            backgroundColor: c.rose,
                                         }}
                                     />
                                 </TimelineSeparator>
                                 <TimelineContent>
                                     <Typography
                                         fontWeight={600}
-                                        sx={(theme) => ({
-                                            fontFamily: theme.typography.h3.fontFamily,
+                                        sx={(t) => ({
+                                            fontFamily: t.typography.h3.fontFamily,
                                             fontSize: '1.05rem',
                                             letterSpacing: '-0.01em',
-                                            color: tokens.colors.ink,
+                                            color: c.ink,
                                             cursor: 'default',
                                             display: 'inline-block',
                                             transition: 'color 0.3s ease',
                                             '&:hover': {
-                                                color: tokens.colors.burgundy,
+                                                color: c.burgundy,
                                             },
                                         })}
                                     >
@@ -267,7 +270,7 @@ export function HomePage() {
                                                             <span
                                                                 style={{
                                                                     whiteSpace: 'pre-line',
-                                                                    color: tokens.colors.rose,
+                                                                    color: c.rose,
                                                                 }}
                                                             >
                                                                 {event.gfNote}
@@ -279,18 +282,18 @@ export function HomePage() {
                                             >
                                                 <LightbulbIcon
                                                     sx={{
-                                                        color: tokens.colors.brown,
+                                                        color: c.brown,
                                                         fontSize: '1.1rem',
                                                         mb: '-2px',
                                                         mx: 0.5,
                                                         transition: 'transform 0.2s ease, color 0.2s ease',
                                                         ...(event.gfNote && {
-                                                            color: tokens.colors.burgundy,
-                                                            filter: `drop-shadow(0 0 4px ${tokens.colors.roseGlow})`,
+                                                            color: c.burgundy,
+                                                            filter: `drop-shadow(0 0 4px ${c.roseGlow})`,
                                                         }),
                                                         '&:hover': {
                                                             transform: 'scale(1.35)',
-                                                            color: tokens.colors.burgundy,
+                                                            color: c.burgundy,
                                                         },
                                                     }}
                                                 />
@@ -326,13 +329,13 @@ export function HomePage() {
                     severity="info"
                     variant="filled"
                     sx={{
-                        fontFamily: tokens.fonts.sans,
+                        fontFamily: f.sans,
                         letterSpacing: '0.02em',
-                        backgroundColor: tokens.colors.creamDark,
-                        color: tokens.colors.ink,
-                        border: `1px solid ${tokens.colors.border}`,
-                        '& .MuiAlert-icon': { color: tokens.colors.burgundy },
-                        '& .MuiAlert-action .MuiIconButton-root': { color: tokens.colors.inkMuted },
+                        backgroundColor: c.creamDark,
+                        color: c.ink,
+                        border: `1px solid ${c.border}`,
+                        '& .MuiAlert-icon': { color: c.burgundy },
+                        '& .MuiAlert-action .MuiIconButton-root': { color: c.inkMuted },
                     }}
                 >
                     {swipeAlert}
@@ -347,10 +350,10 @@ export function HomePage() {
                 onClose={() => setDotMenu(null)}
                 PaperProps={{
                     sx: {
-                        backgroundColor: tokens.colors.surface,
-                        border: `1px solid ${tokens.colors.border}`,
+                        backgroundColor: c.surface,
+                        border: `1px solid ${c.border}`,
                         borderRadius: 2,
-                        boxShadow: `0 8px 24px ${tokens.colors.burgundyGlowFaint}`,
+                        boxShadow: `0 8px 24px ${c.burgundyGlowFaint}`,
                         minWidth: 140,
                     },
                 }}
@@ -361,15 +364,15 @@ export function HomePage() {
                         setDotMenu(null);
                     }}
                     sx={{
-                        fontFamily: tokens.fonts.sans,
+                        fontFamily: f.sans,
                         fontWeight: 600,
                         letterSpacing: '0.04em',
                         fontSize: '0.85rem',
-                        color: tokens.colors.brown,
-                        '&:hover': { backgroundColor: tokens.colors.panel },
+                        color: c.brown,
+                        '&:hover': { backgroundColor: c.panel },
                     }}
                 >
-                    <ListItemIcon sx={{ minWidth: 32, color: tokens.colors.brown }}>
+                    <ListItemIcon sx={{ minWidth: 32, color: c.brown }}>
                         <EditIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Edit</ListItemText>
@@ -380,15 +383,15 @@ export function HomePage() {
                         setDotMenu(null);
                     }}
                     sx={{
-                        fontFamily: tokens.fonts.sans,
+                        fontFamily: f.sans,
                         fontWeight: 600,
                         letterSpacing: '0.04em',
                         fontSize: '0.85rem',
-                        color: tokens.colors.burgundy,
-                        '&:hover': { backgroundColor: tokens.colors.roseGlowFaint },
+                        color: c.burgundy,
+                        '&:hover': { backgroundColor: c.roseGlowFaint },
                     }}
                 >
-                    <ListItemIcon sx={{ minWidth: 32, color: tokens.colors.burgundy }}>
+                    <ListItemIcon sx={{ minWidth: 32, color: c.burgundy }}>
                         <DeleteOutlineIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Delete</ListItemText>

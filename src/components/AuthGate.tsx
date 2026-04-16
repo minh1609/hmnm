@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 import { useAuth } from '@/hooks/useAuth';
 
 const GoogleIcon = () => (
@@ -33,6 +33,7 @@ interface AuthGateProps {
 
 export function AuthGate({ children }: AuthGateProps) {
     const { user, loading, signIn } = useAuth();
+    const { tokens: { colors: c, fonts: f } } = useTheme();
 
     if (loading) {
         return (
@@ -42,11 +43,11 @@ export function AuthGate({ children }: AuthGateProps) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: tokens.colors.cream,
+                    backgroundColor: c.cream,
                 }}
             >
                 <CircularProgress
-                    sx={{ color: tokens.colors.burgundy }}
+                    sx={{ color: c.burgundy }}
                     size={40}
                     thickness={3}
                 />
@@ -63,7 +64,7 @@ export function AuthGate({ children }: AuthGateProps) {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: tokens.colors.cream,
+                    backgroundColor: c.cream,
                     px: 3,
                     position: 'relative',
                     overflow: 'hidden',
@@ -71,7 +72,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         content: '""',
                         position: 'absolute',
                         inset: 0,
-                        background: `radial-gradient(ellipse 80% 60% at 50% 40%, ${tokens.colors.roseGlow}, transparent)`,
+                        background: `radial-gradient(ellipse 80% 60% at 50% 40%, ${c.roseGlow}, transparent)`,
                         pointerEvents: 'none',
                     },
                 }}
@@ -84,7 +85,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         left: 0,
                         right: 0,
                         height: '3px',
-                        background: `linear-gradient(90deg, transparent, ${tokens.colors.burgundy}, ${tokens.colors.rose}, ${tokens.colors.burgundy}, transparent)`,
+                        background: `linear-gradient(90deg, transparent, ${c.burgundy}, ${c.rose}, ${c.burgundy}, transparent)`,
                     }}
                 />
 
@@ -103,7 +104,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         sx={{
                             fontSize: '4rem',
                             lineHeight: 1,
-                            filter: `drop-shadow(0 0 16px ${tokens.colors.roseGlow})`,
+                            filter: `drop-shadow(0 0 16px ${c.roseGlow})`,
                         }}
                     >
                         🌸
@@ -112,11 +113,11 @@ export function AuthGate({ children }: AuthGateProps) {
                     <Box sx={{ textAlign: 'center' }}>
                         <Typography
                             sx={{
-                                fontFamily: tokens.fonts.display,
+                                fontFamily: f.display,
                                 fontSize: '2.4rem',
                                 fontWeight: 700,
                                 letterSpacing: '-0.02em',
-                                color: tokens.colors.ink,
+                                color: c.ink,
                                 lineHeight: 1.1,
                             }}
                         >
@@ -124,10 +125,10 @@ export function AuthGate({ children }: AuthGateProps) {
                         </Typography>
                         <Typography
                             sx={{
-                                fontFamily: tokens.fonts.display,
+                                fontFamily: f.display,
                                 fontStyle: 'italic',
                                 fontSize: '1.3rem',
-                                color: tokens.colors.brown,
+                                color: c.brown,
                                 mt: 0.5,
                             }}
                         >
@@ -140,14 +141,14 @@ export function AuthGate({ children }: AuthGateProps) {
                         sx={{
                             width: '100%',
                             height: '1px',
-                            background: `linear-gradient(90deg, transparent, ${tokens.colors.border}, transparent)`,
+                            background: `linear-gradient(90deg, transparent, ${c.border}, transparent)`,
                         }}
                     />
 
                     <Typography
                         variant="caption"
                         sx={{
-                            color: tokens.colors.inkMuted,
+                            color: c.inkMuted,
                             textAlign: 'center',
                             letterSpacing: '0.06em',
                         }}
@@ -161,19 +162,19 @@ export function AuthGate({ children }: AuthGateProps) {
                         variant="outlined"
                         fullWidth
                         sx={{
-                            fontFamily: tokens.fonts.sans,
+                            fontFamily: f.sans,
                             fontSize: '0.9rem',
                             letterSpacing: '0.04em',
-                            color: tokens.colors.ink,
-                            borderColor: tokens.colors.border,
-                            backgroundColor: tokens.colors.surface,
+                            color: c.ink,
+                            borderColor: c.border,
+                            backgroundColor: c.surface,
                             py: 1.5,
                             borderRadius: '8px',
                             transition: 'all 0.2s ease',
                             '&:hover': {
-                                borderColor: tokens.colors.burgundy,
-                                backgroundColor: tokens.colors.panel,
-                                boxShadow: `0 0 12px ${tokens.colors.burgundyGlowFaint}`,
+                                borderColor: c.burgundy,
+                                backgroundColor: c.panel,
+                                boxShadow: `0 0 12px ${c.burgundyGlowFaint}`,
                             },
                         }}
                     >
@@ -189,7 +190,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         left: 0,
                         right: 0,
                         height: '3px',
-                        background: `linear-gradient(90deg, transparent, ${tokens.colors.rose}, ${tokens.colors.burgundy}, ${tokens.colors.rose}, transparent)`,
+                        background: `linear-gradient(90deg, transparent, ${c.rose}, ${c.burgundy}, ${c.rose}, transparent)`,
                     }}
                 />
             </Box>

@@ -13,7 +13,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { invalidateTimelineCache } from '@/hooks/useTimeline';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 import {
     dialogPaperSx,
     dialogTitleSx,
@@ -33,6 +33,8 @@ interface Props {
 export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
     const [deleting, setDeleting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const theme = useTheme();
+    const { colors: c, fonts: f } = theme.tokens;
 
     const handleClose = () => {
         if (deleting) return;
@@ -74,24 +76,24 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
             maxWidth="xs"
             fullWidth
             disableScrollLock
-            PaperProps={{ sx: dialogPaperSx(tokens.colors.border) }}
+            PaperProps={{ sx: dialogPaperSx(theme, c.border) }}
         >
-            <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
+            <DialogTitle sx={dialogTitleSx(theme, c.burgundy)}>
                 <DeleteOutlineIcon sx={{ fontSize: '1.3rem' }} />
                 Delete
             </DialogTitle>
 
             <DialogContent sx={{ pt: '20px !important', pb: 1 }}>
                 {error && (
-                    <Alert severity="error" sx={errorAlertSx}>
+                    <Alert severity="error" sx={errorAlertSx(theme)}>
                         {error}
                     </Alert>
                 )}
 
                 <Typography
                     sx={{
-                        fontFamily: tokens.fonts.sans,
-                        color: tokens.colors.inkMuted,
+                        fontFamily: f.sans,
+                        color: c.inkMuted,
                         fontSize: '0.95rem',
                         lineHeight: 1.6,
                     }}
@@ -100,10 +102,10 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                     <Typography
                         component="span"
                         sx={{
-                            fontFamily: tokens.fonts.display,
+                            fontFamily: f.display,
                             fontWeight: 600,
                             letterSpacing: '-0.01em',
-                            color: tokens.colors.ink,
+                            color: c.ink,
                         }}
                     >
                         {event?.name}
@@ -112,7 +114,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                         <>
                             {' '}
                             (
-                            <Typography component="span" sx={{ color: tokens.colors.brown, fontWeight: 600 }}>
+                            <Typography component="span" sx={{ color: c.brown, fontWeight: 600 }}>
                                 {dateLabel}
                             </Typography>
                             )
@@ -122,8 +124,8 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                 </Typography>
             </DialogContent>
 
-            <DialogActions sx={dialogActionsSx}>
-                <Button onClick={handleClose} disabled={deleting} sx={cancelButtonSx}>
+            <DialogActions sx={dialogActionsSx(theme)}>
+                <Button onClick={handleClose} disabled={deleting} sx={cancelButtonSx(theme)}>
                     Cancel
                 </Button>
                 <Button
@@ -132,12 +134,12 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                     variant="contained"
                     startIcon={
                         deleting ? (
-                            <CircularProgress size={14} thickness={3} sx={{ color: tokens.colors.white }} />
+                            <CircularProgress size={14} thickness={3} sx={{ color: c.white }} />
                         ) : (
                             <DeleteOutlineIcon />
                         )
                     }
-                    sx={primaryButtonSx(tokens.colors.burgundy, tokens.colors.burgundyLight)}
+                    sx={primaryButtonSx(theme, c.burgundy, c.burgundyLight)}
                 >
                     {deleting ? 'Deleting…' : 'Delete'}
                 </Button>

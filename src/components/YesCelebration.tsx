@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { tokens } from '@/theme';
+import { useTheme } from '@mui/material/styles';
 
 const PARTICLE_EMOJIS = ['❤️', '💕', '💖', '💗', '💓', '🥰', '✨', '💝', '🌸', '⭐'];
 const HEART_PARTICLES = Array.from({ length: 32 }, (_, i) => ({
@@ -12,7 +12,7 @@ const HEART_PARTICLES = Array.from({ length: 32 }, (_, i) => ({
 }));
 
 export function YesCelebration() {
-    const { colors: c, fonts: f } = tokens;
+    const { tokens: { colors: c, fonts: f } } = useTheme();
 
     return (
         <Box
