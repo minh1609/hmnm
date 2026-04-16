@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Typography, Snackbar, Alert, LinearProgress } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { doc, getDoc, setDoc, addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { doc, getDoc, collection, serverTimestamp, Timestamp, runTransaction } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { ferrariTokens } from '@/theme';
 import { YesCelebration } from '@/components/YesCelebration';
@@ -82,16 +82,19 @@ export function WybmgfPage() {
         if (optionIndex === question.correctIndex) {
             if (currentIndex + 1 >= QUESTIONS.length) {
                 setShowYesCelebration(true);
-                setDoc(
-                    doc(db, 'general', 'wybmgf'),
-                    { answer: true, answerTime: serverTimestamp() },
-                    { merge: true }
-                ).catch(() => {});
-                addDoc(collection(db, 'timeline_events'), {
-                    date: Timestamp.fromDate(new Date()),
-                    name: 'official',
-                    burstIcon: '💗',
-                    owner: 'mindy',
+                runTransaction(db, async (tx) => {
+                    tx.set(
+                        doc(db, 'general', 'wybmgf'),
+                        { answer: true, answerTime: serverTimestamp() },
+                        { merge: true }
+                    );
+                    const eventRef = doc(collection(db, 'timeline_events'));
+                    tx.set(eventRef, {
+                        date: Timestamp.fromDate(new Date()),
+                        name: 'official',
+                        burstIcon: '💗',
+                        owner: 'mindy',
+                    });
                 }).catch(() => {});
             } else {
                 setCurrentIndex((i) => i + 1);
