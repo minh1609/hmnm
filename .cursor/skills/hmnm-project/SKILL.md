@@ -108,6 +108,8 @@ Animation classes applied to the wrapping `<div key={location.key}>`:
 
 ## Design tokens — `tokens` / `ferrariTokens` (`src/theme.ts`)
 
+> **Visual spec:** See `.cursor/skills/hmnm-project/DESIGN.md` for the full "Refined Heritage" design brief (color palette rationale, typography choices, roundedness). Read it before making any design or styling decisions.
+
 Single source of truth. Always import `tokens` (or the alias `ferrariTokens`) from `@/theme`. Never hardcode hex values.
 
 ```ts
@@ -115,63 +117,63 @@ import { tokens } from '@/theme';
 const { colors: c, fonts: f } = tokens;
 
 // Primary — Deep Burgundy
-tokens.colors.burgundy;          // #9D2933  — primary brand
-tokens.colors.burgundyLight;     // #C04050
-tokens.colors.burgundyDark;      // #6B1B24
-tokens.colors.burgundyGlow;      // rgba(157,41,51,0.25)
+tokens.colors.burgundy; // #9D2933  — primary brand
+tokens.colors.burgundyLight; // #C04050
+tokens.colors.burgundyDark; // #6B1B24
+tokens.colors.burgundyGlow; // rgba(157,41,51,0.25)
 tokens.colors.burgundyGlowFaint; // rgba(157,41,51,0.10)
 
 // Secondary — Dusty Rose
-tokens.colors.rose;              // #D4A5A5
-tokens.colors.roseDark;          // #B87878
-tokens.colors.roseGlow;          // rgba(212,165,165,0.35)
-tokens.colors.roseGlowFaint;     // rgba(212,165,165,0.15)
+tokens.colors.rose; // #D4A5A5
+tokens.colors.roseDark; // #B87878
+tokens.colors.roseGlow; // rgba(212,165,165,0.35)
+tokens.colors.roseGlowFaint; // rgba(212,165,165,0.15)
 
 // Tertiary — Coffee Brown
-tokens.colors.brown;             // #6D4C41
-tokens.colors.brownLight;        // #8D6E63
-tokens.colors.brownGlow;         // rgba(109,76,65,0.28)
+tokens.colors.brown; // #6D4C41
+tokens.colors.brownLight; // #8D6E63
+tokens.colors.brownGlow; // rgba(109,76,65,0.28)
 
 // Backgrounds (warm light)
-tokens.colors.cream;             // #FAF7F2  — page background
-tokens.colors.creamDark;         // #F0EBE3
-tokens.colors.surface;           // #FFFFFF  — card/paper bg
-tokens.colors.panel;             // #F5F0E8
+tokens.colors.cream; // #FAF7F2  — page background
+tokens.colors.creamDark; // #F0EBE3
+tokens.colors.surface; // #FFFFFF  — card/paper bg
+tokens.colors.panel; // #F5F0E8
 
 // Borders / dividers
-tokens.colors.border;            // #DDD5CC
-tokens.colors.borderSubtle;      // #EDE8E0
+tokens.colors.border; // #DDD5CC
+tokens.colors.borderSubtle; // #EDE8E0
 
 // Text
-tokens.colors.ink;               // #2C1A12  — primary text
-tokens.colors.inkMuted;          // #7A6356
-tokens.colors.inkSubtle;         // #B0A090
+tokens.colors.ink; // #2C1A12  — primary text
+tokens.colors.inkMuted; // #7A6356
+tokens.colors.inkSubtle; // #B0A090
 
 // Utility
-tokens.colors.white;             // #FFFFFF
+tokens.colors.white; // #FFFFFF
 ```
 
 **MUI palette** (theme.ts):
 
-| Palette key          | Maps to               |
-| -------------------- | --------------------- |
-| `primary`            | burgundy (`#9D2933`)  |
-| `secondary`          | rose (`#D4A5A5`)      |
-| `background.default` | cream (`#FAF7F2`)     |
-| `background.paper`   | white (`#FFFFFF`)     |
-| `text.primary`       | ink (`#2C1A12`)       |
-| `text.secondary`     | inkMuted (`#7A6356`)  |
+| Palette key          | Maps to              |
+| -------------------- | -------------------- |
+| `primary`            | burgundy (`#9D2933`) |
+| `secondary`          | rose (`#D4A5A5`)     |
+| `background.default` | cream (`#FAF7F2`)    |
+| `background.paper`   | white (`#FFFFFF`)    |
+| `text.primary`       | ink (`#2C1A12`)      |
+| `text.secondary`     | inkMuted (`#7A6356`) |
 
 > Mode is **light**. `primary` is burgundy, `secondary` is dusty rose.
 
 **Fonts** (loaded via Google Fonts in `index.html`):
 
-| Token           | Font              | Use                                           |
-| --------------- | ----------------- | --------------------------------------------- |
-| `fonts.sans`    | Plus Jakarta Sans | Body / UI labels / buttons                    |
-| `fonts.display` | Newsreader        | Editorial headings, stat values, display text |
+| Token           | Font              | Use                                                |
+| --------------- | ----------------- | -------------------------------------------------- |
+| `fonts.sans`    | Plus Jakarta Sans | Body / UI labels / buttons                         |
+| `fonts.display` | Newsreader        | Editorial headings, stat values, display text      |
 | `fonts.script`  | Newsreader        | Romantic captions — use with `fontStyle: 'italic'` |
-| `fonts.mono`    | system mono       | Code                                          |
+| `fonts.mono`    | system mono       | Code                                               |
 
 ## Config (`src/config.ts`)
 
@@ -392,7 +394,7 @@ Retrigger without remount: remove class → force reflow (`offsetHeight`) → re
 
 ## Conventions
 
-- Import `tokens` (or the alias `ferrariTokens`) from `@/theme` for all color/font values in `sx` props.
+- Import `tokens` from `@/theme` for all color/font values in `sx` props.
 - MUI theme is **light mode**; `primary` = burgundy, `secondary` = dusty rose.
 - Typography variants `h1`/`h2`/`h3` use `fonts.display` (Newsreader serif) — no auto-uppercase.
 - Use `variant="caption"` for small label text — it uses `fonts.sans` with letter-spacing.
