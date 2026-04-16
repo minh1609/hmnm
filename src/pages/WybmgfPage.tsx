@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Typography, Snackbar, Alert, LinearProgress } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { ferrariTokens } from '@/theme';
 import { YesCelebration } from '@/components/YesCelebration';
@@ -58,7 +58,7 @@ export function WybmgfPage() {
     useEffect(() => {
         async function fetchAnswerStatus() {
             try {
-                const metaDoc = await getDoc(doc(db, 'config', 'metadata'));
+                const metaDoc = await getDoc(doc(db, 'general', 'wybmgf'));
                 if (metaDoc.exists() && metaDoc.data().answer === true) {
                     setShowYesCelebration(true);
                 }
@@ -71,13 +71,28 @@ export function WybmgfPage() {
         fetchAnswerStatus();
     }, []);
 
-    useEffect(() => () => { if (celebTimerRef.current) clearTimeout(celebTimerRef.current); }, []);
+    useEffect(
+        () => () => {
+            if (celebTimerRef.current) clearTimeout(celebTimerRef.current);
+        },
+        []
+    );
 
     function handleAnswer(optionIndex: number) {
         if (optionIndex === question.correctIndex) {
             if (currentIndex + 1 >= QUESTIONS.length) {
                 setShowYesCelebration(true);
-                setDoc(doc(db, 'config', 'metadata'), { answer: true }, { merge: true }).catch(() => {});
+                setDoc(
+                    doc(db, 'general', 'wybmgf'),
+                    { answer: true, answerTime: serverTimestamp() },
+                    { merge: true }
+                ).catch(() => {});
+                addDoc(collection(db, 'timeline_events'), {
+                    date: Timestamp.fromDate(new Date()),
+                    name: 'official',
+                    burstIcon: '💗',
+                    owner: 'mindy',
+                }).catch(() => {});
             } else {
                 setCurrentIndex((i) => i + 1);
                 setWrongAttempts(0);
@@ -105,7 +120,7 @@ export function WybmgfPage() {
             {/* Progress bar */}
             <LinearProgress
                 variant={loadingAnswer ? 'indeterminate' : 'determinate'}
-                    value={showYesCelebration ? 100 : progress}
+                value={showYesCelebration ? 100 : progress}
                 sx={{
                     height: 3,
                     backgroundColor: c.redDeep,
@@ -257,6 +272,7 @@ export function WybmgfPage() {
                 autoHideDuration={3000}
                 onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                sx={{ mb: '48px' }}
             >
                 <Alert
                     onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
