@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import type { TooltipProps } from '@mui/material/Tooltip';
 
-const FerrariTooltip = styled(({ className, ...props }: TooltipProps) => (
+const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip enterTouchDelay={0} leaveTouchDelay={4000} {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
@@ -25,4 +25,4 @@ const FerrariTooltip = styled(({ className, ...props }: TooltipProps) => (
     },
 }));
 
-export default FerrariTooltip;
+export default CustomTooltip;

@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { JourneyCounter } from '@/components/JourneyCounter';
 import { FallingObjects } from '@/components/FallingObjects';
 import { IconBurst } from '@/components/IconBurst';
-import FerrariTooltip from '@/components/FerrariTooltip';
+import CustomTooltip from '@/components/CustomTooltip';
 import { CreateEventDialog } from '@/components/CreateEventDialog';
 import { DeleteEventDialog } from '@/components/DeleteEventDialog';
 import { GfNoteDialog } from '@/components/GfNoteDialog';
@@ -259,7 +259,7 @@ export function HomePage() {
                                     >
                                         {index % 2 == 0 && event.name}
                                         {(event.des || event.gfNote) && (
-                                            <FerrariTooltip
+                                            <CustomTooltip
                                                 title={
                                                     <>
                                                         {event.des && (
@@ -297,7 +297,7 @@ export function HomePage() {
                                                         },
                                                     }}
                                                 />
-                                            </FerrariTooltip>
+                                            </CustomTooltip>
                                         )}
                                         {index % 2 == 1 && event.name}
                                     </Typography>

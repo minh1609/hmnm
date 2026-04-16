@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import FerrariTooltip from '@/components/FerrariTooltip';
+import CustomTooltip from '@/components/CustomTooltip';
 
 import { IMAGE_FILES, ICONS } from '@/data';
 import { fallingObjects } from '@/config';
@@ -116,7 +116,7 @@ export function FallingObjects() {
 
                 if (p.kind === 'image') {
                     return (
-                        <FerrariTooltip key={p.id} title={p.label} placement="top" arrow>
+                        <CustomTooltip key={p.id} title={p.label} placement="top" arrow>
                             <img
                                 src={p.src}
                                 alt=""
@@ -130,12 +130,12 @@ export function FallingObjects() {
                                     objectFit: 'contain',
                                 }}
                             />
-                        </FerrariTooltip>
+                        </CustomTooltip>
                     );
                 }
 
                 return (
-                    <FerrariTooltip key={p.id} title={p.label} placement="top" arrow>
+                    <CustomTooltip key={p.id} title={p.label} placement="top" arrow>
                         <span
                             aria-hidden="true"
                             onMouseEnter={() => setHoveredId(p.id)}
@@ -149,7 +149,7 @@ export function FallingObjects() {
                         >
                             {p.symbol}
                         </span>
-                    </FerrariTooltip>
+                    </CustomTooltip>
                 );
             })}
         </div>,

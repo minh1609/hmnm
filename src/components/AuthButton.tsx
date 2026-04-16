@@ -11,11 +11,14 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTheme } from '@mui/material/styles';
 import { useAuth } from '@/hooks/useAuth';
+import { tokens } from '@/theme';
 
 export function AuthButton() {
     const { user, loading, role, isAdmin, signIn, signOut } = useAuth();
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-    const { tokens: { colors: c, fonts: f } } = useTheme();
+    const {
+        tokens: { colors: c, fonts: f },
+    } = useTheme();
 
     if (loading) {
         return <CircularProgress size={18} thickness={3} sx={{ color: c.burgundy }} />;
@@ -24,11 +27,7 @@ export function AuthButton() {
     if (!user) {
         return (
             <Chip
-                icon={
-                    <LoginIcon
-                        sx={{ fontSize: '0.9rem !important', color: `${c.burgundy} !important` }}
-                    />
-                }
+                icon={<LoginIcon sx={{ fontSize: '0.9rem !important', color: `${c.burgundy} !important` }} />}
                 label="Sign in"
                 size="small"
                 onClick={signIn}
@@ -144,8 +143,8 @@ export function AuthButton() {
                             fontSize: '0.6rem',
                             letterSpacing: '0.08em',
                             textTransform: 'uppercase',
-                            color: roleColor(role, c),
-                            borderColor: roleColor(role, c),
+                            color: roleColor(role),
+                            borderColor: roleColor(role),
                             backgroundColor: 'transparent',
                             '& .MuiChip-label': { px: 0.75 },
                         }}
@@ -175,12 +174,14 @@ export function AuthButton() {
     );
 }
 
-type Colors = ReturnType<typeof useTheme>['tokens']['colors'];
-
-const roleColor = (role: string | null, c: Colors) => {
+const roleColor = (role: string | null) => {
+    const c = tokens.colors;
     switch (role) {
-        case 'admin': return c.burgundy;
-        case 'gf':    return c.brown;
-        default:      return c.inkSubtle;
+        case 'admin':
+            return c.burgundy;
+        case 'gf':
+            return c.brown;
+        default:
+            return c.inkSubtle;
     }
 };

@@ -7,7 +7,9 @@ interface Props {
 }
 
 export function AddEventFab({ onClick }: Props) {
-    const { tokens: { colors: c, fonts: f } } = useTheme();
+    const {
+        tokens: { colors: c, fonts: f },
+    } = useTheme();
 
     return (
         <Portal>
@@ -50,7 +52,7 @@ export function AddEventFab({ onClick }: Props) {
                         lineHeight: 1,
                     }}
                 >
-                    Thêm nhìu kỉ niệm
+                    Add event
                 </Typography>
             </Fab>
         </Portal>
