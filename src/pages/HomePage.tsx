@@ -14,7 +14,6 @@ import { GfNoteDialog } from '@/components/GfNoteDialog';
 import { AddEventFab } from '@/components/AddEventFab';
 import { YearDescription } from '@/components/YearDescription';
 import { PageHeader } from '@/components/PageHeader';
-import { AuthButton } from '@/components/AuthButton';
 import { tokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
@@ -144,29 +143,6 @@ export function HomePage() {
                     title="The Journey So Far ..."
                     showBack={false}
                     sticky={false}
-                    right={
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                            {import.meta.env.DEV && (
-                                <Box
-                                    sx={{
-                                        backgroundColor: 'warning.main',
-                                        color: 'warning.contrastText',
-                                        px: 1.5,
-                                        py: 0.25,
-                                        borderRadius: '4px',
-                                        fontFamily: tokens.fonts.sans,
-                                        fontWeight: 600,
-                                        fontSize: '0.7rem',
-                                        letterSpacing: '0.06em',
-                                        textTransform: 'uppercase',
-                                    }}
-                                >
-                                    Dev Mode
-                                </Box>
-                            )}
-                            <AuthButton />
-                        </Box>
-                    }
                 />
                 <JourneyCounter />
 

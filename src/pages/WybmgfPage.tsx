@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Typography, Snackbar, Alert, LinearProgress } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { doc, getDoc, collection, serverTimestamp, Timestamp, runTransaction } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { tokens } from '@/theme';
 import { YesCelebration } from '@/components/YesCelebration';
 import { PageHeader } from '@/components/PageHeader';
-import { AuthButton } from '@/components/AuthButton';
-
 interface Question {
     question: string;
     options: string[];
@@ -110,15 +107,7 @@ export function WybmgfPage() {
 
     return (
         <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: c.cream }}>
-            <PageHeader
-                title="A Question for You"
-                right={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <FavoriteIcon sx={{ color: c.burgundy, fontSize: '1.4rem' }} />
-                        <AuthButton />
-                    </Box>
-                }
-            />
+            <PageHeader title="A Question for You" />
 
             {/* Progress bar */}
             <LinearProgress

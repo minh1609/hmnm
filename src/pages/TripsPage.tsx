@@ -1,11 +1,8 @@
 import { Box, Typography } from '@mui/material';
-import FlightIcon from '@mui/icons-material/Flight';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useTrips } from '@/hooks/useTrips';
 import { tokens } from '@/theme';
 import { PageHeader } from '@/components/PageHeader';
-import { AuthButton } from '@/components/AuthButton';
-
 function formatDateRange(start: Date, end: Date): string {
     const opts: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
     return `${start.toLocaleDateString('en-GB', opts)} — ${end.toLocaleDateString('en-GB', opts)}`;
@@ -24,24 +21,7 @@ export function TripsPage() {
         <>
             <Box sx={{ minHeight: '100vh', pb: 6, backgroundColor: c.cream }}>
                 <PageHeader
-                    title="Trips Together"
-                    titleIcon={<FlightIcon sx={{ color: c.burgundy, fontSize: '1.4rem', transform: 'rotate(-45deg)' }} />}
-                    right={
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                            <Typography
-                                sx={{
-                                    fontFamily: f.sans,
-                                    fontWeight: 600,
-                                    letterSpacing: '0.04em',
-                                    color: c.inkMuted,
-                                    textAlign: 'right',
-                                }}
-                            >
-                                {trips.length} trip{trips.length !== 1 ? 's' : ''}
-                            </Typography>
-                            <AuthButton />
-                        </Box>
-                    }
+                    title={`Trips Together ${trips.length} trip${trips.length !== 1 ? 's' : ''}`}
                 />
 
                 {/* Trip cards */}

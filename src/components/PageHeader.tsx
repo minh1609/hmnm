@@ -2,14 +2,10 @@ import { Box, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { tokens } from '@/theme';
+import { AuthButton } from '@/components/AuthButton';
 
 interface PageHeaderProps {
     title: string;
-    subtitle?: React.ReactNode;
-    /** Icon rendered immediately before the title text */
-    titleIcon?: React.ReactNode;
-    /** Content placed at the trailing (right) edge of the header */
-    right?: React.ReactNode;
     /** Override navigate('/') with a custom back handler */
     onBack?: () => void;
     /** Hide the back button (e.g. on the home page). Defaults to true. */
@@ -20,9 +16,6 @@ interface PageHeaderProps {
 
 export function PageHeader({
     title,
-    subtitle,
-    titleIcon,
-    right,
     onBack,
     showBack = true,
     sticky = true,
@@ -63,32 +56,41 @@ export function PageHeader({
             )}
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flex: 1, minWidth: 0, cursor: 'default' }}>
-                {titleIcon}
-                <Box sx={{ minWidth: 0 }}>
-                    <Typography
-                        sx={{
-                            fontFamily: f.display,
-                            fontWeight: 700,
-                            fontSize: { xs: '1.5rem', sm: '2rem' },
-                            letterSpacing: '-0.02em',
-                            color: c.ink,
-                            lineHeight: 1.1,
-                        }}
-                    >
-                        {title}
-                    </Typography>
-                    {subtitle && (
-                        <Typography
-                            variant="caption"
-                            sx={{ color: c.brown, fontFamily: f.sans, letterSpacing: '0.06em', opacity: 0.9 }}
-                        >
-                            {subtitle}
-                        </Typography>
-                    )}
-                </Box>
+                <Typography
+                    sx={{
+                        fontFamily: f.display,
+                        fontWeight: 700,
+                        fontSize: { xs: '1.5rem', sm: '2rem' },
+                        letterSpacing: '-0.02em',
+                        color: c.ink,
+                        lineHeight: 1.1,
+                    }}
+                >
+                    {title}
+                </Typography>
             </Box>
 
-            {right && <Box sx={{ ml: 'auto', flexShrink: 0 }}>{right}</Box>}
+            <Box sx={{ ml: 'auto', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                {import.meta.env.DEV && (
+                    <Box
+                        sx={{
+                            backgroundColor: 'warning.main',
+                            color: 'warning.contrastText',
+                            px: 1.5,
+                            py: 0.25,
+                            borderRadius: '4px',
+                            fontFamily: f.sans,
+                            fontWeight: 600,
+                            fontSize: '0.7rem',
+                            letterSpacing: '0.06em',
+                            textTransform: 'uppercase',
+                        }}
+                    >
+                        Dev Mode
+                    </Box>
+                )}
+                <AuthButton />
+            </Box>
         </Box>
     );
 }
