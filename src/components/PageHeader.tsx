@@ -1,7 +1,7 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 
 interface PageHeaderProps {
     title: string;
@@ -28,31 +28,34 @@ export function PageHeader({
     sticky = true,
 }: PageHeaderProps) {
     const navigate = useNavigate();
-    const { colors: c, fonts: f } = ferrariTokens;
+    const { colors: c, fonts: f } = tokens;
 
     return (
         <Box
             sx={{
                 ...(sticky && { position: 'sticky', top: 0, zIndex: 100 }),
-                backgroundColor: c.red,
+                backgroundColor: c.cream,
                 px: { xs: 2, sm: 4 },
                 py: 2,
                 display: 'flex',
                 alignItems: 'center',
                 gap: 2,
-                borderBottom: `1px solid ${c.redDeep}`,
-                boxShadow: '0 2px 16px rgba(0,0,0,0.5)',
+                borderBottom: `1px solid ${c.border}`,
+                boxShadow: `0 2px 12px ${c.burgundyGlowFaint}`,
             }}
         >
             {showBack && (
                 <IconButton
                     onClick={onBack ?? (() => navigate('/'))}
                     sx={{
-                        color: c.white,
-                        border: `1px solid ${c.white}`,
-                        borderRadius: '4px',
+                        color: c.burgundy,
+                        border: `1px solid ${c.burgundy}`,
+                        borderRadius: '6px',
                         p: 0.75,
-                        '&:hover': { '& .MuiSvgIcon-root': { transform: 'scale(1.35)' } },
+                        '&:hover': {
+                            backgroundColor: c.burgundyGlowFaint,
+                            '& .MuiSvgIcon-root': { transform: 'scale(1.25)' },
+                        },
                     }}
                 >
                     <ArrowBackIcon fontSize="small" sx={{ transition: 'transform 0.18s ease' }} />
@@ -65,13 +68,11 @@ export function PageHeader({
                     <Typography
                         sx={{
                             fontFamily: f.display,
-                            fontWeight: 900,
-                            fontSize: { xs: '1.6rem', sm: '2.2rem' },
-                            letterSpacing: '0.14em',
-                            textTransform: 'uppercase',
-                            color: c.white,
-                            textShadow: `0 0 20px ${c.goldGlow}`,
-                            lineHeight: 1,
+                            fontWeight: 700,
+                            fontSize: { xs: '1.5rem', sm: '2rem' },
+                            letterSpacing: '-0.02em',
+                            color: c.ink,
+                            lineHeight: 1.1,
                         }}
                     >
                         {title}
@@ -79,7 +80,7 @@ export function PageHeader({
                     {subtitle && (
                         <Typography
                             variant="caption"
-                            sx={{ color: c.gold, fontFamily: f.display, letterSpacing: '0.1em', opacity: 0.9 }}
+                            sx={{ color: c.brown, fontFamily: f.sans, letterSpacing: '0.06em', opacity: 0.9 }}
                         >
                             {subtitle}
                         </Typography>

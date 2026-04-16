@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import FlightIcon from '@mui/icons-material/Flight';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useTrips } from '@/hooks/useTrips';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 import { PageHeader } from '@/components/PageHeader';
 import { AuthButton } from '@/components/AuthButton';
 
@@ -18,23 +18,22 @@ function durationDays(start: Date, end: Date): number {
 
 export function TripsPage() {
     const { trips } = useTrips();
-    const { colors: c, fonts: f } = ferrariTokens;
+    const { colors: c, fonts: f } = tokens;
 
     return (
         <>
-            <Box sx={{ minHeight: '100vh', pb: 6 }}>
+            <Box sx={{ minHeight: '100vh', pb: 6, backgroundColor: c.cream }}>
                 <PageHeader
                     title="Trips Together"
-                    titleIcon={<FlightIcon sx={{ color: c.white, fontSize: '1.6rem', transform: 'rotate(-45deg)' }} />}
+                    titleIcon={<FlightIcon sx={{ color: c.burgundy, fontSize: '1.4rem', transform: 'rotate(-45deg)' }} />}
                     right={
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                             <Typography
                                 sx={{
-                                    fontFamily: f.display,
-                                    fontWeight: 700,
-                                    letterSpacing: '0.12em',
-                                    textTransform: 'uppercase',
-                                    color: 'white',
+                                    fontFamily: f.sans,
+                                    fontWeight: 600,
+                                    letterSpacing: '0.04em',
+                                    color: c.inkMuted,
                                     textAlign: 'right',
                                 }}
                             >
@@ -61,13 +60,13 @@ export function TripsPage() {
                         <Box
                             key={trip.name}
                             sx={{
-                                borderRadius: '6px',
-                                background: `linear-gradient(160deg, ${c.redDeep} 0%, ${c.redDark} 100%)`,
+                                borderRadius: '10px',
+                                background: c.surface,
                                 border: `1px solid ${c.border}`,
-                                borderTop: `3px solid ${c.gold}`,
+                                borderTop: `3px solid ${c.burgundy}`,
                                 overflow: 'hidden',
                                 position: 'relative',
-                                boxShadow: '0 6px 28px rgba(0,0,0,0.5)',
+                                boxShadow: `0 4px 18px ${c.burgundyGlowFaint}`,
                                 transition: 'transform 0.18s ease, box-shadow 0.18s ease',
                                 '&::before': {
                                     content: '""',
@@ -76,7 +75,7 @@ export function TripsPage() {
                                     left: 0,
                                     right: 0,
                                     height: '1px',
-                                    background: `linear-gradient(90deg, transparent, ${c.goldGlow}, transparent)`,
+                                    background: `linear-gradient(90deg, transparent, ${c.roseGlow}, transparent)`,
                                 },
                                 '&::after': {
                                     content: '""',
@@ -85,12 +84,12 @@ export function TripsPage() {
                                     left: 0,
                                     right: 0,
                                     height: '2px',
-                                    background: `linear-gradient(90deg, transparent 0%, #a07830 30%, ${c.goldLight} 50%, #a07830 70%, transparent 100%)`,
-                                    opacity: 0.6,
+                                    background: `linear-gradient(90deg, transparent 0%, ${c.roseDark} 30%, ${c.rose} 50%, ${c.roseDark} 70%, transparent 100%)`,
+                                    opacity: 0.5,
                                 },
                                 '&:hover': {
                                     transform: 'translateY(-4px)',
-                                    boxShadow: `0 12px 40px ${c.goldGlow}`,
+                                    boxShadow: `0 12px 32px ${c.burgundyGlow}`,
                                 },
                             }}
                         >
@@ -111,11 +110,10 @@ export function TripsPage() {
                                         <Typography
                                             sx={{
                                                 fontFamily: f.display,
-                                                fontWeight: 900,
+                                                fontWeight: 700,
                                                 fontSize: { xs: '1.5rem', sm: '1.9rem' },
-                                                letterSpacing: '0.1em',
-                                                textTransform: 'uppercase',
-                                                color: c.white,
+                                                letterSpacing: '-0.02em',
+                                                color: c.ink,
                                                 lineHeight: 1,
                                                 textAlign: 'left',
                                             }}
@@ -125,12 +123,12 @@ export function TripsPage() {
                                     </Box>
 
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexWrap: 'wrap' }}>
-                                        <PlaceIcon sx={{ color: c.gold, fontSize: '0.95rem', flexShrink: 0 }} />
+                                        <PlaceIcon sx={{ color: c.brown, fontSize: '0.95rem', flexShrink: 0 }} />
                                         <Typography
                                             variant="caption"
                                             sx={{
-                                                color: c.gold,
-                                                letterSpacing: '0.08em',
+                                                color: c.brown,
+                                                letterSpacing: '0.06em',
                                                 fontSize: '0.7rem',
                                             }}
                                         >
@@ -162,9 +160,9 @@ export function TripsPage() {
                                         display: 'flex',
                                         flexDirection: 'column',
                                         alignItems: 'center',
-                                        background: `rgba(0,0,0,0.3)`,
+                                        background: c.panel,
                                         border: `1px solid ${c.border}`,
-                                        borderRadius: '4px',
+                                        borderRadius: '6px',
                                         px: 1.5,
                                         py: 0.75,
                                         minWidth: 56,
@@ -174,11 +172,11 @@ export function TripsPage() {
                                     <Typography
                                         sx={{
                                             fontFamily: f.display,
-                                            fontWeight: 900,
+                                            fontWeight: 700,
                                             fontSize: '1.6rem',
                                             lineHeight: 1,
-                                            color: c.white,
-                                            letterSpacing: '-0.02em',
+                                            color: c.burgundy,
+                                            letterSpacing: '-0.03em',
                                         }}
                                     >
                                         {durationDays(trip.startDate, trip.endDate)}
@@ -186,9 +184,9 @@ export function TripsPage() {
                                     <Typography
                                         variant="caption"
                                         sx={{
-                                            color: c.muted,
+                                            color: c.inkMuted,
                                             fontSize: '0.58rem',
-                                            letterSpacing: '0.1em',
+                                            letterSpacing: '0.08em',
                                         }}
                                     >
                                         DAY(S)
@@ -206,9 +204,9 @@ export function TripsPage() {
                                 <Typography
                                     variant="caption"
                                     sx={{
-                                        color: c.muted,
+                                        color: c.inkMuted,
                                         fontSize: '0.68rem',
-                                        letterSpacing: '0.06em',
+                                        letterSpacing: '0.04em',
                                     }}
                                 >
                                     {formatDateRange(trip.startDate, trip.endDate)}
@@ -220,7 +218,7 @@ export function TripsPage() {
                                 sx={{
                                     mx: { xs: 2.5, sm: 3.5 },
                                     height: '1px',
-                                    background: `linear-gradient(90deg, transparent, ${c.goldGlow}, transparent)`,
+                                    background: `linear-gradient(90deg, transparent, ${c.border}, transparent)`,
                                     mb: 2,
                                 }}
                             />
@@ -249,7 +247,7 @@ export function TripsPage() {
                                                 width: 5,
                                                 height: 5,
                                                 borderRadius: '50%',
-                                                backgroundColor: c.gold,
+                                                backgroundColor: c.burgundy,
                                                 mt: '7px',
                                                 flexShrink: 0,
                                             }}
@@ -258,7 +256,7 @@ export function TripsPage() {
                                             sx={{
                                                 fontFamily: f.sans,
                                                 fontSize: { xs: '0.82rem', sm: '0.88rem' },
-                                                color: c.white,
+                                                color: c.ink,
                                                 lineHeight: 1.5,
                                             }}
                                         >
@@ -279,9 +277,10 @@ export function TripsPage() {
                         >
                             <Typography
                                 sx={{
-                                    fontFamily: f.script,
+                                    fontFamily: f.display,
+                                    fontStyle: 'italic',
                                     fontSize: '2rem',
-                                    color: c.muted,
+                                    color: c.inkMuted,
                                 }}
                             >
                                 More adventures to come ✈️

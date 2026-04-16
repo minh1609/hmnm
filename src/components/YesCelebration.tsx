@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 
 const PARTICLE_EMOJIS = ['❤️', '💕', '💖', '💗', '💓', '🥰', '✨', '💝', '🌸', '⭐'];
 const HEART_PARTICLES = Array.from({ length: 32 }, (_, i) => ({
@@ -12,7 +12,7 @@ const HEART_PARTICLES = Array.from({ length: 32 }, (_, i) => ({
 }));
 
 export function YesCelebration() {
-    const { colors: c, fonts: f } = ferrariTokens;
+    const { colors: c, fonts: f } = tokens;
 
     return (
         <Box
@@ -23,14 +23,13 @@ export function YesCelebration() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background:
-                    'radial-gradient(ellipse at 50% 55%, rgba(200,168,75,0.22) 0%, rgba(220,0,0,0.14) 42%, rgba(13,13,13,0.93) 100%)',
+                background: `radial-gradient(ellipse at 50% 55%, ${c.roseGlow} 0%, ${c.burgundyGlowFaint} 42%, rgba(250,247,242,0.96) 100%)`,
                 backdropFilter: 'blur(4px)',
                 animation: 'yesCelebFadeIn 0.8s ease forwards',
                 overflow: 'hidden',
             }}
         >
-            {/* Gold ambient glow ring */}
+            {/* Soft ambient ring */}
             <Box
                 className="yes-glow-ring"
                 sx={{ width: '80vmin', height: '80vmin', margin: 'auto', position: 'absolute' }}
@@ -65,15 +64,16 @@ export function YesCelebration() {
                     component="span"
                     sx={{
                         display: 'block',
-                        fontFamily: f.script,
+                        fontFamily: f.display,
+                        fontStyle: 'italic',
                         fontSize: { xs: '4.8rem', sm: '7.5rem' },
-                        color: c.gold,
+                        color: c.burgundy,
                         lineHeight: 1,
                         animation: 'yesReveal 5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both',
                         textShadow: [
-                            `0 0 24px rgba(200,168,75,0.9)`,
-                            `0 0 56px rgba(200,168,75,0.55)`,
-                            `0 0 96px rgba(200,168,75,0.28)`,
+                            `0 0 24px ${c.burgundyGlow}`,
+                            `0 0 56px ${c.roseGlow}`,
+                            `0 0 96px ${c.burgundyGlowFaint}`,
                         ].join(', '),
                     }}
                 >
@@ -84,11 +84,11 @@ export function YesCelebration() {
                     component="span"
                     sx={{
                         display: 'block',
-                        fontFamily: f.display,
-                        fontSize: { xs: '1rem', sm: '1.35rem' },
-                        color: c.white,
-                        letterSpacing: '0.16em',
-                        textTransform: 'uppercase',
+                        fontFamily: f.sans,
+                        fontWeight: 500,
+                        fontSize: { xs: '1rem', sm: '1.25rem' },
+                        color: c.inkMuted,
+                        letterSpacing: '0.08em',
                         mt: 3,
                         opacity: 0,
                         animation: 'subReveal 1.5s cubic-bezier(0.22, 1, 0.36, 1) 4s forwards',

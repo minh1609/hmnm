@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { Box, Typography } from '@mui/material';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 
 interface YearDescriptionProps {
     description?: string;
@@ -25,18 +25,17 @@ export const YearDescription = forwardRef<HTMLDivElement, YearDescriptionProps>(
             >
                 <Typography
                     sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        fontSize: '1.6rem',
-                        lineHeight: 1.1,
-                        letterSpacing: '0.14em',
-                        textTransform: 'uppercase',
-                        color: '#ffffff',
-                        textShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}, 0 2px 4px rgba(0,0,0,0.5)`,
+                        fontFamily: tokens.fonts.display,
+                        fontWeight: 600,
+                        fontStyle: 'italic',
+                        fontSize: '1.5rem',
+                        lineHeight: 1.2,
+                        letterSpacing: '-0.01em',
+                        color: tokens.colors.burgundy,
                         userSelect: 'none',
                     }}
                 >
-                    🏁 {description}
+                    {description}
                 </Typography>
             </Box>
         );

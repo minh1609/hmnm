@@ -13,7 +13,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { invalidateTimelineCache } from '@/hooks/useTimeline';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 import {
     dialogPaperSx,
     dialogTitleSx,
@@ -71,9 +71,9 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
             onClose={handleClose}
             maxWidth="xs"
             fullWidth
-            PaperProps={{ sx: dialogPaperSx(ferrariTokens.colors.redDeep) }}
+            PaperProps={{ sx: dialogPaperSx(tokens.colors.border) }}
         >
-            <DialogTitle sx={dialogTitleSx(ferrariTokens.colors.red)}>
+            <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
                 <DeleteOutlineIcon sx={{ fontSize: '1.3rem' }} />
                 Xoá kỉ niệm
             </DialogTitle>
@@ -87,8 +87,8 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
 
                 <Typography
                     sx={{
-                        fontFamily: ferrariTokens.fonts.sans,
-                        color: ferrariTokens.colors.muted,
+                        fontFamily: tokens.fonts.sans,
+                        color: tokens.colors.inkMuted,
                         fontSize: '0.95rem',
                         lineHeight: 1.6,
                     }}
@@ -97,11 +97,10 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                     <Typography
                         component="span"
                         sx={{
-                            fontFamily: ferrariTokens.fonts.display,
-                            fontWeight: 700,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.06em',
-                            color: ferrariTokens.colors.white,
+                            fontFamily: tokens.fonts.display,
+                            fontWeight: 600,
+                            letterSpacing: '-0.01em',
+                            color: tokens.colors.ink,
                         }}
                     >
                         {event?.name}
@@ -111,7 +110,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                             {' '}(
                             <Typography
                                 component="span"
-                                sx={{ color: ferrariTokens.colors.gold, fontWeight: 600 }}
+                                sx={{ color: tokens.colors.brown, fontWeight: 600 }}
                             >
                                 {dateLabel}
                             </Typography>
@@ -136,12 +135,12 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                     variant="contained"
                     startIcon={
                         deleting ? (
-                            <CircularProgress size={14} thickness={3} sx={{ color: ferrariTokens.colors.white }} />
+                            <CircularProgress size={14} thickness={3} sx={{ color: tokens.colors.white }} />
                         ) : (
                             <DeleteOutlineIcon />
                         )
                     }
-                    sx={primaryButtonSx(ferrariTokens.colors.red, ferrariTokens.colors.redBright)}
+                    sx={primaryButtonSx(tokens.colors.burgundy, tokens.colors.burgundyLight)}
                 >
                     {deleting ? 'Đang xoá…' : 'Xoá'}
                 </Button>

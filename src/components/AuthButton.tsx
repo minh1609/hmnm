@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 import { useAuth } from '@/hooks/useAuth';
 
 export function AuthButton() {
@@ -17,7 +17,7 @@ export function AuthButton() {
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
 
     if (loading) {
-        return <CircularProgress size={18} thickness={3} sx={{ color: ferrariTokens.colors.gold }} />;
+        return <CircularProgress size={18} thickness={3} sx={{ color: tokens.colors.burgundy }} />;
     }
 
     if (!user) {
@@ -25,7 +25,7 @@ export function AuthButton() {
             <Chip
                 icon={
                     <LoginIcon
-                        sx={{ fontSize: '0.9rem !important', color: `${ferrariTokens.colors.gold} !important` }}
+                        sx={{ fontSize: '0.9rem !important', color: `${tokens.colors.burgundy} !important` }}
                     />
                 }
                 label="Sign in"
@@ -33,23 +33,20 @@ export function AuthButton() {
                 onClick={signIn}
                 variant="outlined"
                 sx={{
-                    fontFamily: ferrariTokens.fonts.display,
+                    fontFamily: tokens.fonts.sans,
                     fontSize: '0.7rem',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: ferrariTokens.colors.gold,
-                    borderColor: ferrariTokens.colors.gold,
-                    backgroundColor: ferrariTokens.colors.black,
-                    borderRadius: '4px',
+                    letterSpacing: '0.06em',
+                    color: tokens.colors.burgundy,
+                    borderColor: tokens.colors.burgundy,
+                    backgroundColor: tokens.colors.surface,
+                    borderRadius: '6px',
                     height: 28,
-                    boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
                     transition: 'all 0.2s ease',
                     '&:hover': {
-                        backgroundColor: `${ferrariTokens.colors.black} !important`,
-                        borderColor: ferrariTokens.colors.gold,
-                        color: ferrariTokens.colors.gold,
-                        transform: 'scale(1.08)',
-                        boxShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}`,
+                        backgroundColor: `${tokens.colors.roseGlowFaint} !important`,
+                        borderColor: tokens.colors.burgundyLight,
+                        color: tokens.colors.burgundyLight,
+                        transform: 'scale(1.06)',
                     },
                     '& .MuiTouchRipple-root': { display: 'none' },
                 }}
@@ -67,11 +64,11 @@ export function AuthButton() {
                         sx={{
                             width: 28,
                             height: 28,
-                            border: `1.5px solid ${isAdmin ? ferrariTokens.colors.red : ferrariTokens.colors.gold}`,
-                            boxShadow: `0 0 8px ${isAdmin ? ferrariTokens.colors.redGlow : ferrariTokens.colors.goldGlow}`,
+                            border: `1.5px solid ${isAdmin ? tokens.colors.burgundy : tokens.colors.rose}`,
+                            boxShadow: `0 0 6px ${isAdmin ? tokens.colors.burgundyGlow : tokens.colors.roseGlow}`,
                             fontSize: '0.75rem',
-                            bgcolor: ferrariTokens.colors.surface,
-                            color: isAdmin ? ferrariTokens.colors.red : ferrariTokens.colors.gold,
+                            bgcolor: tokens.colors.panel,
+                            color: isAdmin ? tokens.colors.burgundy : tokens.colors.brown,
                         }}
                     >
                         {user.displayName?.[0] ?? '?'}
@@ -86,9 +83,9 @@ export function AuthButton() {
                             width: 12,
                             height: 12,
                             borderRadius: '50%',
-                            backgroundColor: ferrariTokens.colors.red,
-                            border: `1.5px solid ${ferrariTokens.colors.black}`,
-                            boxShadow: `0 0 6px ${ferrariTokens.colors.redGlow}`,
+                            backgroundColor: tokens.colors.burgundy,
+                            border: `1.5px solid ${tokens.colors.cream}`,
+                            boxShadow: `0 0 4px ${tokens.colors.burgundyGlow}`,
                         }}
                     />
                 )}
@@ -104,32 +101,33 @@ export function AuthButton() {
                 slotProps={{
                     paper: {
                         sx: {
-                            backgroundColor: ferrariTokens.colors.surface,
-                            border: `1px solid ${ferrariTokens.colors.border}`,
-                            borderRadius: '2px',
+                            backgroundColor: tokens.colors.surface,
+                            border: `1px solid ${tokens.colors.border}`,
+                            borderRadius: '8px',
+                            boxShadow: `0 8px 24px ${tokens.colors.burgundyGlowFaint}`,
                             mt: 0.75,
                             minWidth: 180,
                         },
                     },
                 }}
             >
-                <Box sx={{ px: 2, py: 1, borderBottom: `1px solid ${ferrariTokens.colors.border}` }}>
+                <Box sx={{ px: 2, py: 1, borderBottom: `1px solid ${tokens.colors.border}` }}>
                     <Typography
                         sx={{
-                            fontFamily: ferrariTokens.fonts.display,
-                            fontSize: '0.8rem',
-                            letterSpacing: '0.08em',
-                            textTransform: 'uppercase',
-                            color: ferrariTokens.colors.white,
+                            fontFamily: tokens.fonts.sans,
+                            fontWeight: 600,
+                            fontSize: '0.85rem',
+                            letterSpacing: '0.02em',
+                            color: tokens.colors.ink,
                         }}
                     >
                         {user.displayName ?? 'Signed in'}
                     </Typography>
                     <Typography
                         sx={{
-                            fontFamily: ferrariTokens.fonts.sans,
+                            fontFamily: tokens.fonts.sans,
                             fontSize: '0.7rem',
-                            color: ferrariTokens.colors.muted,
+                            color: tokens.colors.inkMuted,
                             mt: 0.25,
                         }}
                     >
@@ -141,9 +139,9 @@ export function AuthButton() {
                         sx={{
                             mt: 0.75,
                             height: 18,
-                            fontFamily: ferrariTokens.fonts.display,
+                            fontFamily: tokens.fonts.sans,
                             fontSize: '0.6rem',
-                            letterSpacing: '0.1em',
+                            letterSpacing: '0.08em',
                             textTransform: 'uppercase',
                             color: roleColor(role),
                             borderColor: roleColor(role),
@@ -159,14 +157,13 @@ export function AuthButton() {
                         signOut();
                     }}
                     sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontSize: '0.75rem',
-                        letterSpacing: '0.1em',
-                        textTransform: 'uppercase',
-                        color: ferrariTokens.colors.muted,
+                        fontFamily: tokens.fonts.sans,
+                        fontSize: '0.8rem',
+                        letterSpacing: '0.04em',
+                        color: tokens.colors.inkMuted,
                         gap: 1.5,
                         py: 1.25,
-                        '&:hover': { color: ferrariTokens.colors.red, backgroundColor: 'transparent' },
+                        '&:hover': { color: tokens.colors.burgundy, backgroundColor: tokens.colors.roseGlowFaint },
                     }}
                 >
                     <LogoutIcon sx={{ fontSize: '1rem' }} />
@@ -179,9 +176,8 @@ export function AuthButton() {
 
 const roleColor = (role: string | null) => {
     switch (role) {
-        case 'admin': return ferrariTokens.colors.red;
-        case 'gf':    return ferrariTokens.colors.gold;
-        default:      return ferrariTokens.colors.subtle;
+        case 'admin': return tokens.colors.burgundy;
+        case 'gf':    return tokens.colors.brown;
+        default:      return tokens.colors.inkSubtle;
     }
 };
-

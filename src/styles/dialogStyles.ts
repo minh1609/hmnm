@@ -1,27 +1,27 @@
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 
 /**
- * Shared Ferrari-themed style helpers for MUI Dialogs.
+ * Shared Refined Heritage style helpers for MUI Dialogs.
  * All dialogs in the app (Create/Edit, Delete, GfNote) use these to stay consistent.
  */
 
 /** Dialog Paper background, border, and shape. Pass the accent border color. */
 export const dialogPaperSx = (borderColor: string) => ({
-    backgroundColor: ferrariTokens.colors.carbon,
+    backgroundColor: tokens.colors.surface,
     border: `1px solid ${borderColor}`,
     borderRadius: 2,
     backgroundImage: 'none',
+    boxShadow: `0 8px 32px ${tokens.colors.burgundyGlowFaint}`,
 });
 
-/** DialogTitle — uppercase display font with a bottom divider. Pass the accent color. */
+/** DialogTitle — display serif font with a bottom divider. Pass the accent color. */
 export const dialogTitleSx = (color: string) => ({
-    fontFamily: ferrariTokens.fonts.display,
+    fontFamily: tokens.fonts.display,
     fontWeight: 700,
     fontSize: '1.3rem',
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase' as const,
+    letterSpacing: '-0.01em',
     color,
-    borderBottom: `1px solid ${ferrariTokens.colors.border}`,
+    borderBottom: `1px solid ${tokens.colors.border}`,
     pb: 1.5,
     display: 'flex',
     alignItems: 'center',
@@ -32,18 +32,17 @@ export const dialogTitleSx = (color: string) => ({
 export const dialogActionsSx = {
     px: 3,
     py: 2,
-    borderTop: `1px solid ${ferrariTokens.colors.border}`,
+    borderTop: `1px solid ${tokens.colors.border}`,
     gap: 1,
 };
 
-/** Ghost Cancel button — muted text, turns white on hover. */
+/** Ghost Cancel button — muted text, turns ink on hover. */
 export const cancelButtonSx = {
-    fontFamily: ferrariTokens.fonts.display,
-    fontWeight: 700,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase' as const,
-    color: ferrariTokens.colors.muted,
-    '&:hover': { color: ferrariTokens.colors.white },
+    fontFamily: tokens.fonts.sans,
+    fontWeight: 600,
+    letterSpacing: '0.04em',
+    color: tokens.colors.inkMuted,
+    '&:hover': { color: tokens.colors.ink, backgroundColor: tokens.colors.creamDark },
 };
 
 /**
@@ -52,51 +51,51 @@ export const cancelButtonSx = {
  * @param hover     Hover background color
  * @param textColor Button label color (default: white)
  */
-export const primaryButtonSx = (bg: string, hover: string, textColor: string = ferrariTokens.colors.white) => ({
-    fontFamily: ferrariTokens.fonts.display,
-    fontWeight: 700,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase' as const,
+export const primaryButtonSx = (bg: string, hover: string, textColor: string = tokens.colors.white) => ({
+    fontFamily: tokens.fonts.sans,
+    fontWeight: 600,
+    letterSpacing: '0.04em',
     backgroundColor: bg,
     color: textColor,
     '&:hover': { backgroundColor: hover },
     '&.Mui-disabled': {
-        backgroundColor: ferrariTokens.colors.subtle,
-        color: ferrariTokens.colors.muted,
+        backgroundColor: tokens.colors.borderSubtle,
+        color: tokens.colors.inkSubtle,
     },
 });
 
 /**
- * Outlined TextField styled for the dark Ferrari theme.
+ * Outlined TextField styled for the light Heritage theme.
  * @param accentColor Color used for hover/focus border and focused label.
  */
 export const textFieldSx = (accentColor: string) => ({
     '& .MuiOutlinedInput-root': {
-        fontFamily: ferrariTokens.fonts.sans,
-        color: ferrariTokens.colors.white,
-        '& fieldset': { borderColor: ferrariTokens.colors.border },
+        fontFamily: tokens.fonts.sans,
+        color: tokens.colors.ink,
+        backgroundColor: tokens.colors.cream,
+        '& fieldset': { borderColor: tokens.colors.border },
         '&:hover fieldset': { borderColor: accentColor },
         '&.Mui-focused fieldset': { borderColor: accentColor },
     },
     '& .MuiInputLabel-root': {
-        fontFamily: ferrariTokens.fonts.display,
-        fontWeight: 700,
-        letterSpacing: '0.06em',
-        textTransform: 'uppercase' as const,
-        fontSize: '0.8rem',
-        color: ferrariTokens.colors.muted,
+        fontFamily: tokens.fonts.sans,
+        fontWeight: 600,
+        letterSpacing: '0.03em',
+        fontSize: '0.85rem',
+        color: tokens.colors.inkMuted,
         '&.Mui-focused': { color: accentColor },
     },
     '& .MuiInputBase-input::placeholder': {
-        color: ferrariTokens.colors.subtle,
+        color: tokens.colors.inkSubtle,
         opacity: 1,
     },
 });
 
-/** Error Alert styled for the dark theme. */
+/** Error Alert styled for the light theme. */
 export const errorAlertSx = {
     mb: 2,
-    backgroundColor: ferrariTokens.colors.redDeep,
-    color: ferrariTokens.colors.white,
-    '& .MuiAlert-icon': { color: ferrariTokens.colors.goldLight },
+    backgroundColor: '#FFF0F1',
+    color: tokens.colors.burgundyDark,
+    border: `1px solid ${tokens.colors.rose}`,
+    '& .MuiAlert-icon': { color: tokens.colors.burgundy },
 };

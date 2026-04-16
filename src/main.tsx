@@ -10,7 +10,7 @@ import './index.css';
 import './firebase';
 import App from './App.tsx';
 import theme from './theme';
-import { ferrariTokens } from './theme';
+import { tokens } from './theme';
 import { ReasonILikeYou } from './components/ReasonILikeYou';
 
 const AppShell = ({ children }: { children: ReactNode }) => (
@@ -22,7 +22,7 @@ const AppShell = ({ children }: { children: ReactNode }) => (
             justifyContent: 'center',
             flexDirection: 'column',
             gap: 2,
-            backgroundColor: ferrariTokens.colors.black,
+            backgroundColor: tokens.colors.cream,
         }}
     >
         {children}
@@ -31,7 +31,7 @@ const AppShell = ({ children }: { children: ReactNode }) => (
 
 const SuspenseFallback = () => (
     <AppShell>
-        <CircularProgress sx={{ color: ferrariTokens.colors.gold }} size={40} thickness={3} />
+        <CircularProgress sx={{ color: tokens.colors.burgundy }} size={40} thickness={3} />
     </AppShell>
 );
 
@@ -46,18 +46,17 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
                 <AppShell>
                     <Typography
                         sx={{
-                            fontFamily: ferrariTokens.fonts.display,
+                            fontFamily: tokens.fonts.display,
                             fontSize: '1.4rem',
-                            letterSpacing: '0.1em',
-                            textTransform: 'uppercase',
-                            color: ferrariTokens.colors.red,
+                            letterSpacing: '-0.01em',
+                            color: tokens.colors.burgundy,
                         }}
                     >
                         Something went wrong
                     </Typography>
                     <Typography
                         variant="caption"
-                        sx={{ color: ferrariTokens.colors.muted, fontFamily: ferrariTokens.fonts.mono }}
+                        sx={{ color: tokens.colors.inkMuted, fontFamily: tokens.fonts.mono }}
                     >
                         {(this.state.error as Error).message}
                     </Typography>

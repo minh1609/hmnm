@@ -1,60 +1,64 @@
 /*
- * Ferrari F1 CSS custom properties — mirrors ferrariTokens in theme.ts.
+ * Refined Heritage CSS custom properties — mirrors tokens in theme.ts.
  * Use these for non-MUI contexts: plain CSS rules, keyframe animations,
  * pseudo-elements, and global resets.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400;1,600&family=Barlow+Condensed:wght@700;900&family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600;1,6..72,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    /* Brand */
-    --ferrari-red: #dc0000;
-    --ferrari-red-bright: #ff2800;
-    --ferrari-red-deep: #8b0000;
-    --ferrari-red-glow: rgba(220, 0, 0, 0.35);
-    --ferrari-red-glow-faint: rgba(220, 0, 0, 0.12);
+    /* Primary — Deep Burgundy */
+    --burgundy: #9d2933;
+    --burgundy-light: #c04050;
+    --burgundy-dark: #6b1b24;
+    --burgundy-glow: rgba(157, 41, 51, 0.25);
+    --burgundy-glow-faint: rgba(157, 41, 51, 0.10);
 
-    /* Accent / trim */
-    --ferrari-gold: #c8a84b;
-    --ferrari-gold-light: #e8d070;
-    --ferrari-gold-glow: rgba(200, 168, 75, 0.3);
+    /* Secondary — Dusty Rose */
+    --rose: #d4a5a5;
+    --rose-dark: #b87878;
+    --rose-glow: rgba(212, 165, 165, 0.35);
+
+    /* Tertiary — Coffee Brown */
+    --brown: #6d4c41;
+    --brown-light: #8d6e63;
+    --brown-glow: rgba(109, 76, 65, 0.28);
 
     /* Backgrounds */
-    --ferrari-black: #0d0d0d;
-    --ferrari-carbon: #141414;
-    --ferrari-surface: #1a1a1a;
-    --ferrari-panel: #242424;
+    --cream: #faf7f2;
+    --cream-dark: #f0ebe3;
+    --surface: #ffffff;
+    --panel: #f5f0e8;
 
     /* Borders */
-    --ferrari-border: #2e2e2e;
-    --ferrari-border-subtle: #1e1e1e;
+    --border: #ddd5cc;
+    --border-subtle: #ede8e0;
 
     /* Text */
-    --ferrari-white: #ffffff;
-    --ferrari-muted: #999999;
-    --ferrari-subtle: #555555;
+    --ink: #2c1a12;
+    --ink-muted: #7a6356;
+    --ink-subtle: #b0a090;
 
     /* Semantic aliases */
-    --bg: var(--ferrari-red);
-    --surface: var(--ferrari-red-deep);
-    --border: rgba(0, 0, 0, 0.25);
-    --text: #000000;
-    --text-h: var(--ferrari-white);
-    --accent: var(--ferrari-gold);
-    --accent-bg: var(--ferrari-gold-glow);
-    --accent-border: var(--ferrari-gold-glow);
-    --gold: var(--ferrari-gold);
-    --shadow: rgba(0, 0, 0, 0.4) 0 10px 20px -4px, rgba(200, 168, 75, 0.12) 0 4px 8px -2px;
+    --bg: var(--cream);
+    --surface: var(--surface);
+    --border-color: var(--border);
+    --text: var(--ink);
+    --text-h: var(--ink);
+    --accent: var(--burgundy);
+    --accent-bg: var(--burgundy-glow-faint);
+    --accent-border: var(--burgundy-glow);
+    --shadow: rgba(44, 26, 18, 0.10) 0 8px 24px -4px, rgba(157, 41, 51, 0.06) 0 2px 8px -2px;
 
     /* Fonts */
-    --sans: 'Titillium Web', 'Arial Narrow', Arial, sans-serif;
-    --display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
-    --script: 'Great Vibes', cursive;
+    --sans: 'Plus Jakarta Sans', 'Helvetica Neue', Arial, sans-serif;
+    --display: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --script: 'Newsreader', Georgia, serif;
     --mono: ui-monospace, Consolas, monospace;
 
     font: 17px/150% var(--sans);
-    letter-spacing: 0.02px;
-    color-scheme: dark;
+    letter-spacing: 0.01px;
+    color-scheme: light;
     color: var(--text);
     background: var(--bg);
     font-synthesis: none;
@@ -95,9 +99,8 @@ body {
 h1,
 h2 {
     font-family: var(--display);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: var(--text-h);
 }
 
@@ -135,6 +138,6 @@ code {
     font-size: 15px;
     line-height: 135%;
     padding: 4px 8px;
-    background: var(--surface);
+    background: var(--panel);
     border: 1px solid var(--border);
 }

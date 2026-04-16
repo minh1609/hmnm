@@ -1,11 +1,11 @@
 ---
 name: hmnm-project
-description: Domain knowledge and conventions for the hmnm dating progress app — a Ferrari F1 themed React/MUI app that tracks a couple's relationship milestones. Use when working on this project, adding new timeline events, creating components, updating the theme, or editing any file under src/.
+description: Domain knowledge and conventions for the hmnm dating progress app — a Refined Heritage themed React/MUI app that tracks a couple's relationship milestones. Use when working on this project, adding new timeline events, creating components, updating the theme, or editing any file under src/.
 ---
 
-# hmnm — Ferrari F1 Dating Progress App
+# hmnm — Refined Heritage Dating Progress App
 
-A personal React app that tracks and displays a couple's relationship milestones with a dark Ferrari F1 aesthetic.
+A personal React app that tracks and displays a couple's relationship milestones with an editorial, warm light aesthetic inspired by the "Refined Heritage" design system.
 
 ## Project structure
 
@@ -106,59 +106,72 @@ Animation classes applied to the wrapping `<div key={location.key}>`:
 | `page-enter-forward`  | Navigating to higher-order route (commented) |
 | `page-enter-backward` | Navigating to lower-order route (commented)  |
 
-## Design tokens — `ferrariTokens` (`src/theme.ts`)
+## Design tokens — `tokens` / `ferrariTokens` (`src/theme.ts`)
 
-Single source of truth. Always import from `@/theme`, never hardcode hex values.
+Single source of truth. Always import `tokens` (or the alias `ferrariTokens`) from `@/theme`. Never hardcode hex values.
 
 ```ts
-// Brand reds
-ferrariTokens.colors.red; // #DC0000  — primary brand
-ferrariTokens.colors.redBright; // #FF2800
-ferrariTokens.colors.redDeep; // #8B0000
-ferrariTokens.colors.redDark; // #5A0000
-ferrariTokens.colors.redGlow; // rgba(220,0,0,0.35)
-ferrariTokens.colors.redGlowFaint; // rgba(220,0,0,0.12)
+import { tokens } from '@/theme';
+const { colors: c, fonts: f } = tokens;
 
-// Accent / trim
-ferrariTokens.colors.gold; // #C8A84B
-ferrariTokens.colors.goldLight; // #E8D070
-ferrariTokens.colors.goldGlow; // rgba(200,168,75,0.3)
+// Primary — Deep Burgundy
+tokens.colors.burgundy;          // #9D2933  — primary brand
+tokens.colors.burgundyLight;     // #C04050
+tokens.colors.burgundyDark;      // #6B1B24
+tokens.colors.burgundyGlow;      // rgba(157,41,51,0.25)
+tokens.colors.burgundyGlowFaint; // rgba(157,41,51,0.10)
 
-// Backgrounds
-ferrariTokens.colors.black; // #0D0D0D  — page background
-ferrariTokens.colors.carbon; // #141414
-ferrariTokens.colors.surface; // #1A1A1A  — card/paper bg
-ferrariTokens.colors.panel; // #242424
+// Secondary — Dusty Rose
+tokens.colors.rose;              // #D4A5A5
+tokens.colors.roseDark;          // #B87878
+tokens.colors.roseGlow;          // rgba(212,165,165,0.35)
+tokens.colors.roseGlowFaint;     // rgba(212,165,165,0.15)
+
+// Tertiary — Coffee Brown
+tokens.colors.brown;             // #6D4C41
+tokens.colors.brownLight;        // #8D6E63
+tokens.colors.brownGlow;         // rgba(109,76,65,0.28)
+
+// Backgrounds (warm light)
+tokens.colors.cream;             // #FAF7F2  — page background
+tokens.colors.creamDark;         // #F0EBE3
+tokens.colors.surface;           // #FFFFFF  — card/paper bg
+tokens.colors.panel;             // #F5F0E8
 
 // Borders / dividers
-ferrariTokens.colors.border; // #2E2E2E
-ferrariTokens.colors.borderSubtle; // #1E1E1E
+tokens.colors.border;            // #DDD5CC
+tokens.colors.borderSubtle;      // #EDE8E0
 
 // Text
-ferrariTokens.colors.white; // #FFFFFF
-ferrariTokens.colors.muted; // #999999
-ferrariTokens.colors.subtle; // #555555
+tokens.colors.ink;               // #2C1A12  — primary text
+tokens.colors.inkMuted;          // #7A6356
+tokens.colors.inkSubtle;         // #B0A090
+
+// Utility
+tokens.colors.white;             // #FFFFFF
 ```
 
 **MUI palette** (theme.ts):
 
-| Palette key          | Maps to          |
-| -------------------- | ---------------- |
-| `primary`            | gold (`#C8A84B`) |
-| `secondary`          | red (`#DC0000`)  |
-| `background.default` | `c.red`          |
-| `background.paper`   | `c.redDeep`      |
+| Palette key          | Maps to               |
+| -------------------- | --------------------- |
+| `primary`            | burgundy (`#9D2933`)  |
+| `secondary`          | rose (`#D4A5A5`)      |
+| `background.default` | cream (`#FAF7F2`)     |
+| `background.paper`   | white (`#FFFFFF`)     |
+| `text.primary`       | ink (`#2C1A12`)       |
+| `text.secondary`     | inkMuted (`#7A6356`)  |
 
-> Note: `primary` is **gold**, not red. `secondary` is red. This is intentional.
+> Mode is **light**. `primary` is burgundy, `secondary` is dusty rose.
 
-**Fonts** (all loaded via Google Fonts in `index.html`):
+**Fonts** (loaded via Google Fonts in `index.html`):
 
-| Token           | Font             | Use                                 |
-| --------------- | ---------------- | ----------------------------------- |
-| `fonts.sans`    | Titillium Web    | Body / UI text                      |
-| `fonts.display` | Barlow Condensed | Racing display / numbers / headings |
-| `fonts.script`  | Great Vibes      | Romantic captions / section titles  |
-| `fonts.mono`    | system mono      | Code                                |
+| Token           | Font              | Use                                           |
+| --------------- | ----------------- | --------------------------------------------- |
+| `fonts.sans`    | Plus Jakarta Sans | Body / UI labels / buttons                    |
+| `fonts.display` | Newsreader        | Editorial headings, stat values, display text |
+| `fonts.script`  | Newsreader        | Romantic captions — use with `fontStyle: 'italic'` |
+| `fonts.mono`    | system mono       | Code                                          |
 
 ## Config (`src/config.ts`)
 
@@ -379,11 +392,12 @@ Retrigger without remount: remove class → force reflow (`offsetHeight`) → re
 
 ## Conventions
 
-- Use `ferrariTokens` directly in `sx` props for one-off colors not available via `theme.palette.*`.
-- MUI theme is dark mode; `primary` = gold, `secondary` = red.
-- Typography variants `h1`/`h2`/`h3` use `fonts.display` (Barlow Condensed), auto-uppercase.
-- Use `variant="caption"` for small label text — it uses `fonts.display` with wide letter-spacing.
-- Card pattern: `borderTop: 3px solid gold`, `::before` top shimmer line, `::after` bottom gold gradient line, hover lifts with `goldGlow` shadow.
+- Import `tokens` (or the alias `ferrariTokens`) from `@/theme` for all color/font values in `sx` props.
+- MUI theme is **light mode**; `primary` = burgundy, `secondary` = dusty rose.
+- Typography variants `h1`/`h2`/`h3` use `fonts.display` (Newsreader serif) — no auto-uppercase.
+- Use `variant="caption"` for small label text — it uses `fonts.sans` with letter-spacing.
+- Card pattern: `borderTop: 3px solid burgundy`, `::before` top rose shimmer, `::after` bottom rose gradient, hover lifts with `burgundyGlow` shadow.
+- Use `fontStyle: 'italic'` with `fonts.display` (Newsreader) for romantic / script-style text.
 - Keep `@/` alias (not relative imports) for all `src/` imports.
 - `des` field supports both `string` and `string[]` — always handle both cases.
 - `burstIcon` on a `TimelineEvent` makes the date Chip interactive and fires `IconBurst` on click.

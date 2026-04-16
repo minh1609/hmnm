@@ -15,7 +15,7 @@ import { AddEventFab } from '@/components/AddEventFab';
 import { YearDescription } from '@/components/YearDescription';
 import { PageHeader } from '@/components/PageHeader';
 import { AuthButton } from '@/components/AuthButton';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -35,17 +35,17 @@ const yearSx =
     (active: boolean): SxProps<Theme> =>
     (theme) => ({
         fontFamily: theme.typography.h2.fontFamily,
-        fontWeight: active ? 900 : 600,
+        fontWeight: active ? 700 : 400,
+        fontStyle: active ? 'normal' : 'italic',
         fontSize: active ? '1.9rem' : '1.25rem',
-        color: active ? 'white' : 'white',
-        textTransform: 'uppercase' as const,
-        letterSpacing: '0.06em',
+        color: active ? tokens.colors.burgundy : tokens.colors.inkMuted,
+        letterSpacing: '-0.02em',
         cursor: 'pointer',
         transition: 'all 0.2s ease',
         userSelect: 'none',
-        borderBottom: active ? `2px solid ${theme.palette.primary.main}` : '2px solid transparent',
+        borderBottom: active ? `2px solid ${tokens.colors.burgundy}` : '2px solid transparent',
         pb: '2px',
-        '&:hover': { color: 'primary.main', opacity: 1 },
+        '&:hover': { color: tokens.colors.burgundy, opacity: 1 },
     });
 
 export function HomePage() {
@@ -137,7 +137,7 @@ export function HomePage() {
                     position: 'sticky',
                     top: 0,
                     zIndex: 100,
-                    backgroundColor: ferrariTokens.colors.red,
+                    backgroundColor: tokens.colors.cream,
                 }}
             >
                 <PageHeader
@@ -154,10 +154,10 @@ export function HomePage() {
                                         px: 1.5,
                                         py: 0.25,
                                         borderRadius: '4px',
-                                        fontFamily: ferrariTokens.fonts.display,
-                                        fontWeight: 700,
+                                        fontFamily: tokens.fonts.sans,
+                                        fontWeight: 600,
                                         fontSize: '0.7rem',
-                                        letterSpacing: '0.1em',
+                                        letterSpacing: '0.06em',
                                         textTransform: 'uppercase',
                                     }}
                                 >
@@ -242,15 +242,15 @@ export function HomePage() {
                                                   : undefined
                                         }
                                         sx={{
-                                            backgroundColor: event.gfNote ? 'white' : ferrariTokens.colors.carbon,
-                                            borderColor: ferrariTokens.colors.goldLight,
-                                            boxShadow: `0 0 8px ${ferrariTokens.colors.goldGlow}`,
+                                            backgroundColor: event.gfNote ? tokens.colors.rose : tokens.colors.surface,
+                                            borderColor: tokens.colors.burgundy,
+                                            boxShadow: `0 0 6px ${tokens.colors.burgundyGlowFaint}`,
                                             cursor: isAdmin || isGf ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             ...((isAdmin || isGf) && {
                                                 '&:hover': {
-                                                    borderColor: ferrariTokens.colors.red,
-                                                    boxShadow: `0 0 10px ${ferrariTokens.colors.redGlow}`,
+                                                    borderColor: tokens.colors.burgundyLight,
+                                                    boxShadow: `0 0 10px ${tokens.colors.burgundyGlow}`,
                                                     transform: 'scale(1.3)',
                                                 },
                                             }),
@@ -258,29 +258,23 @@ export function HomePage() {
                                     />
                                     <TimelineConnector
                                         sx={{
-                                            backgroundColor: ferrariTokens.colors.gold,
+                                            backgroundColor: tokens.colors.rose,
                                         }}
                                     />
                                 </TimelineSeparator>
                                 <TimelineContent>
                                     <Typography
-                                        fontWeight={700}
+                                        fontWeight={600}
                                         sx={(theme) => ({
                                             fontFamily: theme.typography.h3.fontFamily,
                                             fontSize: '1.05rem',
-                                            textTransform: 'uppercase',
-                                            letterSpacing: '0.06em',
-                                            color: 'white',
+                                            letterSpacing: '-0.01em',
+                                            color: tokens.colors.ink,
                                             cursor: 'default',
                                             display: 'inline-block',
-                                            transition: 'color 1s ease, text-shadow 1.2s ease',
+                                            transition: 'color 0.3s ease',
                                             '&:hover': {
-                                                color: 'white',
-                                                textShadow:
-                                                    '0 0 6px rgba(255,255,255,0.9), 0 0 18px rgba(255,255,255,0.7), 0 0 40px rgba(255,255,255,0.45), 0 0 70px rgba(255,255,255,0.25)',
-                                                animation:
-                                                    'eventNameBreathe 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite',
-                                                transformOrigin: 'center',
+                                                color: tokens.colors.burgundy,
                                             },
                                         })}
                                     >
@@ -297,7 +291,7 @@ export function HomePage() {
                                                             <span
                                                                 style={{
                                                                     whiteSpace: 'pre-line',
-                                                                    color: ferrariTokens.colors.red,
+                                                                    color: tokens.colors.rose,
                                                                 }}
                                                             >
                                                                 {event.gfNote}
@@ -309,17 +303,18 @@ export function HomePage() {
                                             >
                                                 <LightbulbIcon
                                                     sx={{
-                                                        color: 'white',
+                                                        color: tokens.colors.brown,
                                                         fontSize: '1.1rem',
                                                         mb: '-2px',
                                                         mx: 0.5,
-                                                        transition: 'transform 0.2s ease',
+                                                        transition: 'transform 0.2s ease, color 0.2s ease',
                                                         ...(event.gfNote && {
-                                                            filter: `drop-shadow(0 0 4px ${ferrariTokens.colors.gold}) drop-shadow(0 0 12px ${ferrariTokens.colors.gold}) drop-shadow(0 0 28px ${ferrariTokens.colors.goldLight}) drop-shadow(0 0 48px ${ferrariTokens.colors.goldLight})`,
+                                                            color: tokens.colors.burgundy,
+                                                            filter: `drop-shadow(0 0 4px ${tokens.colors.roseGlow})`,
                                                         }),
                                                         '&:hover': {
                                                             transform: 'scale(1.35)',
-                                                            color: 'gold',
+                                                            color: tokens.colors.burgundy,
                                                         },
                                                     }}
                                                 />
@@ -355,12 +350,13 @@ export function HomePage() {
                     severity="info"
                     variant="filled"
                     sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        letterSpacing: '0.05em',
-                        backgroundColor: ferrariTokens.colors.redDeep,
-                        color: ferrariTokens.colors.white,
-                        '& .MuiAlert-icon': { color: ferrariTokens.colors.gold },
-                        '& .MuiAlert-action .MuiIconButton-root': { color: ferrariTokens.colors.muted },
+                        fontFamily: tokens.fonts.sans,
+                        letterSpacing: '0.02em',
+                        backgroundColor: tokens.colors.creamDark,
+                        color: tokens.colors.ink,
+                        border: `1px solid ${tokens.colors.border}`,
+                        '& .MuiAlert-icon': { color: tokens.colors.burgundy },
+                        '& .MuiAlert-action .MuiIconButton-root': { color: tokens.colors.inkMuted },
                     }}
                 >
                     {swipeAlert}
@@ -375,10 +371,10 @@ export function HomePage() {
                 onClose={() => setDotMenu(null)}
                 PaperProps={{
                     sx: {
-                        backgroundColor: ferrariTokens.colors.carbon,
-                        border: `1px solid ${ferrariTokens.colors.border}`,
-                        borderRadius: 1.5,
-                        backgroundImage: 'none',
+                        backgroundColor: tokens.colors.surface,
+                        border: `1px solid ${tokens.colors.border}`,
+                        borderRadius: 2,
+                        boxShadow: `0 8px 24px ${tokens.colors.burgundyGlowFaint}`,
                         minWidth: 140,
                     },
                 }}
@@ -389,16 +385,15 @@ export function HomePage() {
                         setDotMenu(null);
                     }}
                     sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        letterSpacing: '0.06em',
-                        textTransform: 'uppercase',
-                        fontSize: '0.8rem',
-                        color: ferrariTokens.colors.gold,
-                        '&:hover': { backgroundColor: 'rgba(197,160,80,0.12)' },
+                        fontFamily: tokens.fonts.sans,
+                        fontWeight: 600,
+                        letterSpacing: '0.04em',
+                        fontSize: '0.85rem',
+                        color: tokens.colors.brown,
+                        '&:hover': { backgroundColor: tokens.colors.panel },
                     }}
                 >
-                    <ListItemIcon sx={{ minWidth: 32, color: ferrariTokens.colors.gold }}>
+                    <ListItemIcon sx={{ minWidth: 32, color: tokens.colors.brown }}>
                         <EditIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Edit</ListItemText>
@@ -409,16 +404,15 @@ export function HomePage() {
                         setDotMenu(null);
                     }}
                     sx={{
-                        fontFamily: ferrariTokens.fonts.display,
-                        fontWeight: 700,
-                        letterSpacing: '0.06em',
-                        textTransform: 'uppercase',
-                        fontSize: '0.8rem',
-                        color: ferrariTokens.colors.red,
-                        '&:hover': { backgroundColor: 'rgba(218,41,28,0.12)' },
+                        fontFamily: tokens.fonts.sans,
+                        fontWeight: 600,
+                        letterSpacing: '0.04em',
+                        fontSize: '0.85rem',
+                        color: tokens.colors.burgundy,
+                        '&:hover': { backgroundColor: tokens.colors.roseGlowFaint },
                     }}
                 >
-                    <ListItemIcon sx={{ minWidth: 32, color: ferrariTokens.colors.red }}>
+                    <ListItemIcon sx={{ minWidth: 32, color: tokens.colors.burgundy }}>
                         <DeleteOutlineIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Delete</ListItemText>

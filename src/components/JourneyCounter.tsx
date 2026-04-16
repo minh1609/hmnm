@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 import { useTrips } from '@/hooks/useTrips';
 
 const FIRST_DATE = new Date('2025-08-26T00:00:00');
@@ -25,7 +25,7 @@ interface StatCardProps {
 }
 
 function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
-    const { colors: c, fonts: f } = ferrariTokens;
+    const { colors: c, fonts: f } = tokens;
     return (
         <Box
             onClick={onClick}
@@ -37,16 +37,16 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
                 px: { xs: 2.5, sm: 3.5 },
                 pt: { xs: 1.5, sm: 2 },
                 pb: { xs: 1, sm: 1.5 },
-                borderRadius: '4px',
-                background: `linear-gradient(175deg, ${c.redDeep} 0%, ${c.redDark} 100%)`,
-                border: `1px solid rgba(0,0,0,0.3)`,
-                borderTop: `3px solid ${c.gold}`,
+                borderRadius: '8px',
+                background: c.surface,
+                border: `1px solid ${c.border}`,
+                borderTop: `3px solid ${c.burgundy}`,
                 flex: 1,
                 minWidth: 0,
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                boxShadow: `0 2px 10px ${c.burgundyGlowFaint}`,
                 cursor: onClick ? 'pointer' : 'default',
                 '&::before': {
                     content: '""',
@@ -55,7 +55,7 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
                     left: 0,
                     right: 0,
                     height: '1px',
-                    background: `linear-gradient(90deg, transparent, ${c.goldGlow}, transparent)`,
+                    background: `linear-gradient(90deg, transparent, ${c.roseGlow}, transparent)`,
                 },
                 '&::after': {
                     content: '""',
@@ -64,13 +64,13 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
                     left: 0,
                     right: 0,
                     height: '2px',
-                    background: `linear-gradient(90deg, transparent 0%, #a07830 30%, ${c.goldLight} 50%, #a07830 70%, transparent 100%)`,
-                    opacity: 0.6,
+                    background: `linear-gradient(90deg, transparent 0%, ${c.rose} 30%, ${c.roseDark} 50%, ${c.rose} 70%, transparent 100%)`,
+                    opacity: 0.4,
                 },
                 '&:hover': {
                     transform: 'translateY(-3px)',
-                    boxShadow: `0 8px 28px ${c.goldGlow}`,
-                    borderTop: `3px solid ${c.goldLight}`,
+                    boxShadow: `0 8px 24px ${c.burgundyGlow}`,
+                    borderTop: `3px solid ${c.burgundyLight}`,
                 },
                 ...sx,
             }}
@@ -84,12 +84,12 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
                         width: 5,
                         height: 5,
                         borderRadius: '50%',
-                        backgroundColor: c.goldLight,
-                        animation: 'ferrariPulse 1.4s infinite',
-                        '@keyframes ferrariPulse': {
+                        backgroundColor: c.burgundy,
+                        animation: 'heritagePulse 1.4s infinite',
+                        '@keyframes heritagePulse': {
                             '0%, 100%': {
                                 opacity: 1,
-                                boxShadow: `0 0 4px ${c.gold}`,
+                                boxShadow: `0 0 4px ${c.burgundyGlow}`,
                             },
                             '50%': { opacity: 0.25, boxShadow: 'none' },
                         },
@@ -99,13 +99,12 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
             <Typography
                 sx={{
                     fontFamily: f.display,
-                    fontWeight: 900,
+                    fontWeight: 700,
                     fontSize: { xs: '2.2rem', sm: '3rem' },
                     lineHeight: 1,
-                    color: c.white,
+                    color: c.burgundy,
                     letterSpacing: '-0.03em',
                     fontVariantNumeric: 'tabular-nums',
-                    textShadow: `0 0 20px ${c.goldGlow}`,
                 }}
             >
                 {value.toLocaleString()}
@@ -114,14 +113,14 @@ function StatCard({ value, label, live, onClick, sx }: StatCardProps) {
                 sx={{
                     width: '100%',
                     height: '1px',
-                    background: `linear-gradient(90deg, transparent, ${c.goldGlow}, transparent)`,
+                    background: `linear-gradient(90deg, transparent, ${c.border}, transparent)`,
                     my: 0.6,
                 }}
             />
             <Typography
                 variant="caption"
                 sx={{
-                    color: c.white,
+                    color: c.inkMuted,
                     textAlign: 'center',
                     fontSize: { xs: '0.58rem', sm: '0.65rem' },
                 }}
@@ -159,21 +158,20 @@ export function JourneyCounter({ title }: JourneyCounterProps) {
             }}
         >
             {title && (
-            <Typography
-                sx={(theme) => ({
-                    fontFamily: ferrariTokens.fonts.display,
-                    fontWeight: 800,
-                    fontSize: { xs: '2rem', sm: '2.6rem' },
-                    lineHeight: 1,
-                    color: 'white',
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    textShadow: `0 0 24px ${theme.palette.primary.dark}88, 0 2px 4px rgba(0,0,0,0.6)`,
-                    userSelect: 'none',
-                })}
-            >
-                {title}
-            </Typography>
+                <Typography
+                    sx={{
+                        fontFamily: tokens.fonts.display,
+                        fontWeight: 700,
+                        fontStyle: 'italic',
+                        fontSize: { xs: '2rem', sm: '2.6rem' },
+                        lineHeight: 1,
+                        color: tokens.colors.ink,
+                        letterSpacing: '-0.02em',
+                        userSelect: 'none',
+                    }}
+                >
+                    {title}
+                </Typography>
             )}
 
             <Box

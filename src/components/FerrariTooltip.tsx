@@ -1,26 +1,27 @@
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import type { TooltipProps } from '@mui/material/Tooltip';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 
 const FerrariTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip enterTouchDelay={0} leaveTouchDelay={4000} {...props} arrow classes={{ popper: className }} />
 ))(() => ({
     [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: ferrariTokens.colors.surface,
-        color: 'white',
-        fontFamily: ferrariTokens.fonts.sans,
+        backgroundColor: tokens.colors.ink,
+        color: tokens.colors.white,
+        fontFamily: tokens.fonts.sans,
         fontSize: '0.82rem',
         fontWeight: 500,
-        border: `1px solid ${ferrariTokens.colors.border}`,
-        boxShadow: `0 4px 16px rgba(0,0,0,0.5), 0 0 8px ${ferrariTokens.colors.redGlowFaint}`,
+        border: `1px solid ${tokens.colors.burgundyDark}`,
+        boxShadow: `0 4px 16px ${tokens.colors.burgundyGlowFaint}`,
         letterSpacing: '0.02em',
         padding: '6px 12px',
+        borderRadius: '6px',
     },
     [`& .${tooltipClasses.arrow}`]: {
-        color: ferrariTokens.colors.surface,
+        color: tokens.colors.ink,
         '&::before': {
-            border: `1px solid ${ferrariTokens.colors.border}`,
+            border: `1px solid ${tokens.colors.burgundyDark}`,
         },
     },
 }));

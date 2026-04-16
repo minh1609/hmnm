@@ -414,11 +414,11 @@
 @keyframes goldPulse {
     0%,
     100% {
-        opacity: 0.18;
+        opacity: 0.28;
         transform: scale(1);
     }
     50% {
-        opacity: 0.35;
+        opacity: 0.55;
         transform: scale(1.08);
     }
 }
@@ -429,8 +429,8 @@
     border-radius: 50%;
     background: radial-gradient(
         ellipse at center,
-        rgba(200, 168, 75, 0.32) 0%,
-        rgba(200, 168, 75, 0.1) 40%,
+        rgba(212, 165, 165, 0.40) 0%,
+        rgba(157, 41, 51, 0.12) 40%,
         transparent 70%
     );
     animation: goldPulse 3s ease-in-out infinite;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 
 const REASONS = [
     'nhí nháu',
@@ -44,23 +44,23 @@ export function ReasonILikeYou() {
                 textAlign: 'center',
                 py: 1,
                 px: 2,
-                backgroundColor: `${ferrariTokens.colors.redDark}CC`,
-                backdropFilter: 'blur(2px)',
-                borderTop: `1px solid ${ferrariTokens.colors.redDeep}`,
+                backgroundColor: `${tokens.colors.creamDark}EE`,
+                backdropFilter: 'blur(6px)',
+                borderTop: `1px solid ${tokens.colors.border}`,
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
             }}
         >
             <Typography
                 component="span"
-                sx={(theme) => ({
-                    fontFamily: theme.typography.h3.fontFamily,
+                sx={{
+                    fontFamily: tokens.fonts.sans,
                     fontSize: 'clamp(0.65rem, 1.8vw, 1rem)',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: ferrariTokens.colors.white,
+                    fontWeight: 500,
+                    letterSpacing: '0.06em',
+                    color: tokens.colors.inkMuted,
                     mr: '0.4em',
-                })}
+                }}
             >
                 The reason I like you is
             </Typography>
@@ -76,19 +76,18 @@ export function ReasonILikeYou() {
             >
                 <Typography
                     component="span"
-                    sx={(theme) => ({
-                        fontFamily: theme.typography.h1.fontFamily,
+                    sx={{
+                        fontFamily: tokens.fonts.display,
+                        fontStyle: 'italic',
                         fontSize: 'clamp(0.65rem, 1.8vw, 1rem)',
-                        fontWeight: 700,
-                        letterSpacing: '0.06em',
-                        textTransform: 'uppercase',
-                        color: ferrariTokens.colors.gold,
-                        textShadow: `0 0 12px ${ferrariTokens.colors.goldGlow}`,
+                        fontWeight: 600,
+                        letterSpacing: '0.02em',
+                        color: tokens.colors.burgundy,
                         opacity: visible ? 1 : 0,
                         transform: visible ? 'translateY(0)' : 'translateY(4px)',
                         transition: `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`,
                         display: 'inline-block',
-                    })}
+                    }}
                 >
                     {REASONS[index]}
                 </Typography>

@@ -17,7 +17,7 @@ import { collection, addDoc, doc, updateDoc, Timestamp } from 'firebase/firestor
 import { db } from '@/firebase';
 import { activeProfile } from '@/config';
 import { invalidateTimelineCache } from '@/hooks/useTimeline';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 import {
     dialogPaperSx,
     dialogTitleSx,
@@ -125,9 +125,9 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
             onClose={handleClose}
             maxWidth="sm"
             fullWidth
-            PaperProps={{ sx: dialogPaperSx(ferrariTokens.colors.gold) }}
+            PaperProps={{ sx: dialogPaperSx(tokens.colors.burgundy) }}
         >
-            <DialogTitle sx={dialogTitleSx(ferrariTokens.colors.gold)}>
+            <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
                 {isEditing ? <EditIcon sx={{ fontSize: '1.3rem' }} /> : <AddIcon sx={{ fontSize: '1.3rem' }} />}
                 {isEditing ? 'Sửa kỉ niệm' : 'Kỉ niệm mới'}
             </DialogTitle>
@@ -184,7 +184,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                         />
                         <Typography
                             variant="body2"
-                            sx={{ mt: 0.5, color: ferrariTokens.colors.muted, fontSize: '0.75rem' }}
+                            sx={{ mt: 0.5, color: tokens.colors.inkMuted, fontSize: '0.75rem' }}
                         >
                             Tap the date chip on the timeline to trigger this icon burst.
                         </Typography>
@@ -206,7 +206,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                     variant="contained"
                     startIcon={
                         saving ? (
-                            <CircularProgress size={14} thickness={3} sx={{ color: ferrariTokens.colors.black }} />
+                            <CircularProgress size={14} thickness={3} sx={{ color: tokens.colors.white }} />
                         ) : isEditing ? (
                             <EditIcon />
                         ) : (
@@ -214,10 +214,9 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                         )
                     }
                     sx={primaryButtonSx(
-                            ferrariTokens.colors.gold,
-                            ferrariTokens.colors.goldLight,
-                            ferrariTokens.colors.black,
-                        )}
+                        tokens.colors.burgundy,
+                        tokens.colors.burgundyLight,
+                    )}
                 >
                     {saving ? 'Saving…' : isEditing ? 'Lưu' : 'Thêm'}
                 </Button>
@@ -226,4 +225,4 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
     );
 }
 
-const inputSx = textFieldSx(ferrariTokens.colors.gold);
+const inputSx = textFieldSx(tokens.colors.burgundy);

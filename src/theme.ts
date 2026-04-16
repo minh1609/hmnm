@@ -1,79 +1,90 @@
 import { createTheme } from '@mui/material/styles';
 
 /**
- * Ferrari F1 design tokens — single source of truth.
+ * Refined Heritage design tokens — single source of truth.
  * Use these in MUI's `sx` prop via `theme.palette.*` and `theme.typography.*`.
  * The same raw values are mirrored as CSS custom properties in index.css for
  * non-MUI contexts (plain CSS, keyframe animations, etc.).
  */
-export const ferrariTokens = {
+export const tokens = {
     colors: {
-        // Brand
-        red: '#DC0000',
-        redBright: '#FF2800',
-        redDeep: '#8B0000',
-        redDark: '#5A0000',
-        redGlow: 'rgba(220, 0, 0, 0.35)',
-        redGlowFaint: 'rgba(220, 0, 0, 0.12)',
+        // Primary — Deep Burgundy
+        burgundy: '#9D2933',
+        burgundyLight: '#C04050',
+        burgundyDark: '#6B1B24',
+        burgundyGlow: 'rgba(157, 41, 51, 0.25)',
+        burgundyGlowFaint: 'rgba(157, 41, 51, 0.10)',
 
-        // Accent / trim
-        gold: '#C8A84B',
-        goldLight: '#E8D070',
-        goldGlow: 'rgba(200, 168, 75, 0.3)',
+        // Secondary — Dusty Rose
+        rose: '#D4A5A5',
+        roseDark: '#B87878',
+        roseGlow: 'rgba(212, 165, 165, 0.35)',
+        roseGlowFaint: 'rgba(212, 165, 165, 0.15)',
 
-        // Backgrounds (dark fallbacks)
-        black: '#0D0D0D',
-        carbon: '#141414',
-        surface: '#1A1A1A',
-        panel: '#242424',
+        // Tertiary — Coffee Brown
+        brown: '#6D4C41',
+        brownLight: '#8D6E63',
+        brownGlow: 'rgba(109, 76, 65, 0.28)',
+
+        // Backgrounds (warm light)
+        cream: '#FAF7F2',
+        creamDark: '#F0EBE3',
+        surface: '#FFFFFF',
+        panel: '#F5F0E8',
 
         // Borders / dividers
-        border: '#2E2E2E',
-        borderSubtle: '#1E1E1E',
+        border: '#DDD5CC',
+        borderSubtle: '#EDE8E0',
 
         // Text
+        ink: '#2C1A12',
+        inkMuted: '#7A6356',
+        inkSubtle: '#B0A090',
+
+        // Pure utility
         white: '#FFFFFF',
-        muted: '#999999',
-        subtle: '#555555',
     },
     fonts: {
-        // Titillium Web — official F1 font for body / UI text
-        sans: "'Titillium Web', 'Arial Narrow', Arial, sans-serif",
-        // Barlow Condensed — bold racing display / numbers
-        display: "'Barlow Condensed', 'Arial Narrow', Arial, sans-serif",
-        // Great Vibes — script for romantic captions
-        script: "'Great Vibes', cursive",
+        // Plus Jakarta Sans — modern geometric sans for body / UI
+        sans: "'Plus Jakarta Sans', 'Helvetica Neue', Arial, sans-serif",
+        // Newsreader — editorial serif for headlines and display text
+        display: "'Newsreader', Georgia, 'Times New Roman', serif",
+        // Newsreader italic — used for romantic / script-style text
+        script: "'Newsreader', Georgia, serif",
         mono: 'ui-monospace, Consolas, monospace',
     },
 } as const;
 
-const { colors: c, fonts: f } = ferrariTokens;
+/** Backward-compatible alias — all existing imports stay valid. */
+export const ferrariTokens = tokens;
+
+const { colors: c, fonts: f } = tokens;
 
 const theme = createTheme({
     palette: {
-        mode: 'dark',
+        mode: 'light',
         primary: {
-            main: c.gold,
-            light: c.goldLight,
-            dark: '#A07830',
-            contrastText: c.black,
-        },
-        secondary: {
-            main: c.red,
-            light: c.redBright,
-            dark: c.redDeep,
+            main: c.burgundy,
+            light: c.burgundyLight,
+            dark: c.burgundyDark,
             contrastText: c.white,
         },
+        secondary: {
+            main: c.rose,
+            light: '#E8C8C8',
+            dark: c.roseDark,
+            contrastText: c.ink,
+        },
         background: {
-            default: c.red,
-            paper: c.redDeep,
+            default: c.cream,
+            paper: c.surface,
         },
         text: {
-            primary: c.white,
-            secondary: '#000000',
-            disabled: '#444444',
+            primary: c.ink,
+            secondary: c.inkMuted,
+            disabled: c.inkSubtle,
         },
-        divider: 'rgba(0,0,0,0.25)',
+        divider: c.borderSubtle,
     },
 
     typography: {
@@ -81,21 +92,18 @@ const theme = createTheme({
 
         h1: {
             fontFamily: f.display,
-            fontWeight: 900,
-            letterSpacing: '-0.03em',
-            textTransform: 'uppercase',
+            fontWeight: 700,
+            letterSpacing: '-0.02em',
         },
         h2: {
             fontFamily: f.display,
-            fontWeight: 700,
+            fontWeight: 600,
             letterSpacing: '-0.01em',
-            textTransform: 'uppercase',
         },
         h3: {
             fontFamily: f.display,
-            fontWeight: 700,
+            fontWeight: 600,
         },
-        // "script" variant — use as component="p" with variant overrides
         body1: {
             fontFamily: f.sans,
             fontWeight: 400,
@@ -106,38 +114,45 @@ const theme = createTheme({
             fontSize: '0.82rem',
         },
         caption: {
-            fontFamily: f.display,
-            fontWeight: 700,
-            letterSpacing: '0.18em',
+            fontFamily: f.sans,
+            fontWeight: 600,
+            letterSpacing: '0.06em',
             textTransform: 'uppercase' as const,
             fontSize: '0.65rem',
         },
         overline: {
-            fontFamily: f.display,
-            fontWeight: 700,
-            letterSpacing: '0.2em',
+            fontFamily: f.sans,
+            fontWeight: 600,
+            letterSpacing: '0.1em',
         },
     },
 
     shape: {
-        borderRadius: 4,
+        borderRadius: 8,
     },
 
     components: {
         MuiCssBaseline: {
             styleOverrides: {
                 body: {
-                    backgroundColor: c.red,
-                    color: c.white,
+                    backgroundColor: c.cream,
+                    color: c.ink,
                 },
             },
         },
         MuiChip: {
             styleOverrides: {
                 root: {
-                    fontFamily: f.display,
-                    fontWeight: 700,
-                    letterSpacing: '0.04em',
+                    fontFamily: f.sans,
+                    fontWeight: 600,
+                    letterSpacing: '0.02em',
+                },
+            },
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    backgroundImage: 'none',
                 },
             },
         },

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 import { useAuth } from '@/hooks/useAuth';
 
 const GoogleIcon = () => (
@@ -42,11 +42,11 @@ export function AuthGate({ children }: AuthGateProps) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: ferrariTokens.colors.black,
+                    backgroundColor: tokens.colors.cream,
                 }}
             >
                 <CircularProgress
-                    sx={{ color: ferrariTokens.colors.gold }}
+                    sx={{ color: tokens.colors.burgundy }}
                     size={40}
                     thickness={3}
                 />
@@ -63,7 +63,7 @@ export function AuthGate({ children }: AuthGateProps) {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: ferrariTokens.colors.black,
+                    backgroundColor: tokens.colors.cream,
                     px: 3,
                     position: 'relative',
                     overflow: 'hidden',
@@ -71,7 +71,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         content: '""',
                         position: 'absolute',
                         inset: 0,
-                        background: `radial-gradient(ellipse 80% 60% at 50% 40%, ${ferrariTokens.colors.redGlow}, transparent)`,
+                        background: `radial-gradient(ellipse 80% 60% at 50% 40%, ${tokens.colors.roseGlow}, transparent)`,
                         pointerEvents: 'none',
                     },
                 }}
@@ -84,7 +84,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         left: 0,
                         right: 0,
                         height: '3px',
-                        background: `linear-gradient(90deg, transparent, ${ferrariTokens.colors.red}, ${ferrariTokens.colors.gold}, ${ferrariTokens.colors.red}, transparent)`,
+                        background: `linear-gradient(90deg, transparent, ${tokens.colors.burgundy}, ${tokens.colors.rose}, ${tokens.colors.burgundy}, transparent)`,
                     }}
                 />
 
@@ -99,36 +99,35 @@ export function AuthGate({ children }: AuthGateProps) {
                         width: '100%',
                     }}
                 >
-                    {/* Prancing horse / emblem */}
                     <Typography
                         sx={{
                             fontSize: '4rem',
                             lineHeight: 1,
-                            filter: `drop-shadow(0 0 24px ${ferrariTokens.colors.redGlow})`,
+                            filter: `drop-shadow(0 0 16px ${tokens.colors.roseGlow})`,
                         }}
                     >
-                        🐎
+                        🌸
                     </Typography>
 
                     <Box sx={{ textAlign: 'center' }}>
                         <Typography
                             sx={{
-                                fontFamily: ferrariTokens.fonts.display,
-                                fontSize: '2.2rem',
+                                fontFamily: tokens.fonts.display,
+                                fontSize: '2.4rem',
                                 fontWeight: 700,
-                                letterSpacing: '0.18em',
-                                textTransform: 'uppercase',
-                                color: ferrariTokens.colors.white,
-                                lineHeight: 1,
+                                letterSpacing: '-0.02em',
+                                color: tokens.colors.ink,
+                                lineHeight: 1.1,
                             }}
                         >
                             Our Story
                         </Typography>
                         <Typography
                             sx={{
-                                fontFamily: ferrariTokens.fonts.script,
-                                fontSize: '1.4rem',
-                                color: ferrariTokens.colors.gold,
+                                fontFamily: tokens.fonts.display,
+                                fontStyle: 'italic',
+                                fontSize: '1.3rem',
+                                color: tokens.colors.brown,
                                 mt: 0.5,
                             }}
                         >
@@ -141,16 +140,16 @@ export function AuthGate({ children }: AuthGateProps) {
                         sx={{
                             width: '100%',
                             height: '1px',
-                            background: `linear-gradient(90deg, transparent, ${ferrariTokens.colors.border}, transparent)`,
+                            background: `linear-gradient(90deg, transparent, ${tokens.colors.border}, transparent)`,
                         }}
                     />
 
                     <Typography
                         variant="caption"
                         sx={{
-                            color: ferrariTokens.colors.muted,
+                            color: tokens.colors.inkMuted,
                             textAlign: 'center',
-                            letterSpacing: '0.08em',
+                            letterSpacing: '0.06em',
                         }}
                     >
                         Sign in to access this page
@@ -162,20 +161,19 @@ export function AuthGate({ children }: AuthGateProps) {
                         variant="outlined"
                         fullWidth
                         sx={{
-                            fontFamily: ferrariTokens.fonts.display,
+                            fontFamily: tokens.fonts.sans,
                             fontSize: '0.9rem',
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: ferrariTokens.colors.white,
-                            borderColor: ferrariTokens.colors.border,
-                            backgroundColor: ferrariTokens.colors.surface,
+                            letterSpacing: '0.04em',
+                            color: tokens.colors.ink,
+                            borderColor: tokens.colors.border,
+                            backgroundColor: tokens.colors.surface,
                             py: 1.5,
-                            borderRadius: '2px',
+                            borderRadius: '8px',
                             transition: 'all 0.2s ease',
                             '&:hover': {
-                                borderColor: ferrariTokens.colors.gold,
-                                backgroundColor: ferrariTokens.colors.panel,
-                                boxShadow: `0 0 16px ${ferrariTokens.colors.goldGlow}`,
+                                borderColor: tokens.colors.burgundy,
+                                backgroundColor: tokens.colors.panel,
+                                boxShadow: `0 0 12px ${tokens.colors.burgundyGlowFaint}`,
                             },
                         }}
                     >
@@ -191,7 +189,7 @@ export function AuthGate({ children }: AuthGateProps) {
                         left: 0,
                         right: 0,
                         height: '3px',
-                        background: `linear-gradient(90deg, transparent, ${ferrariTokens.colors.gold}, ${ferrariTokens.colors.red}, ${ferrariTokens.colors.gold}, transparent)`,
+                        background: `linear-gradient(90deg, transparent, ${tokens.colors.rose}, ${tokens.colors.burgundy}, ${tokens.colors.rose}, transparent)`,
                     }}
                 />
             </Box>

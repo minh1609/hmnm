@@ -13,7 +13,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { invalidateTimelineCache } from '@/hooks/useTimeline';
-import { ferrariTokens } from '@/theme';
+import { tokens } from '@/theme';
 import {
     dialogPaperSx,
     dialogTitleSx,
@@ -73,9 +73,9 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
             onClose={handleClose}
             maxWidth="sm"
             fullWidth
-            PaperProps={{ sx: dialogPaperSx(ferrariTokens.colors.red) }}
+            PaperProps={{ sx: dialogPaperSx(tokens.colors.rose) }}
         >
-            <DialogTitle sx={dialogTitleSx(ferrariTokens.colors.red)}>
+            <DialogTitle sx={dialogTitleSx(tokens.colors.burgundy)}>
                 <FavoriteIcon sx={{ fontSize: '1.2rem' }} />
                 {event?.name}
             </DialogTitle>
@@ -94,7 +94,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                     multiline
                     minRows={3}
                     placeholder="Add your personal note about this moment…"
-                    sx={textFieldSx(ferrariTokens.colors.red)}
+                    sx={textFieldSx(tokens.colors.burgundy)}
                 />
             </DialogContent>
 
@@ -112,12 +112,12 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                     variant="contained"
                     startIcon={
                         saving ? (
-                            <CircularProgress size={14} thickness={3} sx={{ color: ferrariTokens.colors.white }} />
+                            <CircularProgress size={14} thickness={3} sx={{ color: tokens.colors.white }} />
                         ) : (
                             <FavoriteIcon />
                         )
                     }
-                    sx={primaryButtonSx(ferrariTokens.colors.red, ferrariTokens.colors.redDeep)}
+                    sx={primaryButtonSx(tokens.colors.burgundy, tokens.colors.burgundyLight)}
                 >
                     {saving ? 'Saving…' : 'Save'}
                 </Button>
