@@ -40,18 +40,20 @@ export function YesCelebration() {
             {HEART_PARTICLES.map((p, i) => (
                 <Box
                     key={i}
-                    sx={{
-                        position: 'absolute',
-                        bottom: '-30px',
-                        left: p.left,
-                        fontSize: p.fontSize,
-                        lineHeight: 1,
-                        pointerEvents: 'none',
-                        userSelect: 'none',
-                        willChange: 'transform, opacity',
-                        '--rise-rot': p.rotation,
-                        animation: `heartRise ${p.duration} ${p.delay} ease-in-out both`,
-                    } as React.CSSProperties & Record<string, unknown>}
+                    sx={
+                        {
+                            position: 'absolute',
+                            bottom: '-30px',
+                            left: p.left,
+                            fontSize: p.fontSize,
+                            lineHeight: 1,
+                            pointerEvents: 'none',
+                            userSelect: 'none',
+                            willChange: 'transform, opacity',
+                            '--rise-rot': p.rotation,
+                            animation: `heartRise ${p.duration} ${p.delay} ease-in-out both`,
+                        } as React.CSSProperties & Record<string, unknown>
+                    }
                 >
                     {p.emoji}
                 </Box>
