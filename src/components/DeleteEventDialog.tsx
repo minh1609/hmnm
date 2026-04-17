@@ -18,10 +18,10 @@ import {
     dialogPaperSx,
     dialogTitleSx,
     dialogActionsSx,
-    cancelButtonSx,
+    secondaryButtonSx,
     primaryButtonSx,
     errorAlertSx,
-} from '@/styles/dialogStyles';
+} from '@/styles/appStyles';
 import type { TimelineEvent } from '@/types';
 
 interface Props {
@@ -125,7 +125,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
             </DialogContent>
 
             <DialogActions sx={dialogActionsSx(theme)}>
-                <Button onClick={handleClose} disabled={deleting} sx={cancelButtonSx(theme)}>
+                <Button onClick={handleClose} disabled={deleting} sx={secondaryButtonSx(theme)}>
                     Cancel
                 </Button>
                 <Button

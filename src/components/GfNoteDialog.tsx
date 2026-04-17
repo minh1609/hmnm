@@ -18,11 +18,11 @@ import {
     dialogPaperSx,
     dialogTitleSx,
     dialogActionsSx,
-    cancelButtonSx,
+    secondaryButtonSx,
     primaryButtonSx,
     textFieldSx,
     errorAlertSx,
-} from '@/styles/dialogStyles';
+} from '@/styles/appStyles';
 import type { TimelineEvent } from '@/types';
 
 interface Props {
@@ -105,7 +105,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                 <Button
                     onClick={handleClose}
                     disabled={saving}
-                    sx={cancelButtonSx(theme)}
+                    sx={secondaryButtonSx(theme)}
                 >
                     Cancel
                 </Button>

@@ -1,11 +1,12 @@
 import type { Theme } from '@mui/material/styles';
 
 /**
- * Shared Refined Heritage style helpers for MUI Dialogs.
+ * Shared Refined Heritage style helpers for MUI components.
  * All functions accept the MUI `theme` object as their first argument so that
  * colours and fonts flow from the active theme — no direct token imports needed.
- * All dialogs in the app (Create/Edit, Delete, GfNote) use these to stay consistent.
  */
+
+// ─── Dialogs ────────────────────────────────────────────────────────────────
 
 /** Dialog Paper background, border, and shape. Pass the accent border colour. */
 export const dialogPaperSx = (theme: Theme, borderColor: string) => ({
@@ -38,12 +39,13 @@ export const dialogActionsSx = (theme: Theme) => ({
     gap: 1,
 });
 
-/** Ghost Cancel button — muted text, turns ink on hover. */
-export const cancelButtonSx = (theme: Theme) => ({
+/** Ghost secondary button — muted text, subtle border, turns ink on hover. */
+export const secondaryButtonSx = (theme: Theme) => ({
     fontFamily: theme.tokens.fonts.sans,
     fontWeight: 600,
     letterSpacing: '0.04em',
     color: theme.tokens.colors.inkMuted,
+    border: `1px solid ${theme.tokens.colors.border}`,
     '&:hover': { color: theme.tokens.colors.ink, backgroundColor: theme.tokens.colors.creamDark },
 });
 
@@ -107,4 +109,42 @@ export const errorAlertSx = (theme: Theme) => ({
     color: theme.tokens.colors.burgundyDark,
     border: `1px solid ${theme.tokens.colors.rose}`,
     '& .MuiAlert-icon': { color: theme.tokens.colors.burgundy },
+});
+
+// ─── FAB ────────────────────────────────────────────────────────────────────
+
+/**
+ * Floating action button in the burgundy brand colour with a float animation.
+ * Handles all visual styling (colours, shadow, animation, hover) but not
+ * positioning — set `position`, `bottom`, `right`, and `zIndex` at the call site.
+ */
+export const burgundyFabSx = (theme: Theme) => ({
+    px: 2.5,
+    gap: 1,
+    borderRadius: '999px',
+    backgroundColor: theme.tokens.colors.burgundy,
+    color: theme.tokens.colors.white,
+    border: `1px solid ${theme.tokens.colors.burgundyDark}`,
+    boxShadow: `0 6px 16px ${theme.tokens.colors.burgundyGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
+    animation: 'fabFloat 3s ease-in-out infinite',
+    '@keyframes fabFloat': {
+        '0%, 100%': { transform: 'translateY(0px)' },
+        '50%': { transform: 'translateY(-6px)' },
+    },
+    transition: 'transform 2s ease, box-shadow 0.5s ease, background-color 0.5s ease',
+    '&:hover': {
+        backgroundColor: theme.tokens.colors.burgundyLight,
+        boxShadow: `0 10px 28px ${theme.tokens.colors.burgundyGlow}`,
+        animation: 'none',
+        transform: 'translateY(-4px) scale(1.05)',
+    },
+});
+
+/** Typography label inside a FAB — tight, weighted, sans-serif. */
+export const fabLabelSx = (theme: Theme) => ({
+    fontFamily: theme.tokens.fonts.sans,
+    fontWeight: 600,
+    fontSize: '0.85rem',
+    letterSpacing: '0.04em',
+    lineHeight: 1,
 });

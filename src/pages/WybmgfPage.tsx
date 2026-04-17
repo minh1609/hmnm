@@ -1,10 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
-import { Box, Typography, Snackbar, Alert, LinearProgress } from '@mui/material';
-import { doc, getDoc, collection, serverTimestamp, Timestamp, runTransaction } from 'firebase/firestore';
+import { Box, Typography, Snackbar, Alert, LinearProgress, Button, CircularProgress } from '@mui/material';
+import {
+    doc,
+    getDoc,
+    collection,
+    serverTimestamp,
+    Timestamp,
+    runTransaction,
+    query,
+    where,
+    getDocs,
+    writeBatch,
+} from 'firebase/firestore';
 import { db } from '@/firebase';
 import { useTheme } from '@mui/material/styles';
 import { YesCelebration } from '@/components/YesCelebration';
 import { PageHeader } from '@/components/PageHeader';
+import { useAuth } from '@/hooks/useAuth';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { secondaryButtonSx } from '@/styles/appStyles';
 
 interface Question {
     question: string;
@@ -37,11 +51,16 @@ const QUESTIONS: Question[] = [
 ];
 
 export function WybmgfPage() {
-    const { tokens: { colors: c, fonts: f } } = useTheme();
+    const theme = useTheme();
+    const {
+        tokens: { colors: c, fonts: f },
+    } = theme;
+    const { isAdmin } = useAuth();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showYesCelebration, setShowYesCelebration] = useState(false);
     const [loadingAnswer, setLoadingAnswer] = useState(true);
+    const [resetting, setResetting] = useState(false);
     const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; key: number }>({
         open: false,
         message: '',
@@ -103,6 +122,31 @@ export function WybmgfPage() {
             const msg = msgs[wrongAttempts % msgs.length];
             setWrongAttempts((n) => n + 1);
             setSnackbar((s) => ({ open: true, message: msg, key: s.key + 1 }));
+        }
+    }
+
+    async function handleReset() {
+        setResetting(true);
+        try {
+            const batch = writeBatch(db);
+
+            // Set answer to false in general/wybmgf
+            batch.set(doc(db, 'general', 'wybmgf'), { answer: false }, { merge: true });
+
+            // Delete all timeline_events where name === 'official'
+            const officialSnap = await getDocs(
+                query(collection(db, 'timeline_events'), where('name', '==', 'official'))
+            );
+            officialSnap.forEach((d) => batch.delete(d.ref));
+
+            await batch.commit();
+            setShowYesCelebration(false);
+            setCurrentIndex(0);
+            setWrongAttempts(0);
+        } catch {
+            // silent
+        } finally {
+            setResetting(false);
         }
     }
 
@@ -260,6 +304,29 @@ export function WybmgfPage() {
 
             {/* YES! Celebration overlay */}
             {showYesCelebration && <YesCelebration />}
+
+            {/* Admin reset button — overlaid above celebration */}
+            {showYesCelebration && isAdmin && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        bottom: 72,
+                        left: 24,
+                        zIndex: 9999,
+                    }}
+                >
+                    <Button
+                        startIcon={
+                            resetting ? <CircularProgress size={14} sx={{ color: 'inherit' }} /> : <DeleteOutlineIcon />
+                        }
+                        onClick={handleReset}
+                        disabled={resetting}
+                        sx={secondaryButtonSx(theme)}
+                    >
+                        Reset
+                    </Button>
+                </Box>
+            )}
 
             {/* Wrong answer snackbar */}
             <Snackbar

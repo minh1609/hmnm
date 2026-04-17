@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { Fab, Portal, Zoom } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useTheme } from '@mui/material/styles';
+import { secondaryButtonSx } from '@/styles/appStyles';
 
 export function ScrollToTopFab() {
-    const {
-        tokens: { colors: c },
-    } = useTheme();
+    const theme = useTheme();
 
     const [visible, setVisible] = useState(false);
 
@@ -28,17 +27,7 @@ export function ScrollToTopFab() {
                         bottom: 28,
                         left: 28,
                         zIndex: 1200,
-                        borderRadius: '999px',
-                        backgroundColor: c.surface,
-                        color: c.burgundy,
-                        border: `1px solid ${c.rose}`,
-                        boxShadow: `0 4px 14px ${c.roseGlow}, 0 2px 6px rgba(0,0,0,0.08)`,
-                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                        '&:hover': {
-                            backgroundColor: c.roseGlowFaint,
-                            boxShadow: `0 8px 22px ${c.roseGlow}`,
-                            transform: 'translateY(-3px)',
-                        },
+                        ...secondaryButtonSx(theme),
                     }}
                 >
                     <KeyboardArrowUpIcon sx={{ fontSize: '1.5rem' }} />
