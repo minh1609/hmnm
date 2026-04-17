@@ -23,4 +23,28 @@ export const trips: Trip[] = [
         type: 'trip',
         notes: '',
     },
+    {
+        name: 'Seoul, Korea',
+        flag: '🇰🇷',
+        destinations: [{ name: 'Seoul' }],
+        coordinates: [126.978, 37.566],
+        owner: 'mindy',
+        type: 'plan',
+    },
+    {
+        name: 'Tokyo, Japan',
+        flag: '🇯🇵',
+        destinations: [{ name: 'Tokyo' }],
+        coordinates: [139.692, 35.69],
+        owner: 'mindy',
+        type: 'plan',
+    },
+    {
+        name: 'Hải Phòng, Vietnam',
+        flag: '🇻🇳',
+        destinations: [{ name: 'Hải Phòng' }],
+        coordinates: [106.688, 20.865],
+        owner: 'mindy',
+        type: 'meaningful',
+    },
 ];

@@ -91,8 +91,9 @@ async function migrateTrips() {
 
         const ref = await col.add({
             ...trip,
-            ...(trip.startDate && { startDate: toTimestamp(trip.startDate) }),
-            ...(trip.endDate && { endDate: toTimestamp(trip.endDate) }),
+            // Always write startDate/endDate so where('startDate','==',null) works for undated trips.
+            startDate: trip.startDate ? toTimestamp(trip.startDate) : null,
+            endDate: trip.endDate ? toTimestamp(trip.endDate) : null,
         });
         log('seed', `  ✓ added    "${trip.name}"  (id: ${ref.id})`);
         added++;

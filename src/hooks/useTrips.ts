@@ -36,12 +36,24 @@ export function useTrips(): { trips: Trip[]; loading: boolean } {
             return;
         }
 
-        const q = query(collection(db, 'trips'), where('owner', '==', activeProfile), orderBy('startDate', 'asc'));
+        // Firestore's orderBy silently excludes docs missing the field.
+        // Split into two queries: dated trips (server-ordered) + undated plans.
+        const datedQ = query(
+            collection(db, 'trips'),
+            where('owner', '==', activeProfile),
+            where('startDate', '!=', null),
+            orderBy('startDate', 'asc'),
+        );
+        const undatedQ = query(
+            collection(db, 'trips'),
+            where('owner', '==', activeProfile),
+            where('startDate', '==', null),
+        );
 
-        getDocs(q)
-            .then((snap) => {
-                const source = snap.metadata.fromCache ? 'Firestore IndexedDB cache' : 'Firestore network';
-                const result: Trip[] = snap.docs.map((doc) => {
+        Promise.all([getDocs(datedQ), getDocs(undatedQ)])
+            .then(([datedSnap, undatedSnap]) => {
+                const source = datedSnap.metadata.fromCache ? 'Firestore IndexedDB cache' : 'Firestore network';
+                const toTrip = (doc: (typeof datedSnap.docs)[0]): Trip => {
                     const d = doc.data();
                     return {
                         name: d.name as string,
@@ -54,7 +66,11 @@ export function useTrips(): { trips: Trip[]; loading: boolean } {
                         ...(d.notes != null && { notes: d.notes as string }),
                         owner: d.owner as string,
                     } satisfies Trip;
-                });
+                };
+                const result: Trip[] = [
+                    ...datedSnap.docs.map(toTrip),
+                    ...undatedSnap.docs.map(toTrip),
+                ];
                 console.log(`[useTrips] fetched ${result.length} trips from ${source}`);
                 _tripsCache = result;
                 setTrips(result);
