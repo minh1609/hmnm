@@ -6,7 +6,6 @@ export const trips: Trip[] = [
         flag: '🇨🇦',
         startDate: new Date('2025-11-01T00:00:00'),
         endDate: new Date('2025-11-01T00:00:00'),
-        highlights: [],
         destinations: [
             {
                 name: 'Kelso Conservation Area',
@@ -19,6 +18,7 @@ export const trips: Trip[] = [
                     'https://google.com/maps/search/square+one/@43.5930011,-79.6424732,17z?entry=s&sa=X&ved=1t%3A199789',
             },
         ],
+        coordinates: [-79.84, 43.61],
         owner: 'mindy',
     },
 ];

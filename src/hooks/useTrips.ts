@@ -21,7 +21,7 @@ export function invalidateTripsCache() {
 /**
  * Reads the `trips` collection from Firestore (owner == activeProfile, ordered by startDate).
  *
- * Firestore document fields: { name, flag, startDate, endDate, highlights, destinations, owner }
+ * Firestore document fields: { name, flag, startDate, endDate, destinations, coordinates, owner }
  *
  * Results are held in a module-level cache for the tab session. Call
  * `invalidateTripsCache()` before mounting to force a fresh network read.
@@ -48,8 +48,9 @@ export function useTrips(): { trips: Trip[]; loading: boolean } {
                         flag: d.flag as string,
                         startDate: toDate(d.startDate),
                         endDate: toDate(d.endDate),
-                        highlights: (d.highlights ?? []) as string[],
                         destinations: (d.destinations ?? []) as Trip['destinations'],
+                        coordinates: (d.coordinates ?? [0, 0]) as Trip['coordinates'],
+                        ...(d.notes != null && { notes: d.notes as string }),
                         owner: d.owner as string,
                     } satisfies Trip;
                 });

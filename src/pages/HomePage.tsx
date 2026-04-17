@@ -197,10 +197,11 @@ export function HomePage() {
                                             fontWeight: 600,
                                             borderRadius: '8px',
                                             cursor: event.burstIcon ? 'pointer' : 'default',
-                                            transition: 'transform 0.15s ease',
+                                            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             '&:hover': {
                                                 backgroundColor: season.bgColor,
                                                 transform: 'scale(1.12)',
+                                                boxShadow: `0 4px 14px ${season.color}66`,
                                             },
                                             '& .MuiChip-icon': {
                                                 color: season.color,

@@ -1,267 +1,131 @@
+import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import PlaceIcon from '@mui/icons-material/Place';
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { useTrips } from '@/hooks/useTrips';
 import { useTheme } from '@mui/material/styles';
 import { PageHeader } from '@/components/PageHeader';
+import { TripDetailDialog } from '@/components/TripDetailDialog';
+import type { Trip } from '@/types';
 
-function formatDateRange(start: Date, end: Date): string {
-    const opts: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
-    return `${start.toLocaleDateString('en-GB', opts)} — ${end.toLocaleDateString('en-GB', opts)}`;
-}
-
-function durationDays(start: Date, end: Date): number {
-    let duration = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-    return Math.max(duration, 1);
-}
+const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
 export function TripsPage() {
     const { trips } = useTrips();
-    const { tokens: { colors: c, fonts: f } } = useTheme();
+    const {
+        tokens: { colors: c, fonts: f },
+    } = useTheme();
+    const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
+
+    const mappedTrips = trips;
 
     return (
         <>
             <Box sx={{ minHeight: '100vh', pb: 6, backgroundColor: c.cream }}>
                 <PageHeader
-                    title={`Trips Together ${trips.length} trip${trips.length !== 1 ? 's' : ''}`}
+                    title={`Trips Together · ${trips.length} trip${trips.length !== 1 ? 's' : ''}`}
                 />
 
-                {/* Trip cards */}
+                {/* World map */}
                 <Box
                     sx={{
-                        maxWidth: 680,
-                        mx: 'auto',
-                        px: { xs: 2, sm: 4 },
-                        pt: 4,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 3,
+                        position: 'relative',
+                        width: '100%',
+                        background: `linear-gradient(180deg, ${c.creamDark} 0%, ${c.panel} 100%)`,
+                        borderBottom: `1px solid ${c.border}`,
                     }}
                 >
-                    {trips.map((trip) => (
-                        <Box
-                            key={trip.name}
-                            sx={{
-                                borderRadius: '10px',
-                                background: c.surface,
-                                border: `1px solid ${c.border}`,
-                                borderTop: `3px solid ${c.burgundy}`,
-                                overflow: 'hidden',
-                                position: 'relative',
-                                boxShadow: `0 4px 18px ${c.burgundyGlowFaint}`,
-                                transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                                '&::before': {
-                                    content: '""',
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    height: '1px',
-                                    background: `linear-gradient(90deg, transparent, ${c.roseGlow}, transparent)`,
-                                },
-                                '&::after': {
-                                    content: '""',
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    height: '2px',
-                                    background: `linear-gradient(90deg, transparent 0%, ${c.roseDark} 30%, ${c.rose} 50%, ${c.roseDark} 70%, transparent 100%)`,
-                                    opacity: 0.5,
-                                },
-                                '&:hover': {
-                                    transform: 'translateY(-4px)',
-                                    boxShadow: `0 12px 32px ${c.burgundyGlow}`,
-                                },
-                            }}
-                        >
-                            {/* Card header row */}
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'flex-start',
-                                    justifyContent: 'space-between',
-                                    px: { xs: 2.5, sm: 3.5 },
-                                    pt: { xs: 2, sm: 2.5 },
-                                    pb: 1,
-                                }}
+                    <ComposableMap
+                        projectionConfig={{ scale: 147, center: [0, 10] }}
+                        style={{ width: '100%', height: 'auto', display: 'block' }}
+                    >
+                        <Geographies geography={GEO_URL}>
+                            {({ geographies }: { geographies: unknown[] }) =>
+                                geographies.map((geo: unknown) => (
+                                    <Geography
+                                        key={(geo as { rsmKey: string }).rsmKey}
+                                        geography={geo}
+                                        fill={c.panel}
+                                        stroke={c.border}
+                                        strokeWidth={0.5}
+                                        style={{
+                                            default: { outline: 'none' },
+                                            hover: { outline: 'none', fill: c.borderSubtle },
+                                            pressed: { outline: 'none' },
+                                        }}
+                                    />
+                                ))
+                            }
+                        </Geographies>
+
+                        {mappedTrips.map(trip => (
+                                    <Marker
+                                        key={trip.name}
+                                        coordinates={trip.coordinates}
+                                onClick={() => setSelectedTrip(trip)}
                             >
-                                <Box sx={{ flex: 1 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                                        <Typography sx={{ fontSize: '2rem', lineHeight: 1 }}>{trip.flag}</Typography>
-                                        <Typography
-                                            sx={{
-                                                fontFamily: f.display,
-                                                fontWeight: 700,
-                                                fontSize: { xs: '1.5rem', sm: '1.9rem' },
-                                                letterSpacing: '-0.02em',
-                                                color: c.ink,
-                                                lineHeight: 1,
-                                                textAlign: 'left',
-                                            }}
-                                        >
-                                            {trip.name}
-                                        </Typography>
-                                    </Box>
+                                {/* Pulsing halo */}
+                                <circle r={12} fill={c.burgundyGlow} stroke="none">
+                                    <animate
+                                        attributeName="r"
+                                        from={8}
+                                        to={20}
+                                        dur="2.2s"
+                                        repeatCount="indefinite"
+                                    />
+                                    <animate
+                                        attributeName="opacity"
+                                        from={0.55}
+                                        to={0}
+                                        dur="2.2s"
+                                        repeatCount="indefinite"
+                                    />
+                                </circle>
 
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexWrap: 'wrap' }}>
-                                        <PlaceIcon sx={{ color: c.brown, fontSize: '0.95rem', flexShrink: 0 }} />
-                                        <Typography
-                                            variant="caption"
-                                            sx={{
-                                                color: c.brown,
-                                                letterSpacing: '0.06em',
-                                                fontSize: '0.7rem',
-                                            }}
-                                        >
-                                            {trip.destinations.map((dest, i) => (
-                                                <Box
-                                                    key={i}
-                                                    component={dest.googleMapLink ? 'a' : 'span'}
-                                                    href={dest.googleMapLink}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    sx={{
-                                                        textDecoration: 'none',
-                                                        color: 'inherit',
-                                                        cursor: dest.googleMapLink ? 'pointer' : 'default',
-                                                        '&:hover': dest.googleMapLink ? { opacity: 0.75 } : {},
-                                                    }}
-                                                >
-                                                    {dest.name}
-                                                    {i < trip.destinations.length - 1 && ', '}
-                                                </Box>
-                                            ))}
-                                        </Typography>
-                                    </Box>
-                                </Box>
+                                {/* Pin dot */}
+                                <circle
+                                    r={7}
+                                    fill={c.burgundy}
+                                    stroke={c.surface}
+                                    strokeWidth={2}
+                                    style={{ cursor: 'pointer' }}
+                                />
 
-                                {/* Duration badge */}
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        background: c.panel,
-                                        border: `1px solid ${c.border}`,
-                                        borderRadius: '6px',
-                                        px: 1.5,
-                                        py: 0.75,
-                                        minWidth: 56,
-                                        ml: 0.5,
+                                {/* Flag above pin */}
+                                <text
+                                    textAnchor="middle"
+                                    y={-16}
+                                    style={{
+                                        fontSize: '16px',
+                                        userSelect: 'none',
+                                        cursor: 'pointer',
+                                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.18))',
                                     }}
                                 >
-                                    <Typography
-                                        sx={{
-                                            fontFamily: f.display,
-                                            fontWeight: 700,
-                                            fontSize: '1.6rem',
-                                            lineHeight: 1,
-                                            color: c.burgundy,
-                                            letterSpacing: '-0.03em',
-                                        }}
-                                    >
-                                        {durationDays(trip.startDate, trip.endDate)}
-                                    </Typography>
-                                    <Typography
-                                        variant="caption"
-                                        sx={{
-                                            color: c.inkMuted,
-                                            fontSize: '0.58rem',
-                                            letterSpacing: '0.08em',
-                                        }}
-                                    >
-                                        DAY(S)
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            {/* Date range */}
-                            <Box
-                                sx={{
-                                    px: { xs: 2.5, sm: 3.5 },
-                                    pb: 1.5,
-                                }}
-                            >
-                                <Typography
-                                    variant="caption"
-                                    sx={{
-                                        color: c.inkMuted,
-                                        fontSize: '0.68rem',
-                                        letterSpacing: '0.04em',
-                                    }}
-                                >
-                                    {formatDateRange(trip.startDate, trip.endDate)}
-                                </Typography>
-                            </Box>
-
-                            {/* Divider */}
-                            <Box
-                                sx={{
-                                    mx: { xs: 2.5, sm: 3.5 },
-                                    height: '1px',
-                                    background: `linear-gradient(90deg, transparent, ${c.border}, transparent)`,
-                                    mb: 2,
-                                }}
-                            />
-
-                            {/* Highlights */}
-                            <Box
-                                sx={{
-                                    px: { xs: 2.5, sm: 3.5 },
-                                    pb: { xs: 2.5, sm: 3 },
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: 0.75,
-                                }}
-                            >
-                                {trip.highlights.map((hl, i) => (
-                                    <Box
-                                        key={i}
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'flex-start',
-                                            gap: 1,
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                width: 5,
-                                                height: 5,
-                                                borderRadius: '50%',
-                                                backgroundColor: c.burgundy,
-                                                mt: '7px',
-                                                flexShrink: 0,
-                                            }}
-                                        />
-                                        <Typography
-                                            sx={{
-                                                fontFamily: f.sans,
-                                                fontSize: { xs: '0.82rem', sm: '0.88rem' },
-                                                color: c.ink,
-                                                lineHeight: 1.5,
-                                            }}
-                                        >
-                                            {hl}
-                                        </Typography>
-                                    </Box>
-                                ))}
-                            </Box>
-                        </Box>
-                    ))}
+                                    {trip.flag}
+                                </text>
+                            </Marker>
+                        ))}
+                    </ComposableMap>
 
                     {trips.length === 0 && (
                         <Box
                             sx={{
-                                textAlign: 'center',
-                                py: 8,
+                                position: 'absolute',
+                                inset: 0,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                pointerEvents: 'none',
                             }}
                         >
                             <Typography
                                 sx={{
                                     fontFamily: f.display,
                                     fontStyle: 'italic',
-                                    fontSize: '2rem',
+                                    fontSize: { xs: '1.2rem', sm: '1.5rem' },
                                     color: c.inkMuted,
+                                    textAlign: 'center',
+                                    px: 4,
                                 }}
                             >
                                 More adventures to come ✈️
@@ -269,7 +133,84 @@ export function TripsPage() {
                         </Box>
                     )}
                 </Box>
+
+                {/* Hint */}
+                <Box sx={{ textAlign: 'center', pt: 2.5, pb: 1 }}>
+                    <Typography
+                        variant="caption"
+                        sx={{
+                            color: c.inkSubtle,
+                            letterSpacing: '0.1em',
+                            fontSize: '0.65rem',
+                            fontFamily: f.sans,
+                        }}
+                    >
+                        TAP A PIN TO EXPLORE THE TRIP
+                    </Typography>
+                </Box>
+
+                {/* Trip pills row */}
+                {mappedTrips.length > 0 && (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: 1.5,
+                            justifyContent: 'center',
+                            px: { xs: 2, sm: 4 },
+                            pt: 1,
+                            pb: 2,
+                        }}
+                    >
+                        {mappedTrips.map(trip => (
+                            <Box
+                                key={trip.name}
+                                onClick={() => setSelectedTrip(trip)}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    px: 2,
+                                    py: 0.75,
+                                    borderRadius: '24px',
+                                    border: `1px solid ${c.border}`,
+                                    background: c.surface,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.18s ease',
+                                    boxShadow: `0 2px 8px ${c.burgundyGlowFaint}`,
+                                    '&:hover': {
+                                        borderColor: c.burgundy,
+                                        background: c.panel,
+                                        boxShadow: `0 4px 16px ${c.burgundyGlow}`,
+                                        transform: 'translateY(-2px)',
+                                    },
+                                }}
+                            >
+                                <Typography sx={{ fontSize: '1.1rem', lineHeight: 1 }}>
+                                    {trip.flag}
+                                </Typography>
+                                <Typography
+                                    sx={{
+                                        fontFamily: f.sans,
+                                        fontSize: '0.8rem',
+                                        color: c.ink,
+                                        fontWeight: 500,
+                                        maxWidth: 180,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                    }}
+                                >
+                                    {trip.name}
+                                </Typography>
+                            </Box>
+                        ))}
+                    </Box>
+                )}
             </Box>
+
+            {/* Trip detail dialog */}
+            <TripDetailDialog trip={selectedTrip} onClose={() => setSelectedTrip(null)} />
         </>
     );
 }

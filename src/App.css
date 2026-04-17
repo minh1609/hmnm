@@ -322,12 +322,8 @@
     100% {
         transform: scale(1);
     }
-    45%,
     50% {
-        transform: scale(1.12);
-    }
-    95% {
-        transform: scale(1);
+        transform: scale(1.07);
     }
 }
 

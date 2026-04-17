@@ -21,10 +21,12 @@ export interface Trip {
     startDate: Date;
     /** Firestore index */
     endDate: Date;
-    highlights: string[];
     destinations: TripDestination[];
+    /** [longitude, latitude] for map pin placement */
+    coordinates: [number, number];
     /** Firestore index */
     owner: string;
+    notes?: string;
 }
 
 export interface TimelineEvent {
