@@ -2,6 +2,7 @@ import { Box, Typography, Dialog, DialogContent } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useTheme } from '@mui/material/styles';
 import type { Trip } from '@/types';
+import { getTripTypeStyle } from '@/utils';
 
 function formatDateRange(start: Date, end: Date): string {
     const opts: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -22,6 +23,8 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
         tokens: { colors: c, fonts: f },
     } = useTheme();
 
+    const ts = trip ? getTripTypeStyle(trip.type) : null;
+
     return (
         <Dialog
             open={!!trip}
@@ -33,7 +36,7 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                     borderRadius: '12px',
                     background: c.surface,
                     border: `1px solid ${c.border}`,
-                    borderTop: `3px solid ${c.burgundy}`,
+                    borderTop: `3px solid ${ts?.pin ?? c.burgundy}`,
                     overflow: 'hidden',
                     m: { xs: 2, sm: 4 },
                     position: 'relative',
@@ -44,7 +47,7 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: `linear-gradient(90deg, transparent, ${c.roseGlow}, transparent)`,
+                        background: `linear-gradient(90deg, transparent, ${ts?.halo ?? c.roseGlow}, transparent)`,
                         zIndex: 1,
                     },
                 },
@@ -64,7 +67,7 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                         }}
                     >
                         <Box sx={{ flex: 1, pr: 1 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                                 <Typography sx={{ fontSize: '2rem', lineHeight: 1 }}>{trip.flag}</Typography>
                                 <Typography
                                     sx={{
@@ -78,6 +81,26 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                                 >
                                     {trip.name}
                                 </Typography>
+                                {trip.type === 'plan' && (
+                                    <Typography
+                                        sx={{
+                                            fontFamily: f.sans,
+                                            fontSize: '0.62rem',
+                                            fontWeight: 700,
+                                            letterSpacing: '0.12em',
+                                            color: ts?.pin ?? c.brown,
+                                            background: ts?.glow ?? c.brownGlow,
+                                            border: `1px solid ${ts?.halo ?? c.brownGlow}`,
+                                            borderRadius: '4px',
+                                            px: 1,
+                                            py: 0.4,
+                                            lineHeight: 1.4,
+                                            alignSelf: 'center',
+                                        }}
+                                    >
+                                        FUTURE
+                                    </Typography>
+                                )}
                             </Box>
 
                             {trip.destinations && trip.destinations.length > 0 && (
@@ -144,7 +167,7 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                                         fontWeight: 700,
                                         fontSize: '1.6rem',
                                         lineHeight: 1,
-                                        color: c.burgundy,
+                                        color: ts?.pin ?? c.burgundy,
                                         letterSpacing: '-0.03em',
                                     }}
                                 >
@@ -211,7 +234,7 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                     <Box
                         sx={{
                             height: '2px',
-                            background: `linear-gradient(90deg, transparent 0%, ${c.roseDark} 30%, ${c.rose} 50%, ${c.roseDark} 70%, transparent 100%)`,
+                            background: ts?.gradient,
                             opacity: 0.5,
                         }}
                     />

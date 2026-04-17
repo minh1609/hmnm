@@ -3,6 +3,46 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import React from 'react';
+import type { TripType } from '@/types';
+import { tokens } from '@/theme';
+
+const { colors: c } = tokens;
+
+export type TripTypeStyle = {
+    /** Solid pin / accent colour */
+    pin: string;
+    /** Semi-transparent halo fill */
+    halo: string;
+    /** Very faint tint for card shadows / backgrounds */
+    glow: string;
+    /** Accent gradient used for bottom rule in dialogs */
+    gradient: string;
+};
+
+const TRIP_TYPE_STYLES: Record<TripType, TripTypeStyle> = {
+    trip: {
+        pin: c.burgundy,
+        halo: c.burgundyGlow,
+        glow: c.burgundyGlowFaint,
+        gradient: `linear-gradient(90deg, transparent 0%, ${c.burgundyDark} 30%, ${c.burgundy} 50%, ${c.burgundyDark} 70%, transparent 100%)`,
+    },
+    meaningful: {
+        pin: c.amber,
+        halo: c.amberGlow,
+        glow: c.amberGlowFaint,
+        gradient: `linear-gradient(90deg, transparent 0%, ${c.amber} 30%, ${c.amberLight} 50%, ${c.amber} 70%, transparent 100%)`,
+    },
+    plan: {
+        pin: c.brown,
+        halo: c.brownGlow,
+        glow: c.brownGlow,
+        gradient: `linear-gradient(90deg, transparent 0%, ${c.brownLight} 30%, ${c.brown} 50%, ${c.brownLight} 70%, transparent 100%)`,
+    },
+};
+
+export function getTripTypeStyle(type: TripType): TripTypeStyle {
+    return TRIP_TYPE_STYLES[type] ?? TRIP_TYPE_STYLES.trip;
+}
 
 export type SeasonInfo = {
     icon: React.ReactElement;

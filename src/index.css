@@ -28,6 +28,12 @@
     --brown-light: #8d6e63;
     --brown-glow: rgba(109, 76, 65, 0.28);
 
+    /* Quaternary — Warm Amber */
+    --amber: #b8762a;
+    --amber-light: #d4994a;
+    --amber-glow: rgba(184, 118, 42, 0.30);
+    --amber-glow-faint: rgba(184, 118, 42, 0.12);
+
     /* Backgrounds */
     --cream: #faf7f2;
     --cream-dark: #f0ebe3;

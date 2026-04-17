@@ -20,7 +20,9 @@ const FADE_MS = 600;
 export function ReasonILikeYou() {
     const [index, setIndex] = useState(0);
     const [visible, setVisible] = useState(true);
-    const { tokens: { colors: c, fonts: f } } = useTheme();
+    const {
+        tokens: { colors: c, fonts: f },
+    } = useTheme();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -71,7 +73,7 @@ export function ReasonILikeYou() {
                 component="span"
                 sx={{
                     display: 'inline-block',
-                    width: '11ch',
+                    width: '8ch',
                     textAlign: 'left',
                 }}
             >

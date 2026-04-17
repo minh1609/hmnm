@@ -8,6 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import { PageHeader } from '@/components/PageHeader';
 import { TripDetailDialog } from '@/components/TripDetailDialog';
 import type { Trip } from '@/types';
+import { getTripTypeStyle } from '@/utils';
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
@@ -30,7 +31,7 @@ export function TripsPage() {
         <>
             <Box sx={{ minHeight: '100vh', pb: 6, backgroundColor: c.cream }}>
                 <PageHeader
-                    title={`Trips Together · ${trips.length} trip${trips.length !== 1 ? 's' : ''}`}
+                    title={`Trips Together · ${trips.filter(t => t.type === 'trip').length} trip${trips.filter(t => t.type === 'trip').length !== 1 ? 's' : ''}`}
                 />
 
                 {/* World map */}
@@ -77,6 +78,7 @@ export function TripsPage() {
 
                             {mappedTrips.map(trip => {
                                 const s = 1 / mapZoom;
+                                const ts = getTripTypeStyle(trip.type);
                                 return (
                                     <Marker
                                         key={trip.name}
@@ -84,7 +86,7 @@ export function TripsPage() {
                                         onClick={() => setSelectedTrip(trip)}
                                     >
                                         {/* Pulsing halo */}
-                                        <circle r={12 * s} fill={c.burgundyGlow} stroke="none">
+                                        <circle r={12 * s} fill={ts.halo} stroke="none">
                                             <animate
                                                 attributeName="r"
                                                 from={8 * s}
@@ -104,7 +106,7 @@ export function TripsPage() {
                                         {/* Pin dot */}
                                         <circle
                                             r={7 * s}
-                                            fill={c.burgundy}
+                                            fill={ts.pin}
                                             stroke={c.surface}
                                             strokeWidth={2 * s}
                                             style={{ cursor: 'pointer' }}
@@ -118,7 +120,7 @@ export function TripsPage() {
                                                 fontSize: `${16 * s}px`,
                                                 userSelect: 'none',
                                                 cursor: 'pointer',
-                                                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.18))',
+                                                filter: `drop-shadow(0 1px 3px ${ts.halo})`,
                                             }}
                                         >
                                             {trip.flag}
@@ -223,7 +225,9 @@ export function TripsPage() {
                             pb: 2,
                         }}
                     >
-                        {mappedTrips.map(trip => (
+                        {mappedTrips.map(trip => {
+                            const ts = getTripTypeStyle(trip.type);
+                            return (
                             <Box
                                 key={trip.name}
                                 onClick={() => setSelectedTrip(trip)}
@@ -238,11 +242,11 @@ export function TripsPage() {
                                     background: c.surface,
                                     cursor: 'pointer',
                                     transition: 'all 0.18s ease',
-                                    boxShadow: `0 2px 8px ${c.burgundyGlowFaint}`,
+                                    boxShadow: `0 2px 8px ${ts.glow}`,
                                     '&:hover': {
-                                        borderColor: c.burgundy,
+                                        borderColor: ts.pin,
                                         background: c.panel,
-                                        boxShadow: `0 4px 16px ${c.burgundyGlow}`,
+                                        boxShadow: `0 4px 16px ${ts.halo}`,
                                         transform: 'translateY(-2px)',
                                     },
                                 }}
@@ -264,8 +268,29 @@ export function TripsPage() {
                                 >
                                     {trip.name}
                                 </Typography>
+                                {trip.type === 'plan' && (
+                                    <Typography
+                                        sx={{
+                                            fontFamily: f.sans,
+                                            fontSize: '0.58rem',
+                                            fontWeight: 700,
+                                            letterSpacing: '0.1em',
+                                            color: ts.pin,
+                                            background: ts.glow,
+                                            border: `1px solid ${ts.halo}`,
+                                            borderRadius: '4px',
+                                            px: 0.75,
+                                            py: 0.25,
+                                            lineHeight: 1.4,
+                                            flexShrink: 0,
+                                        }}
+                                    >
+                                        FUTURE
+                                    </Typography>
+                                )}
                             </Box>
-                        ))}
+                            );
+                        })}
                     </Box>
                 )}
             </Box>

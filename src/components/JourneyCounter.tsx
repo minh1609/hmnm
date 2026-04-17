@@ -201,7 +201,7 @@ export function JourneyCounter({ title }: JourneyCounterProps) {
                 <StatCard value={values.hoursToday} label="Hours Today" icon={<ScheduleRoundedIcon />} live />
                 <StatCard value={values.minutesPast} label="Minutes Past" icon={<TimerRoundedIcon />} live />
                 <StatCard
-                    value={trips.length}
+                    value={trips.filter(t => t.type === 'trip').length}
                     label="Trips Taken"
                     icon={<ExploreRoundedIcon />}
                     onClick={() => navigate('/trips')}

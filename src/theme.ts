@@ -32,6 +32,12 @@ export const tokens = {
         brownLight: '#8D6E63',
         brownGlow: 'rgba(109, 76, 65, 0.28)',
 
+        // Quaternary — Warm Amber (used for "meaningful" trip type)
+        amber: '#B8762A',
+        amberLight: '#D4994A',
+        amberGlow: 'rgba(184, 118, 42, 0.30)',
+        amberGlowFaint: 'rgba(184, 118, 42, 0.12)',
+
         // Backgrounds (warm light)
         cream: '#FAF7F2',
         creamDark: '#F0EBE3',

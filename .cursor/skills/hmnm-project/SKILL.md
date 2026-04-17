@@ -34,11 +34,21 @@ src/
 │   ├── HomePage.tsx     # Main timeline page: year selector, MUI Timeline, swipe nav
 │   └── TripsPage.tsx    # Trips page: trip cards with destinations + highlights
 └── components/
-    ├── FallingObjects.tsx   # Ambient particle system — falling images + emoji icons
-    ├── JourneyCounter.tsx   # Live stat cards (days, hours today, minutes past, trips)
-    ├── FerrariTooltip.tsx   # Styled MUI Tooltip (Ferrari dark theme)
-    ├── IconBurst.tsx        # Emoji particle burst effect (portal into document.body)
-    └── HeartDivider.tsx     # Decorative ♥ divider (currently unused)
+    ├── FallingObjects.tsx      # Ambient particle system — falling images + emoji icons
+    ├── JourneyCounter.tsx      # Live circular stat cards (days, hours today, minutes past, trips)
+    ├── PageHeader.tsx          # Sticky/non-sticky header with back button, title, AuthButton
+    ├── TripDetailDialog.tsx    # MUI Dialog showing full trip details (type-coloured)
+    ├── CustomTooltip.tsx       # Styled MUI Tooltip (heritage dark theme)
+    ├── AuthButton.tsx          # Firebase Auth sign-in/out button
+    ├── IconBurst.tsx           # Emoji particle burst effect (portal into document.body)
+    ├── YearDescription.tsx     # Animated year description banner
+    ├── CreateEventDialog.tsx   # Dialog to create a new timeline event
+    ├── DeleteEventDialog.tsx   # Confirmation dialog for event deletion
+    ├── GfNoteDialog.tsx        # Dialog for editing gfNote on an event
+    ├── ReasonILikeYou.tsx      # Decorative reasons-I-like-you component
+    ├── YesCelebration.tsx      # Celebration animation component
+    ├── ScrollToTopFab.tsx      # Floating action button — scroll to top
+    └── AddEventFab.tsx         # Floating action button — add timeline event
 
 public/
 └── particles/           # Transparent PNGs used by FallingObjects (pen.png, fer.png)
@@ -83,9 +93,10 @@ export function useTimeline(): Record<number, TimelineYear>;
 ### `useTrips` (`src/hooks/useTrips.ts`)
 
 ```ts
-export function useTrips(): Trip[];
+export function useTrips(): { trips: Trip[] };
 ```
 
+- Returns `{ trips }`, not a bare array.
 - Queries `trips` collection: `where('owner', '==', 'mindy')`, `orderBy('startDate', 'asc')`.
 - Converts Firestore `Timestamp` fields (`startDate`, `endDate`) to `Date` via local `toDate()`.
 - Falls back to the static `trips` array from `@/data` if collection is empty or unreachable.
@@ -134,6 +145,12 @@ tokens.colors.brown; // #6D4C41
 tokens.colors.brownLight; // #8D6E63
 tokens.colors.brownGlow; // rgba(109,76,65,0.28)
 
+// Quaternary — Warm Amber (used for "meaningful" trip type)
+tokens.colors.amber; // #B8762A
+tokens.colors.amberLight; // #D4994A
+tokens.colors.amberGlow; // rgba(184,118,42,0.30)
+tokens.colors.amberGlowFaint; // rgba(184,118,42,0.12)
+
 // Backgrounds (warm light)
 tokens.colors.cream; // #FAF7F2  — page background
 tokens.colors.creamDark; // #F0EBE3
@@ -165,6 +182,17 @@ tokens.colors.white; // #FFFFFF
 | `text.secondary`     | inkMuted (`#7A6356`) |
 
 > Mode is **light**. `primary` is burgundy, `secondary` is dusty rose.
+
+**Accessing tokens in components** — always use `useTheme()`, never import `tokens` directly:
+
+```ts
+import { useTheme } from '@mui/material/styles';
+
+const { tokens: { colors: c, fonts: f } } = useTheme();
+// c.burgundy, f.display, etc.
+```
+
+The theme is augmented (`declare module`) so `theme.tokens` is fully typed.
 
 **Fonts** (loaded via Google Fonts in `index.html`):
 
@@ -225,27 +253,19 @@ All shared interfaces live here. Import from `@/types`.
 ```ts
 export interface ImageFile {
     file: string; // filename inside public/particles/
-    label: string; // shown in FerrariTooltip on hover
+    label: string; // shown in tooltip on hover
 }
 
 export interface Icon {
     symbol: string; // emoji or text symbol
-    color: string; // CSS color (ignored for emojis, which render in their own colors)
-    label: string; // shown in FerrariTooltip on hover
+    color: string; // CSS color (ignored for emojis)
+    label: string; // shown in tooltip on hover
 }
 
-export interface TimelineEvent {
-    date: Date; // Use new Date('YYYY-MM-DDTHH:mm:ss')
-    name: string; // Event title — shown in UPPERCASE via CSS
-    des?: string; // Optional detail(s) shown in FerrariTooltip via LightbulbIcon
-    burstIcon?: string; // Optional emoji — clicking the date Chip triggers IconBurst
-    owner: string; // Firestore filter key (e.g. 'mindy')
-}
-
-export interface TimelineYear {
-    description: string; // Shown above the timeline (Barlow Condensed, uppercase)
-    events: TimelineEvent[];
-}
+export type TripType = 'trip' | 'meaningful' | 'plan';
+// 'trip'        — completed trip (burgundy pins)
+// 'meaningful'  — meaningful/special place (amber pins)
+// 'plan'        — future planned trip (brown pins, "FUTURE" badge)
 
 export interface TripDestination {
     name: string;
@@ -254,12 +274,29 @@ export interface TripDestination {
 
 export interface Trip {
     name: string;
-    flag: string; // Country flag emoji
-    startDate: Date;
-    endDate: Date;
-    highlights: string[]; // Bullet points shown in card body
-    destinations: TripDestination[];
-    owner: string; // Firestore filter key (e.g. 'mindy')
+    flag: string;                          // Country flag emoji
+    startDate?: Date;                      // Optional — plans may not have dates yet
+    endDate?: Date;                        // Optional
+    destinations?: TripDestination[];      // Optional
+    coordinates: [number, number];         // [longitude, latitude] — required for map pin
+    owner: string;                         // Firestore filter key (e.g. 'mindy')
+    type: TripType;                        // Required — controls pin color + FUTURE badge
+    notes?: string;                        // Optional free-text notes shown in dialog
+}
+
+export interface TimelineEvent {
+    id?: string;        // Firestore document ID — present for Firestore docs, absent for static data
+    date: Date;         // Use new Date('YYYY-MM-DDTHH:mm:ss')
+    name: string;       // Event title — shown in UPPERCASE via CSS
+    des?: string;       // Optional detail shown in tooltip via LightbulbIcon
+    burstIcon?: string; // Optional emoji — clicking the date Chip triggers IconBurst
+    owner: string;      // Firestore filter key (e.g. 'mindy')
+    gfNote?: string;    // Note added by gf role — only editable by gf
+}
+
+export interface TimelineYear {
+    description: string; // Shown above the timeline
+    events: TimelineEvent[];
 }
 ```
 
@@ -298,8 +335,13 @@ Each event must include `owner: 'mindy'` to match the Firestore query filter.
 
 ### Trips (`trips.ts`)
 
-To add a new trip: append a `Trip` object (including `owner: 'mindy'`) to the `trips` array.  
-`TRIPS_TAKEN` in `JourneyCounter.tsx` is `trips.length` — it updates automatically; **no manual increment needed**.
+To add a new trip: append a `Trip` object (including `owner: 'mindy'` and `coordinates: [lon, lat]`) to the `trips` array.
+
+- `type: 'trip'` — a completed trip (burgundy map pin).
+- `type: 'meaningful'` — a special/meaningful place (amber map pin).
+- `type: 'plan'` — a future planned trip (brown map pin + "FUTURE" badge in dialog).
+- `startDate`/`endDate` and `destinations` are optional for plans without dates yet.
+- `TRIPS_TAKEN` in `JourneyCounter.tsx` counts only entries where `type === 'trip'` — it updates automatically; **no manual increment needed**.
 
 ### Falling objects (`objects.ts`)
 
@@ -332,10 +374,12 @@ To add new falling icons/emoji: append `{ symbol, color, label }` to `ICONS`.
 
 ### `TripsPage` (`src/pages/TripsPage.tsx`)
 
-- Sticky header with back button (navigates to `/`), title, and trip count.
-- Trip cards styled with gold border-top and gradient pattern (same `StatCard` card pattern).
-- Each card shows: flag + name, destinations (linked if `googleMapLink` set), date range, duration badge, highlights list.
-- Empty state: shows "More adventures to come ✈️" in Great Vibes script font.
+- `PageHeader` at the top: title shows trip count (only `type === 'trip'` entries), back button navigates to `/`.
+- **Interactive world map** (`react-simple-maps` — `ComposableMap` + `ZoomableGroup`): countries from `world-atlas@2` CDN, zoom controls (+/−) in the bottom-right corner.
+- Each trip is a **map pin** coloured by `getTripTypeStyle(trip.type)`: pulsing halo + solid pin dot + flag emoji above.
+- Clicking a pin → opens `TripDetailDialog`.
+- **Trip pills row** below the map: horizontal wrapping row of pill buttons, one per trip. Each pill shows flag + name + "FUTURE" badge (for plans). Clicking a pill opens `TripDetailDialog`.
+- Empty state on map: "More adventures to come ✈️" when no trips exist.
 
 ## Components
 
@@ -352,16 +396,38 @@ Ambient particle effect rendered via `createPortal` into `document.body` (fixed,
 ### `JourneyCounter` (`src/components/JourneyCounter.tsx`)
 
 - `FIRST_DATE` constant: `new Date('2025-08-26T00:00:00')` — update if start date changes.
-- `TRIPS_TAKEN = trips.length` — automatically stays in sync with the trips array; no manual update needed.
+- Trips taken count: `trips.filter(t => t.type === 'trip').length` — only real trips, automatically in sync.
 - `getCounterValues()` returns `{ days, hoursToday, minutesPast }`.
 - Refreshes every **30 seconds** via `setInterval`.
-- `StatCard` props: `value`, `label`, `live` (pulsing gold dot), `onClick`, `sx`.
+- `StatCard` props: `value`, `label`, `icon` (watermark MUI icon), `live` (pulsing rose dot), `onClick`, `sx`.
+- Cards are **circular** — `borderRadius: '50%'`, watermark icon at 5.5% opacity in background, value centered in burgundy italic serif.
 - "Trips Taken" card is clickable and navigates to `/trips`.
-- Card pattern: `borderTop: 3px solid gold`, `::before` top shimmer, `::after` bottom gold gradient line, hover lifts with gold glow.
+- Hover lifts the circle with `burgundyGlow` box-shadow.
 
-### `FerrariTooltip` (`src/components/FerrariTooltip.tsx`)
+### `PageHeader` (`src/components/PageHeader.tsx`)
 
-A styled MUI `Tooltip` with Ferrari dark theme: `surface` background, white text, `border` outline, red glow shadow. Touch-friendly (`enterTouchDelay={0}`, `leaveTouchDelay={4000}`). Used in `HomePage` to show `event.des` details on the `LightbulbIcon`, and in `FallingObjects` to show particle labels.
+Reusable sticky/non-sticky header used by all secondary pages.
+
+Props:
+
+| Prop        | Type     | Default | Description                                          |
+| ----------- | -------- | ------- | ---------------------------------------------------- |
+| `title`     | `string` | —       | Displayed in display serif font                       |
+| `onBack`    | `() => void` | navigate('/') | Custom back handler                         |
+| `showBack`  | `boolean`| `true`  | Show/hide the back arrow button                      |
+| `sticky`    | `boolean`| `true`  | Whether to apply `position: sticky` + `top: 0`      |
+
+- Shows a "Dev Mode" amber badge in `import.meta.env.DEV`.
+- Renders `AuthButton` on the right side.
+
+### `TripDetailDialog` (`src/components/TripDetailDialog.tsx`)
+
+MUI `Dialog` that opens when a trip pin or pill is clicked on `TripsPage`.
+
+- `borderTop` coloured by `getTripTypeStyle(trip.type).pin`.
+- Shows: flag + name heading, "FUTURE" badge (plans only), destinations (linked if `googleMapLink`), duration badge (days count), date range, and `trip.notes` (italic serif, muted).
+- Bottom accent line uses `getTripTypeStyle().gradient`.
+- Props: `trip: Trip | null`, `onClose: () => void`.
 
 ### `IconBurst` (`src/components/IconBurst.tsx`)
 
@@ -381,33 +447,70 @@ Renders emoji particles via `createPortal` that burst outward from `(x, y)` coor
 
 Retrigger without remount: remove class → force reflow (`offsetHeight`) → re-add class.
 
-## Season chips (`src/utils.tsx`)
+## Utils (`src/utils.tsx`)
 
-`getSeason(date)` returns `{ icon, color, bgColor }` based on month:
+### `getSeason(date)`
 
-| Months | Season | Color            |
-| ------ | ------ | ---------------- |
-| 3–5    | Spring | Purple `#a855f7` |
-| 6–8    | Summer | Amber `#f59e0b`  |
-| 9–10   | Autumn | Orange `#ea580c` |
-| 11–2   | Winter | Blue `#3b82f6`   |
+Returns `SeasonInfo` based on month:
+
+```ts
+export type SeasonInfo = {
+    icon: React.ReactElement;
+    color: string;
+    bgColor: string;
+    weatherEmojis: string[]; // season-appropriate emoji for use in UI
+};
+```
+
+| Months | Season | Color            | bgColor    |
+| ------ | ------ | ---------------- | ---------- |
+| 3–5    | Spring | Purple `#a855f7` | `#f3e8ff`  |
+| 6–8    | Summer | Amber `#f59e0b`  | `#fef3c7`  |
+| 9–10   | Autumn | Orange `#ea580c` | `#ffedd5`  |
+| 11–2   | Winter | Blue `#3b82f6`   | `#dbeafe`  |
+
+### `getTripTypeStyle(type)`
+
+```ts
+export type TripTypeStyle = {
+    pin: string;      // solid pin / accent colour
+    halo: string;     // semi-transparent halo fill for SVG animate
+    glow: string;     // very faint tint for card shadows / backgrounds
+    gradient: string; // accent gradient for dialog bottom rule
+};
+
+export function getTripTypeStyle(type: TripType): TripTypeStyle;
+```
+
+| TripType      | Pin colour    | Token source  |
+| ------------- | ------------- | ------------- |
+| `'trip'`      | burgundy      | `c.burgundy`  |
+| `'meaningful'`| amber         | `c.amber`     |
+| `'plan'`      | brown         | `c.brown`     |
+
+Use this wherever a UI element should be coloured by trip type (map pins, dialog border, card accents).
 
 ## Conventions
 
-- Import `tokens` from `@/theme` for all color/font values in `sx` props.
+- Access tokens via `useTheme().tokens` in components — **never** import `tokens` directly from `@/theme` in component files.
 - MUI theme is **light mode**; `primary` = burgundy, `secondary` = dusty rose.
 - Typography variants `h1`/`h2`/`h3` use `fonts.display` (Newsreader serif) — no auto-uppercase.
-- Use `variant="caption"` for small label text — it uses `fonts.sans` with letter-spacing.
-- Card pattern: `borderTop: 3px solid burgundy`, `::before` top rose shimmer, `::after` bottom rose gradient, hover lifts with `burgundyGlow` shadow.
+- Use `variant="caption"` for small label text — it uses `fonts.sans` with letter-spacing + uppercase.
 - Use `fontStyle: 'italic'` with `fonts.display` (Newsreader) for romantic / script-style text.
+- Card pattern: `borderTop: 3px solid <color>`, `::before` top shimmer gradient, `::after` bottom gradient line, hover lifts with glow shadow.
 - Keep `@/` alias (not relative imports) for all `src/` imports.
-- `des` field supports both `string` and `string[]` — always handle both cases.
+- `des` field on `TimelineEvent` is `string | undefined` — treat as plain string.
 - `burstIcon` on a `TimelineEvent` makes the date Chip interactive and fires `IconBurst` on click.
 - All shared interfaces go in `src/types.ts`; import from `@/types`.
 - All tunable constants (counts, sizes, timings) go in `src/config.ts`; never hardcode magic numbers in components.
 - All data (events, trips, particles) lives in the active profile folder under `src/data/`; components import from `@/data`.
-- Always include `owner: 'mindy'` on every `TimelineEvent` and `Trip` object — it is required by the Firestore query filter.
+- Always include `owner: 'mindy'` on every `TimelineEvent` and `Trip` object — required by Firestore query filter.
+- Always include `coordinates: [lon, lat]` on every `Trip` object — required for map pin placement.
+- Always include `type: TripType` on every `Trip` object.
 - Use `useTimeline()` and `useTrips()` hooks in pages/components instead of importing static data directly.
+- `useTrips()` returns `{ trips }` — destructure accordingly.
+- For trip-type-dependent colours, use `getTripTypeStyle(trip.type)` from `@/utils` — never hardcode trip type colours.
+- CSS custom properties in `index.css` mirror `tokens` in `theme.ts` — keep them in sync when adding new colour tokens.
 
 ## Dev commands
 
