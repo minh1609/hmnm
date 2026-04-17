@@ -187,10 +187,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                             sx={inputSx}
                             inputProps={{ maxLength: 4 }}
                         />
-                        <Typography
-                            variant="body2"
-                            sx={{ mt: 0.5, color: c.inkMuted, fontSize: '0.75rem' }}
-                        >
+                        <Typography variant="body2" sx={{ mt: 0.5, color: c.inkMuted, fontSize: '0.75rem' }}>
                             Tap the date chip on the timeline to trigger this icon burst.
                         </Typography>
                     </Box>
@@ -198,11 +195,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
             </DialogContent>
 
             <DialogActions sx={dialogActionsSx(theme)}>
-                <Button
-                    onClick={handleClose}
-                    disabled={saving}
-                    sx={secondaryButtonSx(theme)}
-                >
+                <Button onClick={handleClose} disabled={saving} sx={secondaryButtonSx(theme)}>
                     Cancel
                 </Button>
                 <Button

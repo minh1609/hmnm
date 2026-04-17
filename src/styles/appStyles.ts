@@ -39,14 +39,25 @@ export const dialogActionsSx = (theme: Theme) => ({
     gap: 1,
 });
 
-/** Ghost secondary button — muted text, subtle border, turns ink on hover. */
+/** Ghost secondary button — muted text, subtle border, turns burgundy on hover. */
 export const secondaryButtonSx = (theme: Theme) => ({
     fontFamily: theme.tokens.fonts.sans,
     fontWeight: 600,
-    letterSpacing: '0.04em',
+    fontSize: '0.85rem',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
     color: theme.tokens.colors.inkMuted,
     border: `1px solid ${theme.tokens.colors.border}`,
-    '&:hover': { color: theme.tokens.colors.ink, backgroundColor: theme.tokens.colors.creamDark },
+    borderRadius: '999px',
+    px: 3,
+    py: 1,
+    backdropFilter: 'blur(4px)',
+    backgroundColor: `${theme.tokens.colors.creamDark}CC`,
+    '&:hover': {
+        backgroundColor: theme.tokens.colors.surface,
+        borderColor: theme.tokens.colors.burgundy,
+        color: theme.tokens.colors.burgundy,
+    },
 });
 
 /**
@@ -60,11 +71,16 @@ export const primaryButtonSx = (
     theme: Theme,
     bg: string,
     hover: string,
-    textColor: string = theme.tokens.colors.white,
+    textColor: string = theme.tokens.colors.white
 ) => ({
     fontFamily: theme.tokens.fonts.sans,
     fontWeight: 600,
-    letterSpacing: '0.04em',
+    fontSize: '0.85rem',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    borderRadius: '999px',
+    px: 3,
+    py: 1,
     backgroundColor: bg,
     color: textColor,
     '&:hover': { backgroundColor: hover },
@@ -109,42 +125,4 @@ export const errorAlertSx = (theme: Theme) => ({
     color: theme.tokens.colors.burgundyDark,
     border: `1px solid ${theme.tokens.colors.rose}`,
     '& .MuiAlert-icon': { color: theme.tokens.colors.burgundy },
-});
-
-// ─── FAB ────────────────────────────────────────────────────────────────────
-
-/**
- * Floating action button in the burgundy brand colour with a float animation.
- * Handles all visual styling (colours, shadow, animation, hover) but not
- * positioning — set `position`, `bottom`, `right`, and `zIndex` at the call site.
- */
-export const burgundyFabSx = (theme: Theme) => ({
-    px: 2.5,
-    gap: 1,
-    borderRadius: '999px',
-    backgroundColor: theme.tokens.colors.burgundy,
-    color: theme.tokens.colors.white,
-    border: `1px solid ${theme.tokens.colors.burgundyDark}`,
-    boxShadow: `0 6px 16px ${theme.tokens.colors.burgundyGlow}, 0 2px 6px rgba(0,0,0,0.12)`,
-    animation: 'fabFloat 3s ease-in-out infinite',
-    '@keyframes fabFloat': {
-        '0%, 100%': { transform: 'translateY(0px)' },
-        '50%': { transform: 'translateY(-6px)' },
-    },
-    transition: 'transform 2s ease, box-shadow 0.5s ease, background-color 0.5s ease',
-    '&:hover': {
-        backgroundColor: theme.tokens.colors.burgundyLight,
-        boxShadow: `0 10px 28px ${theme.tokens.colors.burgundyGlow}`,
-        animation: 'none',
-        transform: 'translateY(-4px) scale(1.05)',
-    },
-});
-
-/** Typography label inside a FAB — tight, weighted, sans-serif. */
-export const fabLabelSx = (theme: Theme) => ({
-    fontFamily: theme.tokens.fonts.sans,
-    fontWeight: 600,
-    fontSize: '0.85rem',
-    letterSpacing: '0.04em',
-    lineHeight: 1,
 });

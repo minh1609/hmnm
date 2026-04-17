@@ -1,6 +1,7 @@
 import { Box, Typography, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { secondaryButtonSx } from '@/styles/appStyles';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 
 const PARTICLE_EMOJIS = ['❤️', '💕', '💖', '💗', '💓', '🥰', '✨', '💝', '🌸', '⭐'];
@@ -14,7 +15,10 @@ const HEART_PARTICLES = Array.from({ length: 32 }, (_, i) => ({
 }));
 
 export function YesCelebration() {
-    const { tokens: { colors: c, fonts: f } } = useTheme();
+    const theme = useTheme();
+    const {
+        tokens: { colors: c, fonts: f },
+    } = theme;
     const navigate = useNavigate();
 
     return (
@@ -117,27 +121,9 @@ export function YesCelebration() {
                     startIcon={<HomeOutlinedIcon />}
                     onClick={() => navigate('/')}
                     sx={{
+                        ...secondaryButtonSx(theme),
                         mt: 4,
-                        opacity: 0,
                         animation: 'subReveal 1s ease 7s forwards',
-                        fontFamily: f.sans,
-                        fontWeight: 600,
-                        fontSize: '0.85rem',
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        color: c.inkMuted,
-                        borderColor: c.border,
-                        border: '1px solid',
-                        borderRadius: '8px',
-                        px: 3,
-                        py: 1,
-                        backdropFilter: 'blur(4px)',
-                        backgroundColor: `${c.creamDark}CC`,
-                        '&:hover': {
-                            backgroundColor: c.surface,
-                            borderColor: c.burgundy,
-                            color: c.burgundy,
-                        },
                     }}
                 >
                     Go Home

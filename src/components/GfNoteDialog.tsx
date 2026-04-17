@@ -102,11 +102,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
             </DialogContent>
 
             <DialogActions sx={dialogActionsSx(theme)}>
-                <Button
-                    onClick={handleClose}
-                    disabled={saving}
-                    sx={secondaryButtonSx(theme)}
-                >
+                <Button onClick={handleClose} disabled={saving} sx={secondaryButtonSx(theme)}>
                     Cancel
                 </Button>
                 <Button
@@ -114,11 +110,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                     disabled={saving}
                     variant="contained"
                     startIcon={
-                        saving ? (
-                            <CircularProgress size={14} thickness={3} sx={{ color: c.white }} />
-                        ) : (
-                            <FavoriteIcon />
-                        )
+                        saving ? <CircularProgress size={14} thickness={3} sx={{ color: c.white }} /> : <FavoriteIcon />
                     }
                     sx={primaryButtonSx(theme, c.burgundy, c.burgundyLight)}
                 >
