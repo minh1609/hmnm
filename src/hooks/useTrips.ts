@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, orderBy, type Timestamp } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { activeProfile } from '@/config';
-import type { Trip } from '@/types';
+import type { Trip, TripType } from '@/types';
 
 function toDate(val: unknown): Date {
     if (val != null && typeof (val as Timestamp).toDate === 'function') {
@@ -21,7 +21,7 @@ export function invalidateTripsCache() {
 /**
  * Reads the `trips` collection from Firestore (owner == activeProfile, ordered by startDate).
  *
- * Firestore document fields: { name, flag, startDate, endDate, destinations, coordinates, owner }
+ * Firestore document fields: { name, flag, startDate, endDate, destinations, coordinates, type, owner }
  *
  * Results are held in a module-level cache for the tab session. Call
  * `invalidateTripsCache()` before mounting to force a fresh network read.
@@ -46,10 +46,11 @@ export function useTrips(): { trips: Trip[]; loading: boolean } {
                     return {
                         name: d.name as string,
                         flag: d.flag as string,
-                        startDate: toDate(d.startDate),
-                        endDate: toDate(d.endDate),
+                        ...(d.startDate != null && { startDate: toDate(d.startDate) }),
+                        ...(d.endDate != null && { endDate: toDate(d.endDate) }),
                         destinations: (d.destinations ?? []) as Trip['destinations'],
                         coordinates: (d.coordinates ?? [0, 0]) as Trip['coordinates'],
+                        type: (d.type ?? 'trip') as TripType,
                         ...(d.notes != null && { notes: d.notes as string }),
                         owner: d.owner as string,
                     } satisfies Trip;

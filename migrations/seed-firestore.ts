@@ -17,7 +17,7 @@
  *
  * Firestore schema written:
  *   timeline_events/{autoId}  →  { date, name, des?, burstIcon?, gfNote?, owner }
- *   trips/{autoId}            →  { name, flag, startDate, endDate, highlights, destinations, owner }
+ *   trips/{autoId}            →  { name, flag, startDate, endDate, destinations, coordinates, type, owner }
  *   users/{uid}               →  { role: 'admin' }
  */
 
@@ -81,7 +81,7 @@ async function migrateTrips() {
     let added = 0;
     let skipped = 0;
     for (const trip of trips) {
-        const key = toDateKey(trip.startDate);
+        const key = trip.startDate ? toDateKey(trip.startDate) : `nodate::${trip.name}`;
 
         if (existingKeys.has(key)) {
             log('seed', `  ~ skipped  "${trip.name}" (${key}) — already exists`);
@@ -91,8 +91,8 @@ async function migrateTrips() {
 
         const ref = await col.add({
             ...trip,
-            startDate: toTimestamp(trip.startDate),
-            endDate: toTimestamp(trip.endDate),
+            ...(trip.startDate && { startDate: toTimestamp(trip.startDate) }),
+            ...(trip.endDate && { endDate: toTimestamp(trip.endDate) }),
         });
         log('seed', `  ✓ added    "${trip.name}"  (id: ${ref.id})`);
         added++;

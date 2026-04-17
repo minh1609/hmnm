@@ -1,5 +1,4 @@
-import { Box, Typography, Dialog, DialogContent, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Box, Typography, Dialog, DialogContent } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useTheme } from '@mui/material/styles';
 import type { Trip } from '@/types';
@@ -81,99 +80,105 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                                 </Typography>
                             </Box>
 
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 0.5,
-                                    flexWrap: 'wrap',
-                                }}
-                            >
-                                <PlaceIcon sx={{ color: c.brown, fontSize: '0.95rem', flexShrink: 0 }} />
-                                <Typography
-                                    variant="caption"
+                            {trip.destinations && trip.destinations.length > 0 && (
+                                <Box
                                     sx={{
-                                        color: c.brown,
-                                        letterSpacing: '0.06em',
-                                        fontSize: '0.7rem',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 0.5,
+                                        flexWrap: 'wrap',
                                     }}
                                 >
-                                    {trip.destinations.map((dest, i) => (
-                                        <Box
-                                            key={i}
-                                            component={dest.googleMapLink ? 'a' : 'span'}
-                                            href={dest.googleMapLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            sx={{
-                                                textDecoration: 'none',
-                                                color: 'inherit',
-                                                cursor: dest.googleMapLink ? 'pointer' : 'default',
-                                                '&:hover': dest.googleMapLink ? { opacity: 0.75 } : {},
-                                            }}
-                                        >
-                                            {dest.name}
-                                            {i < trip.destinations.length - 1 && ', '}
-                                        </Box>
-                                    ))}
-                                </Typography>
-                            </Box>
+                                    <PlaceIcon sx={{ color: c.brown, fontSize: '0.95rem', flexShrink: 0 }} />
+                                    <Typography
+                                        variant="caption"
+                                        sx={{
+                                            color: c.brown,
+                                            letterSpacing: '0.06em',
+                                            fontSize: '0.7rem',
+                                        }}
+                                    >
+                                        {trip.destinations.map((dest, i) => (
+                                            <Box
+                                                key={i}
+                                                component={dest.googleMapLink ? 'a' : 'span'}
+                                                href={dest.googleMapLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                sx={{
+                                                    textDecoration: 'none',
+                                                    color: 'inherit',
+                                                    cursor: dest.googleMapLink ? 'pointer' : 'default',
+                                                    '&:hover': dest.googleMapLink ? { opacity: 0.75 } : {},
+                                                }}
+                                            >
+                                                {dest.name}
+                                                {i < trip.destinations!.length - 1 && ', '}
+                                            </Box>
+                                        ))}
+                                    </Typography>
+                                </Box>
+                            )}
                         </Box>
 
                         {/* Duration badge */}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                background: c.panel,
-                                border: `1px solid ${c.border}`,
-                                borderRadius: '6px',
-                                px: 1.5,
-                                py: 0.75,
-                                minWidth: 56,
-                                mr: 4,
-                                flexShrink: 0,
-                            }}
-                        >
-                            <Typography
+                        {trip.startDate && trip.endDate && (
+                            <Box
                                 sx={{
-                                    fontFamily: f.display,
-                                    fontWeight: 700,
-                                    fontSize: '1.6rem',
-                                    lineHeight: 1,
-                                    color: c.burgundy,
-                                    letterSpacing: '-0.03em',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    background: c.panel,
+                                    border: `1px solid ${c.border}`,
+                                    borderRadius: '6px',
+                                    px: 1.5,
+                                    py: 0.75,
+                                    minWidth: 56,
+                                    mr: 4,
+                                    flexShrink: 0,
                                 }}
                             >
-                                {durationDays(trip.startDate, trip.endDate)}
-                            </Typography>
+                                <Typography
+                                    sx={{
+                                        fontFamily: f.display,
+                                        fontWeight: 700,
+                                        fontSize: '1.6rem',
+                                        lineHeight: 1,
+                                        color: c.burgundy,
+                                        letterSpacing: '-0.03em',
+                                    }}
+                                >
+                                    {durationDays(trip.startDate, trip.endDate)}
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{
+                                        color: c.inkMuted,
+                                        fontSize: '0.58rem',
+                                        letterSpacing: '0.08em',
+                                    }}
+                                >
+                                    DAY(S)
+                                </Typography>
+                            </Box>
+                        )}
+                    </Box>
+
+                    {/* Date range */}
+                    {trip.startDate && trip.endDate && (
+                        <Box sx={{ px: { xs: 2.5, sm: 3.5 }, pb: trip.notes ? 1.5 : 2.5 }}>
                             <Typography
                                 variant="caption"
                                 sx={{
                                     color: c.inkMuted,
-                                    fontSize: '0.58rem',
-                                    letterSpacing: '0.08em',
+                                    fontSize: '0.68rem',
+                                    letterSpacing: '0.04em',
                                 }}
                             >
-                                DAY(S)
+                                {formatDateRange(trip.startDate, trip.endDate)}
                             </Typography>
                         </Box>
-                    </Box>
-
-                    {/* Date range */}
-                    <Box sx={{ px: { xs: 2.5, sm: 3.5 }, pb: trip.notes ? 1.5 : 2.5 }}>
-                        <Typography
-                            variant="caption"
-                            sx={{
-                                color: c.inkMuted,
-                                fontSize: '0.68rem',
-                                letterSpacing: '0.04em',
-                            }}
-                        >
-                            {formatDateRange(trip.startDate, trip.endDate)}
-                        </Typography>
-                    </Box>
+                    )}
 
                     {/* Notes */}
                     {trip.notes && (

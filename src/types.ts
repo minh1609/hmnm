@@ -9,6 +9,8 @@ export interface Icon {
     label: string;
 }
 
+export type TripType = 'trip' | 'meaningful' | 'plan';
+
 export interface TripDestination {
     name: string;
     googleMapLink?: string;
@@ -18,14 +20,15 @@ export interface Trip {
     name: string;
     flag: string;
     /** Firestore index */
-    startDate: Date;
+    startDate?: Date;
     /** Firestore index */
-    endDate: Date;
-    destinations: TripDestination[];
+    endDate?: Date;
+    destinations?: TripDestination[];
     /** [longitude, latitude] for map pin placement */
     coordinates: [number, number];
     /** Firestore index */
     owner: string;
+    type: TripType;
     notes?: string;
 }
 

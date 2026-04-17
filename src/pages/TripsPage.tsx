@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Box, Typography } from '@mui/material';
-import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
+import { Box, Typography, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
 import { useTrips } from '@/hooks/useTrips';
 import { useTheme } from '@mui/material/styles';
 import { PageHeader } from '@/components/PageHeader';
@@ -17,6 +19,12 @@ export function TripsPage() {
     const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
 
     const mappedTrips = trips;
+
+    const [mapZoom, setMapZoom] = useState(1);
+    const [mapCenter, setMapCenter] = useState<[number, number]>([0, 10]);
+
+    const MIN_ZOOM = 1;
+    const MAX_ZOOM = 8;
 
     return (
         <>
@@ -38,74 +46,127 @@ export function TripsPage() {
                         projectionConfig={{ scale: 147, center: [0, 10] }}
                         style={{ width: '100%', height: 'auto', display: 'block' }}
                     >
-                        <Geographies geography={GEO_URL}>
-                            {({ geographies }: { geographies: unknown[] }) =>
-                                geographies.map((geo: unknown) => (
-                                    <Geography
-                                        key={(geo as { rsmKey: string }).rsmKey}
-                                        geography={geo}
-                                        fill={c.panel}
-                                        stroke={c.border}
-                                        strokeWidth={0.5}
-                                        style={{
-                                            default: { outline: 'none' },
-                                            hover: { outline: 'none', fill: c.borderSubtle },
-                                            pressed: { outline: 'none' },
-                                        }}
-                                    />
-                                ))
-                            }
-                        </Geographies>
+                        <ZoomableGroup
+                            zoom={mapZoom}
+                            center={mapCenter}
+                            minZoom={MIN_ZOOM}
+                            maxZoom={MAX_ZOOM}
+                            onMoveEnd={({ coordinates, zoom }: { coordinates: [number, number]; zoom: number }) => {
+                                setMapCenter(coordinates);
+                                setMapZoom(zoom);
+                            }}
+                        >
+                            <Geographies geography={GEO_URL}>
+                                {({ geographies }: { geographies: unknown[] }) =>
+                                    geographies.map((geo: unknown) => (
+                                        <Geography
+                                            key={(geo as { rsmKey: string }).rsmKey}
+                                            geography={geo}
+                                            fill={c.panel}
+                                            stroke={c.border}
+                                            strokeWidth={0.5}
+                                            style={{
+                                                default: { outline: 'none' },
+                                                hover: { outline: 'none', fill: c.borderSubtle },
+                                                pressed: { outline: 'none' },
+                                            }}
+                                        />
+                                    ))
+                                }
+                            </Geographies>
 
-                        {mappedTrips.map(trip => (
+                            {mappedTrips.map(trip => {
+                                const s = 1 / mapZoom;
+                                return (
                                     <Marker
                                         key={trip.name}
                                         coordinates={trip.coordinates}
-                                onClick={() => setSelectedTrip(trip)}
-                            >
-                                {/* Pulsing halo */}
-                                <circle r={12} fill={c.burgundyGlow} stroke="none">
-                                    <animate
-                                        attributeName="r"
-                                        from={8}
-                                        to={20}
-                                        dur="2.2s"
-                                        repeatCount="indefinite"
-                                    />
-                                    <animate
-                                        attributeName="opacity"
-                                        from={0.55}
-                                        to={0}
-                                        dur="2.2s"
-                                        repeatCount="indefinite"
-                                    />
-                                </circle>
+                                        onClick={() => setSelectedTrip(trip)}
+                                    >
+                                        {/* Pulsing halo */}
+                                        <circle r={12 * s} fill={c.burgundyGlow} stroke="none">
+                                            <animate
+                                                attributeName="r"
+                                                from={8 * s}
+                                                to={20 * s}
+                                                dur="2.2s"
+                                                repeatCount="indefinite"
+                                            />
+                                            <animate
+                                                attributeName="opacity"
+                                                from={0.55}
+                                                to={0}
+                                                dur="2.2s"
+                                                repeatCount="indefinite"
+                                            />
+                                        </circle>
 
-                                {/* Pin dot */}
-                                <circle
-                                    r={7}
-                                    fill={c.burgundy}
-                                    stroke={c.surface}
-                                    strokeWidth={2}
-                                    style={{ cursor: 'pointer' }}
-                                />
+                                        {/* Pin dot */}
+                                        <circle
+                                            r={7 * s}
+                                            fill={c.burgundy}
+                                            stroke={c.surface}
+                                            strokeWidth={2 * s}
+                                            style={{ cursor: 'pointer' }}
+                                        />
 
-                                {/* Flag above pin */}
-                                <text
-                                    textAnchor="middle"
-                                    y={-16}
-                                    style={{
-                                        fontSize: '16px',
-                                        userSelect: 'none',
-                                        cursor: 'pointer',
-                                        filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.18))',
-                                    }}
-                                >
-                                    {trip.flag}
-                                </text>
-                            </Marker>
-                        ))}
+                                        {/* Flag above pin */}
+                                        <text
+                                            textAnchor="middle"
+                                            y={-16 * s}
+                                            style={{
+                                                fontSize: `${16 * s}px`,
+                                                userSelect: 'none',
+                                                cursor: 'pointer',
+                                                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.18))',
+                                            }}
+                                        >
+                                            {trip.flag}
+                                        </text>
+                                    </Marker>
+                                );
+                            })}
+                        </ZoomableGroup>
                     </ComposableMap>
+
+                    {/* Zoom controls */}
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            bottom: 12,
+                            right: 12,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 0.5,
+                        }}
+                    >
+                        {[
+                            { icon: <AddIcon fontSize="small" />, action: () => setMapZoom(z => Math.min(z * 1.5, MAX_ZOOM)) },
+                            { icon: <RemoveIcon fontSize="small" />, action: () => setMapZoom(z => Math.max(z / 1.5, MIN_ZOOM)) },
+                        ].map(({ icon, action }, i) => (
+                            <IconButton
+                                key={i}
+                                onClick={action}
+                                size="small"
+                                sx={{
+                                    width: 30,
+                                    height: 30,
+                                    background: c.surface,
+                                    border: `1px solid ${c.border}`,
+                                    color: c.inkMuted,
+                                    borderRadius: '6px',
+                                    boxShadow: `0 2px 6px rgba(0,0,0,0.10)`,
+                                    '&:hover': {
+                                        background: c.panel,
+                                        color: c.burgundy,
+                                        borderColor: c.burgundy,
+                                    },
+                                }}
+                            >
+                                {icon}
+                            </IconButton>
+                        ))}
+                    </Box>
 
                     {trips.length === 0 && (
                         <Box

@@ -18,7 +18,9 @@ export const trips: Trip[] = [
                     'https://google.com/maps/search/square+one/@43.5930011,-79.6424732,17z?entry=s&sa=X&ved=1t%3A199789',
             },
         ],
-        coordinates: [-79.84, 43.61],
+        coordinates: [-79.928, 43.573],
         owner: 'mindy',
+        type: 'trip',
+        notes: '',
     },
 ];
