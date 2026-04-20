@@ -11,10 +11,15 @@ import './firebase';
 import App from './App.tsx';
 import theme from './theme';
 import { ReasonILikeYou } from './components/ReasonILikeYou';
+import { useAuth } from './hooks/useAuth';
+import { UnderConstruction } from './components/UnderConstruction';
+import { PageHeader } from './components/PageHeader';
 
 /** Centred wrapper used by the loading and error states. */
 const AppShell = ({ children }: { children: ReactNode }) => {
-    const { tokens: { colors: c } } = useTheme();
+    const {
+        tokens: { colors: c },
+    } = useTheme();
     return (
         <Box
             sx={{
@@ -33,7 +38,9 @@ const AppShell = ({ children }: { children: ReactNode }) => {
 };
 
 const SuspenseFallback = () => {
-    const { tokens: { colors: c } } = useTheme();
+    const {
+        tokens: { colors: c },
+    } = useTheme();
     return (
         <AppShell>
             <CircularProgress sx={{ color: c.burgundy }} size={40} thickness={3} />
@@ -74,10 +81,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
                         >
                             Something went wrong
                         </Typography>
-                        <Typography
-                            variant="caption"
-                            sx={{ color: c.inkMuted, fontFamily: f.mono }}
-                        >
+                        <Typography variant="caption" sx={{ color: c.inkMuted, fontFamily: f.mono }}>
                             {(this.state.error as Error).message}
                         </Typography>
                     </Box>
@@ -87,6 +91,19 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
         return this.props.children;
     }
 }
+
+const AppGuard = () => {
+    const { isAdmin, isGf } = useAuth();
+    if ((!isAdmin || !isGf) && import.meta.env.PROD) {
+        return (
+            <>
+                <PageHeader title="The Journey So Far ..." showBack={false} />
+                <UnderConstruction />
+            </>
+        );
+    }
+    return <App />;
+};
 
 const container = document.getElementById('root')!;
 // Reuse the existing root during HMR hot reloads to avoid the
@@ -104,7 +121,7 @@ root.render(
                     <CssBaseline />
                     <Suspense fallback={<SuspenseFallback />}>
                         <ReasonILikeYou />
-                        <App />
+                        <AppGuard />
                     </Suspense>
                 </ThemeProvider>
             </HashRouter>
