@@ -38,21 +38,21 @@ const yearSx =
         fontWeight: active ? 700 : 500,
         fontStyle: active ? 'normal' : 'italic',
         fontSize: active ? '1.9rem' : '1.6rem',
-        color: active ? theme.tokens.colors.burgundy : theme.tokens.colors.inkMuted,
+        color: active ? theme.palette.primary.main : theme.tokens.colors.inkMuted,
         letterSpacing: '-0.02em',
         cursor: 'pointer',
         transition: 'all 0.2s ease',
         userSelect: 'none',
-        borderBottom: active ? `2px solid ${theme.tokens.colors.burgundy}` : '2px solid transparent',
+        borderBottom: active ? `2px solid ${theme.palette.primary.main}` : '2px solid transparent',
         pb: '2px',
-        '&:hover': { color: theme.tokens.colors.burgundy, opacity: 1 },
+        '&:hover': { color: theme.palette.primary.main, opacity: 1 },
     });
 
 export function HomePage() {
     const { timeline: datingTimeline, refetch } = useTimeline();
     const { isAdmin, isGf } = useAuth();
     const theme = useTheme();
-    const { colors: c, fonts: f } = theme.tokens;
+    const { palette: p, tokens: { colors: c, fonts: f } } = theme;
 
     const years = Object.keys(datingTimeline)
         .map(Number)
@@ -219,15 +219,15 @@ export function HomePage() {
                                                   : undefined
                                         }
                                         sx={{
-                                            backgroundColor: event.gfNote ? c.rose : c.surface,
-                                            borderColor: c.burgundy,
-                                            boxShadow: `0 0 6px ${c.burgundyGlowFaint}`,
+                                            backgroundColor: event.gfNote ? p.secondary.main : c.surface,
+                                            borderColor: p.primary.main,
+                                            boxShadow: `0 0 6px ${p.primary.glowFaint}`,
                                             cursor: isAdmin || isGf ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             ...((isAdmin || isGf) && {
                                                 '&:hover': {
-                                                    borderColor: c.burgundyLight,
-                                                    boxShadow: `0 0 10px ${c.burgundyGlow}`,
+                                                    borderColor: p.primary.light,
+                                                    boxShadow: `0 0 10px ${p.primary.glow}`,
                                                     transform: 'scale(1.3)',
                                                 },
                                             }),
@@ -235,7 +235,7 @@ export function HomePage() {
                                     />
                                     <TimelineConnector
                                         sx={{
-                                            backgroundColor: c.rose,
+                                            backgroundColor: p.secondary.main,
                                         }}
                                     />
                                 </TimelineSeparator>
@@ -251,7 +251,7 @@ export function HomePage() {
                                             display: 'inline-block',
                                             transition: 'color 0.3s ease',
                                             '&:hover': {
-                                                color: c.burgundy,
+                                                color: p.primary.main,
                                                 animation: 'breathe 4.5s ease-in-out infinite',
                                             },
                                         })}
@@ -269,7 +269,7 @@ export function HomePage() {
                                                             <span
                                                                 style={{
                                                                     whiteSpace: 'pre-line',
-                                                                    color: c.rose,
+                                                                    color: p.secondary.main,
                                                                 }}
                                                             >
                                                                 {event.gfNote}
@@ -281,18 +281,18 @@ export function HomePage() {
                                             >
                                                 <LightbulbIcon
                                                     sx={{
-                                                        color: c.brown,
+                                                        color: p.tertiary.main,
                                                         fontSize: '1.1rem',
                                                         mb: '-2px',
                                                         mx: 0.5,
                                                         transition: 'transform 0.2s ease, color 0.2s ease',
                                                         ...(event.gfNote && {
-                                                            color: c.burgundy,
-                                                            filter: `drop-shadow(0 0 4px ${c.roseGlow})`,
+                                                            color: p.primary.main,
+                                                            filter: `drop-shadow(0 0 4px ${p.secondary.glow})`,
                                                         }),
                                                         '&:hover': {
                                                             transform: 'scale(1.35)',
-                                                            color: c.burgundy,
+                                                            color: p.primary.main,
                                                         },
                                                     }}
                                                 />
@@ -333,7 +333,7 @@ export function HomePage() {
                         backgroundColor: c.creamDark,
                         color: c.ink,
                         border: `1px solid ${c.border}`,
-                        '& .MuiAlert-icon': { color: c.burgundy },
+                        '& .MuiAlert-icon': { color: p.primary.main },
                         '& .MuiAlert-action .MuiIconButton-root': { color: c.inkMuted },
                     }}
                 >
@@ -353,7 +353,7 @@ export function HomePage() {
                         backgroundColor: c.surface,
                         border: `1px solid ${c.border}`,
                         borderRadius: 2,
-                        boxShadow: `0 8px 24px ${c.burgundyGlowFaint}`,
+                        boxShadow: `0 8px 24px ${p.primary.glowFaint}`,
                         minWidth: 140,
                     },
                 }}
@@ -368,11 +368,11 @@ export function HomePage() {
                         fontWeight: 600,
                         letterSpacing: '0.04em',
                         fontSize: '0.85rem',
-                        color: c.brown,
+                        color: p.tertiary.main,
                         '&:hover': { backgroundColor: c.panel },
                     }}
                 >
-                    <ListItemIcon sx={{ minWidth: 32, color: c.brown }}>
+                    <ListItemIcon sx={{ minWidth: 32, color: p.tertiary.main }}>
                         <EditIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Edit</ListItemText>
@@ -387,11 +387,11 @@ export function HomePage() {
                         fontWeight: 600,
                         letterSpacing: '0.04em',
                         fontSize: '0.85rem',
-                        color: c.burgundy,
-                        '&:hover': { backgroundColor: c.roseGlowFaint },
+                        color: p.primary.main,
+                        '&:hover': { backgroundColor: p.secondary.glowFaint },
                     }}
                 >
-                    <ListItemIcon sx={{ minWidth: 32, color: c.burgundy }}>
+                    <ListItemIcon sx={{ minWidth: 32, color: p.primary.main }}>
                         <DeleteOutlineIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Delete</ListItemText>

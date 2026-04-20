@@ -20,6 +20,7 @@ interface TripDetailDialogProps {
 
 export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
     const {
+        palette: p,
         tokens: { colors: c, fonts: f },
     } = useTheme();
 
@@ -36,7 +37,7 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                     borderRadius: '12px',
                     background: c.surface,
                     border: `1px solid ${c.border}`,
-                    borderTop: `3px solid ${ts?.pin ?? c.burgundy}`,
+                    borderTop: `3px solid ${ts?.pin ?? p.primary.main}`,
                     overflow: 'hidden',
                     m: { xs: 2, sm: 4 },
                     position: 'relative',
@@ -47,7 +48,7 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: `linear-gradient(90deg, transparent, ${ts?.halo ?? c.roseGlow}, transparent)`,
+                        background: `linear-gradient(90deg, transparent, ${ts?.halo ?? p.secondary.glow}, transparent)`,
                         zIndex: 1,
                     },
                 },
@@ -88,9 +89,9 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                                             fontSize: '0.62rem',
                                             fontWeight: 700,
                                             letterSpacing: '0.12em',
-                                            color: ts?.pin ?? c.brown,
-                                            background: ts?.glow ?? c.brownGlow,
-                                            border: `1px solid ${ts?.halo ?? c.brownGlow}`,
+                                            color: ts?.pin ?? p.tertiary.main,
+                                            background: ts?.glow ?? p.tertiary.glow,
+                                            border: `1px solid ${ts?.halo ?? p.tertiary.glow}`,
                                             borderRadius: '4px',
                                             px: 1,
                                             py: 0.4,
@@ -112,11 +113,11 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                                         flexWrap: 'wrap',
                                     }}
                                 >
-                                    <PlaceIcon sx={{ color: c.brown, fontSize: '0.95rem', flexShrink: 0 }} />
+                                    <PlaceIcon sx={{ color: p.tertiary.main, fontSize: '0.95rem', flexShrink: 0 }} />
                                     <Typography
                                         variant="caption"
                                         sx={{
-                                            color: c.brown,
+                                            color: p.tertiary.main,
                                             letterSpacing: '0.06em',
                                             fontSize: '0.7rem',
                                         }}
@@ -167,7 +168,7 @@ export function TripDetailDialog({ trip, onClose }: TripDetailDialogProps) {
                                         fontWeight: 700,
                                         fontSize: '1.6rem',
                                         lineHeight: 1,
-                                        color: ts?.pin ?? c.burgundy,
+                                        color: ts?.pin ?? p.primary.main,
                                         letterSpacing: '-0.03em',
                                     }}
                                 >

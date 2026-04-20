@@ -3,8 +3,10 @@ import EngineeringIcon from '@mui/icons-material/Engineering';
 import { useTheme } from '@mui/material/styles';
 
 export function UnderConstruction() {
-    const theme = useTheme();
-    const { colors: c, fonts: f } = theme.tokens;
+    const {
+        palette: p,
+        tokens: { colors: c, fonts: f },
+    } = useTheme();
 
     return (
         <Box
@@ -22,7 +24,7 @@ export function UnderConstruction() {
             <EngineeringIcon
                 sx={{
                     fontSize: '4rem',
-                    color: c.burgundy,
+                    color: p.primary.main,
                     opacity: 0.7,
                 }}
             />
@@ -32,7 +34,7 @@ export function UnderConstruction() {
                     fontFamily: f.display,
                     fontWeight: 700,
                     fontSize: { xs: '1.8rem', sm: '2.4rem' },
-                    color: c.burgundy,
+                    color: p.primary.main,
                     letterSpacing: '-0.02em',
                 }}
             >
@@ -53,7 +55,7 @@ export function UnderConstruction() {
                 sx={{
                     fontFamily: f.script,
                     fontSize: '1.5rem',
-                    color: c.burgundy,
+                    color: p.primary.main,
                     opacity: 0.6,
                 }}
             >

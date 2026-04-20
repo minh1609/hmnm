@@ -15,6 +15,7 @@ const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 export function TripsPage() {
     const { trips } = useTrips();
     const {
+        palette: p,
         tokens: { colors: c, fonts: f },
     } = useTheme();
     const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
@@ -59,20 +60,26 @@ export function TripsPage() {
                         >
                             <Geographies geography={GEO_URL}>
                                 {({ geographies }: { geographies: unknown[] }) =>
-                                    geographies.map((geo: unknown) => (
-                                        <Geography
-                                            key={(geo as { rsmKey: string }).rsmKey}
-                                            geography={geo}
-                                            fill={c.panel}
-                                            stroke={c.border}
-                                            strokeWidth={0.5}
-                                            style={{
-                                                default: { outline: 'none' },
-                                                hover: { outline: 'none', fill: c.borderSubtle },
-                                                pressed: { outline: 'none' },
-                                            }}
-                                        />
-                                    ))
+                                    geographies.map((geo: unknown) => {
+                                        const id = (geo as { rsmKey: string; id?: string }).id;
+                                        const isHighlighted = id === '704' /* Vietnam */ || id === '124' /* Canada */;
+                                        const fill = isHighlighted ? p.secondary.main : c.panel;
+                                        const hoverFill = isHighlighted ? p.secondary.dark : c.borderSubtle;
+                                        return (
+                                            <Geography
+                                                key={(geo as { rsmKey: string }).rsmKey}
+                                                geography={geo}
+                                                fill={fill}
+                                                stroke={c.border}
+                                                strokeWidth={0.5}
+                                                style={{
+                                                    default: { outline: 'none' },
+                                                    hover: { outline: 'none', fill: hoverFill },
+                                                    pressed: { outline: 'none' },
+                                                }}
+                                            />
+                                        );
+                                    })
                                 }
                             </Geographies>
 
@@ -160,8 +167,8 @@ export function TripsPage() {
                                     boxShadow: `0 2px 6px rgba(0,0,0,0.10)`,
                                     '&:hover': {
                                         background: c.panel,
-                                        color: c.burgundy,
-                                        borderColor: c.burgundy,
+                                        color: p.primary.main,
+                                        borderColor: p.primary.main,
                                     },
                                 }}
                             >

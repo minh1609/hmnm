@@ -31,6 +31,7 @@ interface StatCardProps {
 
 function StatCard({ value, label, icon, live, onClick, sx }: StatCardProps) {
     const {
+        palette: p,
         tokens: { colors: c, fonts: f },
     } = useTheme();
     return (
@@ -60,7 +61,7 @@ function StatCard({ value, label, icon, live, onClick, sx }: StatCardProps) {
                     boxShadow: `0 2px 10px rgba(0,0,0,0.06), inset 0 1px 0 ${c.surface}`,
                     '&:hover': {
                         transform: 'scale(1.1)',
-                        boxShadow: `0 8px 28px ${c.burgundyGlow}`,
+                        boxShadow: `0 8px 28px ${p.primary.glow}`,
                     },
                 }}
             >
@@ -91,7 +92,7 @@ function StatCard({ value, label, icon, live, onClick, sx }: StatCardProps) {
                         fontStyle: 'italic',
                         fontSize: { xs: '1.6rem', sm: '2rem' },
                         lineHeight: 1,
-                        color: c.burgundy,
+                        color: p.primary.main,
                         letterSpacing: '-0.02em',
                         fontVariantNumeric: 'tabular-nums',
                         position: 'relative',
@@ -111,10 +112,10 @@ function StatCard({ value, label, icon, live, onClick, sx }: StatCardProps) {
                             width: 6,
                             height: 6,
                             borderRadius: '50%',
-                            backgroundColor: c.rose,
+                            backgroundColor: p.secondary.main,
                             animation: 'heritagePulse 1.8s ease-in-out infinite',
                             '@keyframes heritagePulse': {
-                                '0%, 100%': { opacity: 1, boxShadow: `0 0 6px ${c.roseGlow}` },
+                                '0%, 100%': { opacity: 1, boxShadow: `0 0 6px ${p.secondary.glow}` },
                                 '50%': { opacity: 0.25, boxShadow: 'none' },
                             },
                         }}

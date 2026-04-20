@@ -36,7 +36,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const theme = useTheme();
-    const { colors: c } = theme.tokens;
+    const { palette: p, tokens: { colors: c } } = theme;
 
     useEffect(() => {
         if (event) {
@@ -76,9 +76,9 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
             maxWidth="sm"
             fullWidth
             disableScrollLock
-            PaperProps={{ sx: dialogPaperSx(theme, c.rose) }}
+            PaperProps={{ sx: dialogPaperSx(theme, p.secondary.main) }}
         >
-            <DialogTitle sx={dialogTitleSx(theme, c.burgundy)}>
+            <DialogTitle sx={dialogTitleSx(theme, p.primary.main)}>
                 <FavoriteIcon sx={{ fontSize: '1.2rem' }} />
                 {event?.name}
             </DialogTitle>
@@ -97,7 +97,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                     multiline
                     minRows={3}
                     placeholder="Add your personal note about this moment…"
-                    sx={textFieldSx(theme, c.burgundy)}
+                    sx={textFieldSx(theme, p.primary.main)}
                 />
             </DialogContent>
 
@@ -112,7 +112,7 @@ export function GfNoteDialog({ event, onClose, onSaved }: Props) {
                     startIcon={
                         saving ? <CircularProgress size={14} thickness={3} sx={{ color: c.white }} /> : <FavoriteIcon />
                     }
-                    sx={primaryButtonSx(theme, c.burgundy, c.burgundyLight)}
+                    sx={primaryButtonSx(theme, p.primary.main, p.primary.light)}
                 >
                     {saving ? 'Saving…' : 'Save'}
                 </Button>

@@ -34,7 +34,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
     const [deleting, setDeleting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const theme = useTheme();
-    const { colors: c, fonts: f } = theme.tokens;
+    const { palette: p, tokens: { colors: c, fonts: f } } = theme;
 
     const handleClose = () => {
         if (deleting) return;
@@ -78,7 +78,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
             disableScrollLock
             PaperProps={{ sx: dialogPaperSx(theme, c.border) }}
         >
-            <DialogTitle sx={dialogTitleSx(theme, c.burgundy)}>
+            <DialogTitle sx={dialogTitleSx(theme, p.primary.main)}>
                 <DeleteOutlineIcon sx={{ fontSize: '1.3rem' }} />
                 Delete
             </DialogTitle>
@@ -114,7 +114,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                         <>
                             {' '}
                             (
-                            <Typography component="span" sx={{ color: c.brown, fontWeight: 600 }}>
+                            <Typography component="span" sx={{ color: p.tertiary.main, fontWeight: 600 }}>
                                 {dateLabel}
                             </Typography>
                             )
@@ -139,7 +139,7 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
                             <DeleteOutlineIcon />
                         )
                     }
-                    sx={primaryButtonSx(theme, c.burgundy, c.burgundyLight)}
+                    sx={primaryButtonSx(theme, p.primary.main, p.primary.light)}
                 >
                     {deleting ? 'Deleting…' : 'Delete'}
                 </Button>

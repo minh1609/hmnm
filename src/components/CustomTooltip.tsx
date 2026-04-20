@@ -11,8 +11,8 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
         fontFamily: theme.tokens.fonts.sans,
         fontSize: '0.82rem',
         fontWeight: 500,
-        border: `1px solid ${theme.tokens.colors.burgundyDark}`,
-        boxShadow: `0 4px 16px ${theme.tokens.colors.burgundyGlowFaint}`,
+        border: `1px solid ${theme.palette.primary.dark}`,
+        boxShadow: `0 4px 16px ${theme.palette.primary.glowFaint}`,
         letterSpacing: '0.02em',
         padding: '6px 12px',
         borderRadius: '6px',
@@ -20,7 +20,7 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
     [`& .${tooltipClasses.arrow}`]: {
         color: theme.tokens.colors.ink,
         '&::before': {
-            border: `1px solid ${theme.tokens.colors.burgundyDark}`,
+            border: `1px solid ${theme.palette.primary.dark}`,
         },
     },
 }));

@@ -11,23 +11,24 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTheme } from '@mui/material/styles';
 import { useAuth } from '@/hooks/useAuth';
-import { tokens } from '@/theme';
+import appTheme from '@/theme';
 
 export function AuthButton() {
     const { user, loading, role, isAdmin, signIn, signOut } = useAuth();
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const {
+        palette: p,
         tokens: { colors: c, fonts: f },
     } = useTheme();
 
     if (loading) {
-        return <CircularProgress size={18} thickness={3} sx={{ color: c.burgundy }} />;
+        return <CircularProgress size={18} thickness={3} sx={{ color: p.primary.main }} />;
     }
 
     if (!user) {
         return (
             <Chip
-                icon={<LoginIcon sx={{ fontSize: '0.9rem !important', color: `${c.burgundy} !important` }} />}
+                icon={<LoginIcon sx={{ fontSize: '0.9rem !important', color: `${p.primary.main} !important` }} />}
                 label="Sign in"
                 size="small"
                 onClick={signIn}
@@ -36,16 +37,16 @@ export function AuthButton() {
                     fontFamily: f.sans,
                     fontSize: '0.7rem',
                     letterSpacing: '0.06em',
-                    color: c.burgundy,
-                    borderColor: c.burgundy,
+                    color: p.primary.main,
+                    borderColor: p.primary.main,
                     backgroundColor: c.surface,
                     borderRadius: '6px',
                     height: 28,
                     transition: 'all 0.2s ease',
                     '&:hover': {
-                        backgroundColor: `${c.roseGlowFaint} !important`,
-                        borderColor: c.burgundyLight,
-                        color: c.burgundyLight,
+                        backgroundColor: `${p.secondary.glowFaint} !important`,
+                        borderColor: p.primary.light,
+                        color: p.primary.light,
                         transform: 'scale(1.06)',
                     },
                     '& .MuiTouchRipple-root': { display: 'none' },
@@ -64,11 +65,11 @@ export function AuthButton() {
                         sx={{
                             width: 28,
                             height: 28,
-                            border: `1.5px solid ${isAdmin ? c.burgundy : c.rose}`,
-                            boxShadow: `0 0 6px ${isAdmin ? c.burgundyGlow : c.roseGlow}`,
+                            border: `1.5px solid ${isAdmin ? p.primary.main : p.secondary.main}`,
+                            boxShadow: `0 0 6px ${isAdmin ? p.primary.glow : p.secondary.glow}`,
                             fontSize: '0.75rem',
                             bgcolor: c.panel,
-                            color: isAdmin ? c.burgundy : c.brown,
+                            color: isAdmin ? p.primary.main : p.tertiary.main,
                         }}
                     >
                         {user.displayName?.[0] ?? '?'}
@@ -83,9 +84,9 @@ export function AuthButton() {
                             width: 12,
                             height: 12,
                             borderRadius: '50%',
-                            backgroundColor: c.burgundy,
+                            backgroundColor: p.primary.main,
                             border: `1.5px solid ${c.cream}`,
-                            boxShadow: `0 0 4px ${c.burgundyGlow}`,
+                            boxShadow: `0 0 4px ${p.primary.glow}`,
                         }}
                     />
                 )}
@@ -104,7 +105,7 @@ export function AuthButton() {
                             backgroundColor: c.surface,
                             border: `1px solid ${c.border}`,
                             borderRadius: '8px',
-                            boxShadow: `0 8px 24px ${c.burgundyGlowFaint}`,
+                            boxShadow: `0 8px 24px ${p.primary.glowFaint}`,
                             mt: 0.75,
                             minWidth: 180,
                         },
@@ -163,7 +164,7 @@ export function AuthButton() {
                         color: c.inkMuted,
                         gap: 1.5,
                         py: 1.25,
-                        '&:hover': { color: c.burgundy, backgroundColor: c.roseGlowFaint },
+                        '&:hover': { color: p.primary.main, backgroundColor: p.secondary.glowFaint },
                     }}
                 >
                     <LogoutIcon sx={{ fontSize: '1rem' }} />
@@ -175,13 +176,13 @@ export function AuthButton() {
 }
 
 const roleColor = (role: string | null) => {
-    const c = tokens.colors;
+    const p = appTheme.palette;
     switch (role) {
         case 'admin':
-            return c.burgundy;
+            return p.primary.main;
         case 'gf':
-            return c.brown;
+            return p.tertiary.main;
         default:
-            return c.inkSubtle;
+            return appTheme.tokens.colors.inkSubtle;
     }
 };

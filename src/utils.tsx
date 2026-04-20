@@ -4,9 +4,9 @@ import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import React from 'react';
 import type { TripType } from '@/types';
-import { tokens } from '@/theme';
+import theme from '@/theme';
 
-const { colors: c } = tokens;
+const p = theme.palette;
 
 export type TripTypeStyle = {
     /** Solid pin / accent colour */
@@ -21,22 +21,22 @@ export type TripTypeStyle = {
 
 const TRIP_TYPE_STYLES: Record<TripType, TripTypeStyle> = {
     trip: {
-        pin: c.burgundy,
-        halo: c.burgundyGlow,
-        glow: c.burgundyGlowFaint,
-        gradient: `linear-gradient(90deg, transparent 0%, ${c.burgundyDark} 30%, ${c.burgundy} 50%, ${c.burgundyDark} 70%, transparent 100%)`,
+        pin: p.primary.main,
+        halo: p.primary.glow!,
+        glow: p.primary.glowFaint!,
+        gradient: `linear-gradient(90deg, transparent 0%, ${p.primary.dark} 30%, ${p.primary.main} 50%, ${p.primary.dark} 70%, transparent 100%)`,
     },
     meaningful: {
-        pin: c.amber,
-        halo: c.amberGlow,
-        glow: c.amberGlowFaint,
-        gradient: `linear-gradient(90deg, transparent 0%, ${c.amber} 30%, ${c.amberLight} 50%, ${c.amber} 70%, transparent 100%)`,
+        pin: p.quaternary.main,
+        halo: p.quaternary.glow!,
+        glow: p.quaternary.glowFaint!,
+        gradient: `linear-gradient(90deg, transparent 0%, ${p.quaternary.main} 30%, ${p.quaternary.light} 50%, ${p.quaternary.main} 70%, transparent 100%)`,
     },
     plan: {
-        pin: c.brown,
-        halo: c.brownGlow,
-        glow: c.brownGlow,
-        gradient: `linear-gradient(90deg, transparent 0%, ${c.brownLight} 30%, ${c.brown} 50%, ${c.brownLight} 70%, transparent 100%)`,
+        pin: p.tertiary.main,
+        halo: p.tertiary.glow!,
+        glow: p.tertiary.glow!,
+        gradient: `linear-gradient(90deg, transparent 0%, ${p.tertiary.light} 30%, ${p.tertiary.main} 50%, ${p.tertiary.light} 70%, transparent 100%)`,
     },
 };
 

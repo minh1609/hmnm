@@ -53,6 +53,7 @@ const QUESTIONS: Question[] = [
 export function WybmgfPage() {
     const theme = useTheme();
     const {
+        palette: p,
         tokens: { colors: c, fonts: f },
     } = theme;
     const { isAdmin } = useAuth();
@@ -162,7 +163,7 @@ export function WybmgfPage() {
                     height: 3,
                     backgroundColor: c.borderSubtle,
                     '& .MuiLinearProgress-bar': {
-                        backgroundColor: c.burgundy,
+                        backgroundColor: p.primary.main,
                         transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
                     },
                 }}
@@ -188,11 +189,11 @@ export function WybmgfPage() {
                             maxWidth: 520,
                             backgroundColor: c.surface,
                             border: `1px solid ${c.border}`,
-                            borderTop: `3px solid ${c.burgundy}`,
+                            borderTop: `3px solid ${p.primary.main}`,
                             borderRadius: '10px',
                             overflow: 'hidden',
                             position: 'relative',
-                            boxShadow: `0 4px 18px ${c.burgundyGlowFaint}`,
+                            boxShadow: `0 4px 18px ${p.primary.glowFaint}`,
                             '&::before': {
                                 content: '""',
                                 position: 'absolute',
@@ -200,7 +201,7 @@ export function WybmgfPage() {
                                 left: 0,
                                 right: 0,
                                 height: '1px',
-                                background: `linear-gradient(90deg, transparent, ${c.roseGlow}, transparent)`,
+                                background: `linear-gradient(90deg, transparent, ${p.secondary.glow}, transparent)`,
                             },
                         }}
                     >
@@ -263,8 +264,8 @@ export function WybmgfPage() {
                                         transition: 'all 0.18s ease',
                                         '&:hover': {
                                             backgroundColor: c.panel,
-                                            borderColor: c.burgundy,
-                                            boxShadow: `0 0 0 1px ${c.burgundy}, 0 4px 12px ${c.burgundyGlowFaint}`,
+                                            borderColor: p.primary.main,
+                                            boxShadow: `0 0 0 1px ${p.primary.main}, 0 4px 12px ${p.primary.glowFaint}`,
                                             transform: 'translateY(-1px)',
                                         },
                                         '&:active': {
@@ -278,7 +279,7 @@ export function WybmgfPage() {
                                             fontWeight: 700,
                                             fontSize: '0.85rem',
                                             letterSpacing: '0.06em',
-                                            color: c.burgundy,
+                                            color: p.primary.main,
                                             minWidth: '22px',
                                             textTransform: 'uppercase',
                                         }}
@@ -343,10 +344,10 @@ export function WybmgfPage() {
                     variant="filled"
                     sx={{
                         backgroundColor: c.creamDark,
-                        border: `1px solid ${c.rose}`,
+                        border: `1px solid ${p.secondary.main}`,
                         color: c.ink,
                         fontFamily: f.sans,
-                        '& .MuiAlert-icon': { color: c.burgundy },
+                        '& .MuiAlert-icon': { color: p.primary.main },
                         '& .MuiAlert-action .MuiSvgIcon-root': { color: c.inkMuted },
                     }}
                 >

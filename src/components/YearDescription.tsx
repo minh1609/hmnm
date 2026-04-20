@@ -8,7 +8,7 @@ interface YearDescriptionProps {
 
 export const YearDescription = forwardRef<HTMLDivElement, YearDescriptionProps>(
     ({ description }, ref) => {
-        const { tokens: { colors: c, fonts: f } } = useTheme();
+        const { palette: p, tokens: { fonts: f } } = useTheme();
 
         if (!description) return null;
 
@@ -33,7 +33,7 @@ export const YearDescription = forwardRef<HTMLDivElement, YearDescriptionProps>(
                         fontSize: '1.5rem',
                         lineHeight: 1.2,
                         letterSpacing: '-0.01em',
-                        color: c.burgundy,
+                        color: p.primary.main,
                         userSelect: 'none',
                     }}
                 >

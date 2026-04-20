@@ -17,6 +17,7 @@ const HEART_PARTICLES = Array.from({ length: 32 }, (_, i) => ({
 export function YesCelebration() {
     const theme = useTheme();
     const {
+        palette: p,
         tokens: { colors: c, fonts: f },
     } = theme;
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ export function YesCelebration() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: `radial-gradient(ellipse at 50% 55%, ${c.roseGlow} 0%, ${c.burgundyGlowFaint} 42%, rgba(250,247,242,0.96) 100%)`,
+                background: `radial-gradient(ellipse at 50% 55%, ${p.secondary.glow} 0%, ${p.primary.glowFaint} 42%, rgba(250,247,242,0.96) 100%)`,
                 backdropFilter: 'blur(4px)',
                 animation: 'yesCelebFadeIn 0.8s ease forwards',
                 overflow: 'hidden',
@@ -43,25 +44,25 @@ export function YesCelebration() {
             />
 
             {/* Rising heart/emoji particles */}
-            {HEART_PARTICLES.map((p, i) => (
+            {HEART_PARTICLES.map((particle, i) => (
                 <Box
                     key={i}
                     sx={
                         {
                             position: 'absolute',
                             bottom: '-30px',
-                            left: p.left,
-                            fontSize: p.fontSize,
+                            left: particle.left,
+                            fontSize: particle.fontSize,
                             lineHeight: 1,
                             pointerEvents: 'none',
                             userSelect: 'none',
                             willChange: 'transform, opacity',
-                            '--rise-rot': p.rotation,
-                            animation: `heartRise ${p.duration} ${p.delay} ease-in-out both`,
+                            '--rise-rot': particle.rotation,
+                            animation: `heartRise ${particle.duration} ${particle.delay} ease-in-out both`,
                         } as React.CSSProperties & Record<string, unknown>
                     }
                 >
-                    {p.emoji}
+                    {particle.emoji}
                 </Box>
             ))}
 
@@ -74,13 +75,13 @@ export function YesCelebration() {
                         fontFamily: f.display,
                         fontStyle: 'italic',
                         fontSize: { xs: '4.8rem', sm: '7.5rem' },
-                        color: c.burgundy,
+                        color: p.primary.main,
                         lineHeight: 1,
                         animation: 'yesReveal 5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both',
                         textShadow: [
-                            `0 0 24px ${c.burgundyGlow}`,
-                            `0 0 56px ${c.roseGlow}`,
-                            `0 0 96px ${c.burgundyGlowFaint}`,
+                            `0 0 24px ${p.primary.glow}`,
+                            `0 0 56px ${p.secondary.glow}`,
+                            `0 0 96px ${p.primary.glowFaint}`,
                         ].join(', '),
                     }}
                 >

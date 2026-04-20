@@ -1,43 +1,14 @@
 import { createTheme } from '@mui/material/styles';
 
 /**
- * Refined Heritage design tokens — single source of truth.
+ * Refined Heritage design tokens — structural / neutral values only.
  *
- * Components access these via `theme.tokens` from `useTheme()` or the sx callback
- * `(theme) => ({...})`. Never import `tokens` directly in components.
- *
- * To swap the entire colour palette: edit `tokens` below — every component that
- * reads from the theme updates automatically.
- *
- * Also update the matching CSS custom properties in index.css for global/animation
- * contexts (keyframes, pseudo-elements, global resets).
+ * Brand colours (primary, secondary, tertiary, quaternary) live exclusively
+ * in `theme.palette` and must always be accessed through it.
+ * These tokens hold only the structural values that have no palette equivalent.
  */
-export const tokens = {
+const tokens = {
     colors: {
-        // Primary — Deep Burgundy
-        burgundy: '#9D2933',
-        burgundyLight: '#C04050',
-        burgundyDark: '#6B1B24',
-        burgundyGlow: 'rgba(157, 41, 51, 0.25)',
-        burgundyGlowFaint: 'rgba(157, 41, 51, 0.10)',
-
-        // Secondary — Dusty Rose
-        rose: '#D4A5A5',
-        roseDark: '#B87878',
-        roseGlow: 'rgba(212, 165, 165, 0.35)',
-        roseGlowFaint: 'rgba(212, 165, 165, 0.15)',
-
-        // Tertiary — Coffee Brown
-        brown: '#6D4C41',
-        brownLight: '#8D6E63',
-        brownGlow: 'rgba(109, 76, 65, 0.28)',
-
-        // Quaternary — Warm Amber (used for "meaningful" trip type)
-        amber: '#B8762A',
-        amberLight: '#D4994A',
-        amberGlow: 'rgba(184, 118, 42, 0.30)',
-        amberGlowFaint: 'rgba(184, 118, 42, 0.12)',
-
         // Backgrounds (warm light)
         cream: '#FAF7F2',
         creamDark: '#F0EBE3',
@@ -67,9 +38,6 @@ export const tokens = {
     },
 } as const;
 
-/** Backward-compatible alias — keeps any migration-script references valid. */
-export const ferrariTokens = tokens;
-
 // Augment the MUI Theme type so every component can reach `theme.tokens`
 // via `useTheme()` or an sx callback — no direct `tokens` import needed.
 declare module '@mui/material/styles' {
@@ -79,6 +47,26 @@ declare module '@mui/material/styles' {
     interface ThemeOptions {
         tokens?: typeof tokens;
     }
+
+    // Glow / glowFaint extensions on every named palette colour
+    interface PaletteColor {
+        glow?: string;
+        glowFaint?: string;
+    }
+    interface SimplePaletteColorOptions {
+        glow?: string;
+        glowFaint?: string;
+    }
+
+    // Custom brand palette slots
+    interface Palette {
+        tertiary: PaletteColor;
+        quaternary: PaletteColor;
+    }
+    interface PaletteOptions {
+        tertiary?: SimplePaletteColorOptions;
+        quaternary?: SimplePaletteColorOptions;
+    }
 }
 
 const { colors: c, fonts: f } = tokens;
@@ -87,18 +75,47 @@ const theme = createTheme({
     tokens,
     palette: {
         mode: 'light',
+
+        // ── Primary — Deep Burgundy ──────────────────────────────────────────
         primary: {
-            main: c.burgundy,
-            light: c.burgundyLight,
-            dark: c.burgundyDark,
+            main: '#9D2933',
+            light: '#C04050',
+            dark: '#6B1B24',
             contrastText: c.white,
+            glow: 'rgba(157, 41, 51, 0.25)',
+            glowFaint: 'rgba(157, 41, 51, 0.10)',
         },
+
+        // ── Secondary — Dusty Rose ───────────────────────────────────────────
         secondary: {
-            main: c.rose,
+            main: '#D4A5A5',
             light: '#E8C8C8',
-            dark: c.roseDark,
+            dark: '#B87878',
             contrastText: c.ink,
+            glow: 'rgba(212, 165, 165, 0.35)',
+            glowFaint: 'rgba(212, 165, 165, 0.15)',
         },
+
+        // ── Tertiary — Coffee Brown ──────────────────────────────────────────
+        tertiary: {
+            main: '#6D4C41',
+            light: '#8D6E63',
+            dark: '#5D4037',
+            contrastText: c.white,
+            glow: 'rgba(109, 76, 65, 0.28)',
+            glowFaint: 'rgba(109, 76, 65, 0.10)',
+        },
+
+        // ── Quaternary — Warm Amber ──────────────────────────────────────────
+        quaternary: {
+            main: '#B8762A',
+            light: '#D4994A',
+            dark: '#8B5A20',
+            contrastText: c.white,
+            glow: 'rgba(184, 118, 42, 0.30)',
+            glowFaint: 'rgba(184, 118, 42, 0.12)',
+        },
+
         background: {
             default: c.cream,
             paper: c.surface,

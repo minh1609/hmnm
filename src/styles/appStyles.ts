@@ -14,7 +14,7 @@ export const dialogPaperSx = (theme: Theme, borderColor: string) => ({
     border: `1px solid ${borderColor}`,
     borderRadius: 2,
     backgroundImage: 'none',
-    boxShadow: `0 8px 32px ${theme.tokens.colors.burgundyGlowFaint}`,
+    boxShadow: `0 8px 32px ${theme.palette.primary.glowFaint}`,
 });
 
 /** DialogTitle — display serif font with a bottom divider. Pass the accent colour. */
@@ -39,7 +39,7 @@ export const dialogActionsSx = (theme: Theme) => ({
     gap: 1,
 });
 
-/** Ghost secondary button — muted text, subtle border, turns burgundy on hover. */
+/** Ghost secondary button — muted text, subtle border, turns primary on hover. */
 export const secondaryButtonSx = (theme: Theme) => ({
     fontFamily: theme.tokens.fonts.sans,
     fontWeight: 600,
@@ -55,8 +55,8 @@ export const secondaryButtonSx = (theme: Theme) => ({
     backgroundColor: `${theme.tokens.colors.creamDark}CC`,
     '&:hover': {
         backgroundColor: theme.tokens.colors.surface,
-        borderColor: theme.tokens.colors.burgundy,
-        color: theme.tokens.colors.burgundy,
+        borderColor: theme.palette.primary.main,
+        color: theme.palette.primary.main,
     },
 });
 
@@ -122,7 +122,7 @@ export const textFieldSx = (theme: Theme, accentColor: string) => ({
 export const errorAlertSx = (theme: Theme) => ({
     mb: 2,
     backgroundColor: '#FFF0F1',
-    color: theme.tokens.colors.burgundyDark,
-    border: `1px solid ${theme.tokens.colors.rose}`,
-    '& .MuiAlert-icon': { color: theme.tokens.colors.burgundy },
+    color: theme.palette.primary.dark,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    '& .MuiAlert-icon': { color: theme.palette.primary.main },
 });

@@ -1,6 +1,6 @@
 # hmnm
 
-A Ferrari F1 themed React app that tracks a couple's relationship milestones.
+A React app that tracks a couple's relationship milestones.
 
 **Live site:** [https://minh1609.github.io/hmnm/](https://minh1609.github.io/hmnm/)
 

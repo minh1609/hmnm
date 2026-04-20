@@ -22,9 +22,9 @@ export function AddEventFab({ onClick }: Props) {
                     right: 28,
                     zIndex: 1200,
                     animation: 'breathe 2.8s ease-in-out infinite',
-                    ...primaryButtonSx(theme, theme.tokens.colors.burgundy, theme.tokens.colors.burgundyLight),
+                    ...primaryButtonSx(theme, theme.palette.primary.main, theme.palette.primary.light),
                     '&:hover': {
-                        backgroundColor: theme.tokens.colors.burgundyLight,
+                        backgroundColor: theme.palette.primary.light,
                         animationPlayState: 'paused',
                     },
                 }}

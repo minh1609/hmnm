@@ -40,7 +40,7 @@ interface Props {
 export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props) {
     const isEditing = Boolean(editEvent);
     const theme = useTheme();
-    const { colors: c } = theme.tokens;
+    const { palette: p, tokens: { colors: c } } = theme;
 
     const [date, setDate] = useState('');
     const [name, setName] = useState('');
@@ -121,7 +121,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
         }
     };
 
-    const inputSx = textFieldSx(theme, c.burgundy);
+    const inputSx = textFieldSx(theme, p.primary.main);
 
     return (
         <Dialog
@@ -130,9 +130,9 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
             maxWidth="sm"
             fullWidth
             disableScrollLock
-            PaperProps={{ sx: dialogPaperSx(theme, c.burgundy) }}
+            PaperProps={{ sx: dialogPaperSx(theme, p.primary.main) }}
         >
-            <DialogTitle sx={dialogTitleSx(theme, c.burgundy)}>
+            <DialogTitle sx={dialogTitleSx(theme, p.primary.main)}>
                 {isEditing ? <EditIcon sx={{ fontSize: '1.3rem' }} /> : <AddIcon sx={{ fontSize: '1.3rem' }} />}
                 {isEditing ? 'Edit Memory' : 'New Memory'}
             </DialogTitle>
@@ -211,7 +211,7 @@ export function CreateEventDialog({ open, onClose, onCreated, editEvent }: Props
                             <AddIcon />
                         )
                     }
-                    sx={primaryButtonSx(theme, c.burgundy, c.burgundyLight)}
+                    sx={primaryButtonSx(theme, p.primary.main, p.primary.light)}
                 >
                     {saving ? 'Saving…' : isEditing ? 'Save' : 'Add'}
                 </Button>

@@ -38,12 +38,10 @@ const AppShell = ({ children }: { children: ReactNode }) => {
 };
 
 const SuspenseFallback = () => {
-    const {
-        tokens: { colors: c },
-    } = useTheme();
+    const { palette: p } = useTheme();
     return (
         <AppShell>
-            <CircularProgress sx={{ color: c.burgundy }} size={40} thickness={3} />
+            <CircularProgress sx={{ color: p.primary.main }} size={40} thickness={3} />
         </AppShell>
     );
 };
@@ -55,9 +53,10 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
     }
     render() {
         if (this.state.error) {
-            // Class components can't use hooks. Access tokens directly from the
-            // imported theme object — values are identical to what useTheme() returns.
+            // Class components can't use hooks — access values directly from the
+            // imported theme singleton; values are identical to useTheme() output.
             const { colors: c, fonts: f } = theme.tokens;
+            const p = theme.palette;
             return (
                 <ThemeProvider theme={theme}>
                     <Box
@@ -76,7 +75,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
                                 fontFamily: f.display,
                                 fontSize: '1.4rem',
                                 letterSpacing: '-0.01em',
-                                color: c.burgundy,
+                                color: p.primary.main,
                             }}
                         >
                             Something went wrong
@@ -94,7 +93,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
 
 const AppGuard = () => {
     const { isAdmin, isGf } = useAuth();
-    if ((!isAdmin || !isGf) && import.meta.env.PROD) {
+    if (!isAdmin && !isGf && import.meta.env.PROD) {
         return (
             <>
                 <PageHeader title="The Journey So Far ..." showBack={false} />

@@ -17,6 +17,7 @@ interface PageHeaderProps {
 export function PageHeader({ title, onBack, showBack = true, sticky = true }: PageHeaderProps) {
     const navigate = useNavigate();
     const {
+        palette: p,
         tokens: { colors: c, fonts: f },
     } = useTheme();
 
@@ -31,19 +32,19 @@ export function PageHeader({ title, onBack, showBack = true, sticky = true }: Pa
                 alignItems: 'center',
                 gap: 2,
                 borderBottom: `1px solid ${c.border}`,
-                boxShadow: `0 2px 12px ${c.burgundyGlowFaint}`,
+                boxShadow: `0 2px 12px ${p.primary.glowFaint}`,
             }}
         >
             {showBack && (
                 <IconButton
                     onClick={onBack ?? (() => navigate('/'))}
                     sx={{
-                        color: c.burgundy,
-                        border: `1px solid ${c.burgundy}`,
+                        color: p.primary.main,
+                        border: `1px solid ${p.primary.main}`,
                         borderRadius: '6px',
                         p: 0.75,
                         '&:hover': {
-                            backgroundColor: c.burgundyGlowFaint,
+                            backgroundColor: p.primary.glowFaint,
                             '& .MuiSvgIcon-root': { transform: 'scale(1.25)' },
                         },
                     }}

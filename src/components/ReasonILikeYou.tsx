@@ -21,6 +21,7 @@ export function ReasonILikeYou() {
     const [index, setIndex] = useState(0);
     const [visible, setVisible] = useState(true);
     const {
+        palette: p,
         tokens: { colors: c, fonts: f },
     } = useTheme();
 
@@ -85,7 +86,7 @@ export function ReasonILikeYou() {
                         fontSize: 'clamp(0.65rem, 1.8vw, 1rem)',
                         fontWeight: 600,
                         letterSpacing: '0.02em',
-                        color: c.burgundy,
+                        color: p.primary.main,
                         opacity: visible ? 1 : 0,
                         transform: visible ? 'translateY(0)' : 'translateY(4px)',
                         transition: `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`,
