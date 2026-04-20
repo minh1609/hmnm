@@ -68,9 +68,9 @@ function baseParticle(id: number) {
     };
 }
 
-// Build pool: half images, half icons — computed once, stable across re-renders
-const IMAGE_COUNT = fallingObjects.imageCount;
-const ICON_COUNT = fallingObjects.iconCount;
+// Build pool: each image/icon repeated twice — computed once, stable across re-renders
+const IMAGE_COUNT = IMAGE_FILES.length * 2;
+const ICON_COUNT = ICONS.length * 2;
 
 const PARTICLES: Particle[] = [
     ...Array.from<unknown, ImageParticle>({ length: IMAGE_COUNT }, (_, i) => ({

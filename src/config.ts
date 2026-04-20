@@ -20,18 +20,6 @@ export type DataProfile = typeof activeProfile;
 // ── FallingObjects ────────────────────────────────────────────────────────────
 
 export const fallingObjects = {
-    /**
-     * How many image particles (transparent PNGs from public/particles/) to
-     * render in the ambient background. Higher values are denser but costlier.
-     */
-    imageCount: 6,
-
-    /**
-     * How many emoji/icon particles to render alongside the images.
-     * Total ambient particles = imageCount + iconCount.
-     */
-    iconCount: 10,
-
     particle: {
         /**
          * Horizontal spread: particles are placed at a random horizontal
@@ -48,14 +36,14 @@ export const fallingObjects = {
          * Fall duration range in seconds. Shorter = faster falling particles.
          * Each particle picks a random value in [durationMin, durationMax].
          */
-        durationMin: 10,
-        durationMax: 24,
+        durationMin: 16,
+        durationMax: 36,
 
         /**
          * Negative delay staggers particles so they don't all start from the
          * top simultaneously. Range is in seconds; must be ≤ 0.
          */
-        delayMin: -24,
+        delayMin: -36,
         delayMax: 0,
 
         /**

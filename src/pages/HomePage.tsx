@@ -35,9 +35,9 @@ const yearSx =
     (active: boolean): SxProps<Theme> =>
     (theme) => ({
         fontFamily: theme.typography.h2.fontFamily,
-        fontWeight: active ? 700 : 400,
+        fontWeight: active ? 700 : 500,
         fontStyle: active ? 'normal' : 'italic',
-        fontSize: active ? '1.9rem' : '1.25rem',
+        fontSize: active ? '1.9rem' : '1.6rem',
         color: active ? theme.tokens.colors.burgundy : theme.tokens.colors.inkMuted,
         letterSpacing: '-0.02em',
         cursor: 'pointer',
