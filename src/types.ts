@@ -32,6 +32,24 @@ export interface Trip {
     notes?: string;
 }
 
+export const GfReact = {
+    Heart: 'heart',
+    Laugh: 'laugh',
+    Wow:   'wow',
+    Sad:   'sad',
+    Angry: 'angry',
+} as const;
+
+export type GfReact = (typeof GfReact)[keyof typeof GfReact];
+
+export const GF_REACT_EMOJI: Record<GfReact, string> = {
+    heart: '❤️',
+    laugh: '😂',
+    wow:   '😮',
+    sad:   '😢',
+    angry: '😡',
+};
+
 export interface TimelineEvent {
     /** Firestore document ID — present for documents fetched from Firestore, absent for static data */
     id?: string;
@@ -44,6 +62,8 @@ export interface TimelineEvent {
     owner: string;
     /** Note added by gf role — only editable by gf */
     gfNote?: string;
+    /** Reaction emoji chosen by gf — stored as GfReact enum string in Firestore */
+    gfReact?: GfReact;
 }
 
 export interface TimelineYear {

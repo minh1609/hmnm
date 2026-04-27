@@ -19,7 +19,7 @@ service cloud.firestore {
       allow write: if isAdmin();
       allow create: if request.resource.data.name == 'official';
       allow update: if isGf()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['gfNote']);
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['gfNote', 'gfReact']);
     }
     match /trips/{doc} {
       allow read: if true;

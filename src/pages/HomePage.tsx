@@ -10,7 +10,7 @@ import { IconBurst } from '@/components/IconBurst';
 import CustomTooltip from '@/components/CustomTooltip';
 import { CreateEventDialog } from '@/components/CreateEventDialog';
 import { DeleteEventDialog } from '@/components/DeleteEventDialog';
-import { GfNoteDialog } from '@/components/GfNoteDialog';
+import { GfActionDialog } from '@/components/GfActionDialog';
 import { AddEventFab } from '@/components/AddEventFab';
 import { ScrollToTopFab } from '@/components/ScrollToTopFab';
 import { YearDescription } from '@/components/YearDescription';
@@ -29,6 +29,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import type { SxProps, Theme } from '@mui/material';
 import type { TimelineEvent } from '@/types';
+import { GF_REACT_EMOJI } from '@/types';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 
 const yearSx =
@@ -73,7 +74,7 @@ export function HomePage() {
     const [deleteEvent, setDeleteEvent] = useState<TimelineEvent | null>(null);
     const [editEvent, setEditEvent] = useState<TimelineEvent | null>(null);
     const [dotMenu, setDotMenu] = useState<{ anchor: HTMLElement; event: TimelineEvent } | null>(null);
-    const [gfNoteEvent, setGfNoteEvent] = useState<TimelineEvent | null>(null);
+    const [gfActionEvent, setGfActionEvent] = useState<TimelineEvent | null>(null);
     const touchStartX = useRef<number | null>(null);
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -213,29 +214,63 @@ export function HomePage() {
                                     />
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
-                                    <TimelineDot
-                                        onClick={
-                                            isAdmin
-                                                ? (e) => setDotMenu({ anchor: e.currentTarget, event })
-                                                : isGf
-                                                  ? () => setGfNoteEvent(event)
-                                                  : undefined
-                                        }
-                                        sx={{
-                                            backgroundColor: event.gfNote ? p.secondary.main : c.surface,
-                                            borderColor: p.primary.main,
-                                            boxShadow: `0 0 6px ${p.primary.glowFaint}`,
-                                            cursor: isAdmin || isGf ? 'pointer' : 'default',
-                                            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                                            ...((isAdmin || isGf) && {
-                                                '&:hover': {
-                                                    borderColor: p.primary.light,
-                                                    boxShadow: `0 0 10px ${p.primary.glow}`,
-                                                    transform: 'scale(1.3)',
-                                                },
-                                            }),
-                                        }}
-                                    />
+                                    {event.gfReact ? (
+                                        <Box
+                                            component="span"
+                                            onClick={
+                                                isAdmin
+                                                    ? (e: React.MouseEvent<HTMLSpanElement>) =>
+                                                          setDotMenu({ anchor: e.currentTarget as HTMLElement, event })
+                                                    : isGf
+                                                      ? () => setGfActionEvent(event)
+                                                      : undefined
+                                            }
+                                            sx={{
+                                                fontSize: '1.55rem',
+                                                lineHeight: 1,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: 32,
+                                                height: 32,
+                                                cursor: isAdmin || isGf ? 'pointer' : 'default',
+                                                filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.18))',
+                                                transition: 'transform 0.15s ease, filter 0.15s ease',
+                                                ...((isAdmin || isGf) && {
+                                                    '&:hover': {
+                                                        transform: 'scale(1.35)',
+                                                        filter: `drop-shadow(0 2px 6px ${p.secondary.main}99)`,
+                                                    },
+                                                }),
+                                            }}
+                                        >
+                                            {GF_REACT_EMOJI[event.gfReact]}
+                                        </Box>
+                                    ) : (
+                                        <TimelineDot
+                                            onClick={
+                                                isAdmin
+                                                    ? (e) => setDotMenu({ anchor: e.currentTarget, event })
+                                                    : isGf
+                                                      ? () => setGfActionEvent(event)
+                                                      : undefined
+                                            }
+                                            sx={{
+                                                backgroundColor: event.gfNote ? p.secondary.main : c.surface,
+                                                borderColor: p.primary.main,
+                                                boxShadow: `0 0 6px ${p.primary.glowFaint}`,
+                                                cursor: isAdmin || isGf ? 'pointer' : 'default',
+                                                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                                                ...((isAdmin || isGf) && {
+                                                    '&:hover': {
+                                                        // borderColor: p.primary.light,
+                                                        // boxShadow: `0 0 10px ${p.primary.glow}`,
+                                                        transform: 'scale(1.3)',
+                                                    },
+                                                }),
+                                            }}
+                                        />
+                                    )}
                                     <TimelineConnector
                                         sx={{
                                             backgroundColor: p.secondary.main,
@@ -413,7 +448,7 @@ export function HomePage() {
 
             <DeleteEventDialog event={deleteEvent} onClose={() => setDeleteEvent(null)} onDeleted={refetch} />
 
-            <GfNoteDialog event={gfNoteEvent} onClose={() => setGfNoteEvent(null)} onSaved={refetch} />
+            <GfActionDialog event={gfActionEvent} onClose={() => setGfActionEvent(null)} onSaved={refetch} />
         </>
     );
 }

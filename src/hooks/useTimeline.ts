@@ -3,6 +3,7 @@ import { collection, getDocs, query, where, orderBy, type Timestamp } from 'fire
 import { db } from '@/firebase';
 import { timelineEvents as staticTimelineEvents, yearDescriptions as staticYearDescriptions } from '@/data';
 import type { TimelineEvent, TimelineYear } from '@/types';
+import { GfReact } from '@/types';
 import { activeProfile } from '@/config';
 
 function toDate(val: unknown): Date {
@@ -75,6 +76,9 @@ export function useTimeline(): UseTimelineResult {
                     if (d.des != null) event.des = d.des as string;
                     if (d.burstIcon != null) event.burstIcon = d.burstIcon as string;
                     if (d.gfNote != null) event.gfNote = d.gfNote as string;
+                    if (d.gfReact != null && Object.values(GfReact).includes(d.gfReact as GfReact)) {
+                        event.gfReact = d.gfReact as GfReact;
+                    }
                     return event;
                 });
                 console.log(`[useTimeline] fetched ${events.length} events from ${source}`);
