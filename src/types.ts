@@ -35,8 +35,8 @@ export interface Trip {
 export const GfReact = {
     Heart: 'heart',
     Laugh: 'laugh',
-    Wow:   'wow',
-    Sad:   'sad',
+    Wow: 'wow',
+    Sad: 'sad',
     Angry: 'angry',
 } as const;
 
@@ -45,8 +45,8 @@ export type GfReact = (typeof GfReact)[keyof typeof GfReact];
 export const GF_REACT_EMOJI: Record<GfReact, string> = {
     heart: '❤️',
     laugh: '😂',
-    wow:   '😮',
-    sad:   '😢',
+    wow: '😮',
+    sad: '😢',
     angry: '😡',
 };
 
