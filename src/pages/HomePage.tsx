@@ -52,7 +52,10 @@ export function HomePage() {
     const { timeline: datingTimeline, refetch } = useTimeline();
     const { isAdmin, isGf } = useAuth();
     const theme = useTheme();
-    const { palette: p, tokens: { colors: c, fonts: f } } = theme;
+    const {
+        palette: p,
+        tokens: { colors: c, fonts: f },
+    } = theme;
 
     const years = Object.keys(datingTimeline)
         .map(Number)
@@ -348,6 +351,7 @@ export function HomePage() {
                 open={dotMenu !== null}
                 anchorEl={dotMenu?.anchor}
                 onClose={() => setDotMenu(null)}
+                disableScrollLock
                 PaperProps={{
                     sx: {
                         backgroundColor: c.surface,

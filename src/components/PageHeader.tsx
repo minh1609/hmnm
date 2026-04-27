@@ -60,7 +60,7 @@ export function PageHeader({ title, onBack, showBack = true, sticky = true }: Pa
                         fontWeight: 700,
                         fontSize: { xs: '1.5rem', sm: '2rem' },
                         letterSpacing: '-0.02em',
-                        color: c.ink,
+                        color: p.primary.main,
                         lineHeight: 1.1,
                     }}
                 >
