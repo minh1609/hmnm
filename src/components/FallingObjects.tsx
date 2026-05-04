@@ -68,26 +68,27 @@ function baseParticle(id: number) {
     };
 }
 
-// Build pool: each image/icon repeated twice — computed once, stable across re-renders
-const IMAGE_COUNT = 10;
-const ICON_COUNT = 4;
-
-const PARTICLES: Particle[] = [
-    ...Array.from<unknown, ImageParticle>({ length: IMAGE_COUNT }, (_, i) => ({
-        kind: 'image',
-        ...baseParticle(i),
-        ...pick(IMAGE_SRCS),
-    })),
-    ...Array.from<unknown, IconParticle>({ length: ICON_COUNT }, (_, i) => ({
-        kind: 'icon',
-        ...baseParticle(IMAGE_COUNT + i),
-        ...pick(ICONS),
-    })),
-];
-
 export function FallingObjects() {
     const theme = useTheme();
     const [hoveredId, setHoveredId] = useState<number | null>(null);
+
+    const [particles] = useState<Particle[]>(() => {
+        const isMobile = window.matchMedia('(max-width: 600px)').matches;
+        const imageCount = Math.ceil(IMAGE_FILES.length / (isMobile ? 2 : 1));
+        const iconCount = Math.ceil(ICONS.length / (isMobile ? 2 : 1));
+        return [
+            ...Array.from<unknown, ImageParticle>({ length: imageCount }, (_, i) => ({
+                kind: 'image',
+                ...baseParticle(i),
+                ...pick(IMAGE_SRCS),
+            })),
+            ...Array.from<unknown, IconParticle>({ length: iconCount }, (_, i) => ({
+                kind: 'icon',
+                ...baseParticle(imageCount + i),
+                ...pick(ICONS),
+            })),
+        ];
+    });
 
     return createPortal(
         <div
@@ -99,7 +100,7 @@ export function FallingObjects() {
                 overflow: 'hidden',
             }}
         >
-            {PARTICLES.map((p) => {
+            {particles.map((p) => {
                 const isHovered = hoveredId === p.id;
                 const sharedStyle = {
                     position: 'absolute' as const,

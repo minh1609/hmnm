@@ -7,7 +7,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { JourneyCounter } from '@/components/JourneyCounter';
 import { FallingObjects } from '@/components/FallingObjects';
 import { IconBurst } from '@/components/IconBurst';
-import CustomTooltip from '@/components/CustomTooltip';
 import { CreateEventDialog } from '@/components/CreateEventDialog';
 import { DeleteEventDialog } from '@/components/DeleteEventDialog';
 import { GfActionDialog } from '@/components/GfActionDialog';
@@ -25,6 +24,7 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import { Alert, Box, Chip, Snackbar, Typography, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import CustomTooltip from '@/components/CustomTooltip';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import type { SxProps, Theme } from '@mui/material';
@@ -180,27 +180,7 @@ export function HomePage() {
                 <Timeline position="alternate">
                     {currentTimeline.events.map((event) => {
                         const season = getSeason(event.date);
-                        const tooltipContent =
-                            event.des || event.gfNote ? (
-                                <>
-                                    {event.des && (
-                                        <span style={{ whiteSpace: 'pre-line' }}>{event.des}</span>
-                                    )}
-                                    {event.des && event.gfNote && <br />}
-                                    {event.gfNote && (
-                                        <span
-                                            style={{
-                                                whiteSpace: 'pre-line',
-                                                color: p.secondary.main,
-                                            }}
-                                        >
-                                            {event.gfNote}
-                                        </span>
-                                    )}
-                                </>
-                            ) : (
-                                ''
-                            );
+                        const hasContent = !!(event.des || event.gfNote);
 
                         return (
                             <TimelineItem key={event.name}>
@@ -216,13 +196,17 @@ export function HomePage() {
                                                 year: 'numeric',
                                             })
                                             .replace(/\//g, '-')}
-                                        onClick={(e) => handleChipClick(e, event.burstIcon)}
+                                        onClick={(e) => {
+                                            handleChipClick(e, event.burstIcon);
+                                            if (isAdmin) setDotMenu({ anchor: e.currentTarget, event });
+                                            else if (isGf) setGfActionEvent(event);
+                                        }}
                                         sx={{
                                             backgroundColor: season.bgColor,
                                             color: season.color,
                                             fontWeight: 600,
                                             borderRadius: '8px',
-                                            cursor: event.burstIcon ? 'pointer' : 'default',
+                                            cursor: isAdmin || isGf || event.burstIcon ? 'pointer' : 'default',
                                             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                             '&:hover': {
                                                 backgroundColor: season.bgColor,
@@ -236,63 +220,31 @@ export function HomePage() {
                                     />
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
-                                    <CustomTooltip title={tooltipContent} placement="top">
-                                        {event.gfReact ? (
-                                            <Box
-                                                component="span"
-                                                onClick={
-                                                    isAdmin
-                                                        ? (e: React.MouseEvent<HTMLSpanElement>) =>
-                                                              setDotMenu({ anchor: e.currentTarget as HTMLElement, event })
-                                                        : isGf
-                                                          ? () => setGfActionEvent(event)
-                                                          : undefined
-                                                }
-                                                sx={{
-                                                    fontSize: '1.55rem',
-                                                    lineHeight: 1,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    width: 32,
-                                                    height: 32,
-                                                    cursor: isAdmin || isGf ? 'pointer' : 'default',
-                                                    filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.18))',
-                                                    transition: 'transform 0.15s ease, filter 0.15s ease',
-                                                    ...((isAdmin || isGf) && {
-                                                        '&:hover': {
-                                                            transform: 'scale(1.35)',
-                                                            filter: `drop-shadow(0 2px 6px ${p.secondary.main}99)`,
-                                                        },
-                                                    }),
-                                                }}
-                                            >
-                                                {GF_REACT_EMOJI[event.gfReact]}
-                                            </Box>
-                                        ) : (
-                                            <TimelineDot
-                                                onClick={
-                                                    isAdmin
-                                                        ? (e) => setDotMenu({ anchor: e.currentTarget, event })
-                                                        : isGf
-                                                          ? () => setGfActionEvent(event)
-                                                          : undefined
-                                                }
-                                                sx={{
-                                                    backgroundColor: event.gfNote ? p.secondary.main : (event.des ? p.primary.main : c.surface),
-                                                    borderColor: p.primary.main,
-                                                    boxShadow: `0 0 6px ${p.primary.glowFaint}`,
-                                                    cursor: isAdmin || isGf ? 'pointer' : 'default',
-                                                    transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                                                    ...((isAdmin || isGf) && {
-                                                        '&:hover': {
-                                                            transform: 'scale(1.3)',
-                                                        },
-                                                    }),
-                                                }}
-                                            />
-                                        )}
-                                    </CustomTooltip>
+                                    {event.gfReact ? (
+                                        <Box
+                                            component="span"
+                                            sx={{
+                                                fontSize: '1.55rem',
+                                                lineHeight: 1,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: 32,
+                                                height: 32,
+                                                filter: 'drop-shadow(0 1px 4px rgba(0,0,0,0.18))',
+                                            }}
+                                        >
+                                            {GF_REACT_EMOJI[event.gfReact]}
+                                        </Box>
+                                    ) : (
+                                        <TimelineDot
+                                            sx={{
+                                                backgroundColor: event.gfNote ? p.secondary.main : (event.des ? p.primary.main : c.surface),
+                                                borderColor: p.primary.main,
+                                                boxShadow: `0 0 6px ${p.primary.glowFaint}`,
+                                            }}
+                                        />
+                                    )}
                                     <TimelineConnector
                                         sx={{
                                             backgroundColor: p.secondary.main,
@@ -300,24 +252,43 @@ export function HomePage() {
                                     />
                                 </TimelineSeparator>
                                 <TimelineContent>
-                                    <Typography
-                                        fontWeight={600}
-                                        sx={(t) => ({
-                                            fontFamily: t.typography.h3.fontFamily,
-                                            fontSize: '1.05rem',
-                                            letterSpacing: '-0.01em',
-                                            color: c.ink,
-                                            cursor: 'default',
-                                            display: 'inline-block',
-                                            transition: 'color 0.3s ease',
-                                            '&:hover': {
-                                                color: p.primary.main,
-                                                animation: 'breathe 4.5s ease-in-out infinite',
-                                            },
-                                        })}
+                                    <CustomTooltip
+                                        title={hasContent ? (
+                                            <Box sx={{ fontSize: '0.82rem', lineHeight: 1.5, maxWidth: 260 }}>
+                                                {event.des && (
+                                                    <Typography sx={{ whiteSpace: 'pre-line', fontSize: 'inherit', lineHeight: 'inherit', color: c.white }}>
+                                                        {event.des}
+                                                    </Typography>
+                                                )}
+                                                {event.des && event.gfNote && <Box sx={{ height: '0.5em' }} />}
+                                                {event.gfNote && (
+                                                    <Typography sx={{ whiteSpace: 'pre-line', fontSize: 'inherit', lineHeight: 'inherit', color: p.secondary.main }}>
+                                                        {event.gfNote}
+                                                    </Typography>
+                                                )}
+                                            </Box>
+                                        ) : ''}
+                                        placement="top"
                                     >
-                                        {event.name}
-                                    </Typography>
+                                        <Typography
+                                            fontWeight={600}
+                                            sx={(t) => ({
+                                                fontFamily: t.typography.h3.fontFamily,
+                                                fontSize: '1.05rem',
+                                                letterSpacing: '-0.01em',
+                                                color: c.ink,
+                                                cursor: hasContent ? 'pointer' : 'default',
+                                                display: 'inline-block',
+                                                transition: 'color 0.3s ease',
+                                                '&:hover': {
+                                                    color: p.primary.main,
+                                                    animation: 'breathe 4.5s ease-in-out infinite',
+                                                },
+                                            })}
+                                        >
+                                            {event.name}
+                                        </Typography>
+                                    </CustomTooltip>
                                 </TimelineContent>
                             </TimelineItem>
                         );

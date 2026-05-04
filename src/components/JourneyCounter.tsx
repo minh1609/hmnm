@@ -50,8 +50,8 @@ function StatCard({ value, label, icon, live, onClick, sx }: StatCardProps) {
             <Box
                 sx={{
                     position: 'relative',
-                    width: { xs: 88, sm: 112 },
-                    height: { xs: 88, sm: 112 },
+                    width: { xs: 72, sm: 112 },
+                    height: { xs: 72, sm: 112 },
                     borderRadius: '50%',
                     background: c.creamDark,
                     display: 'flex',
@@ -76,7 +76,7 @@ function StatCard({ value, label, icon, live, onClick, sx }: StatCardProps) {
                         opacity: 0.055,
                         pointerEvents: 'none',
                         '& .MuiSvgIcon-root': {
-                            fontSize: { xs: 52, sm: 64 },
+                            fontSize: { xs: 42, sm: 64 },
                             color: c.ink,
                         },
                     }}
@@ -90,7 +90,7 @@ function StatCard({ value, label, icon, live, onClick, sx }: StatCardProps) {
                         fontFamily: f.display,
                         fontWeight: 700,
                         fontStyle: 'italic',
-                        fontSize: { xs: '1.6rem', sm: '2rem' },
+                        fontSize: { xs: '1.25rem', sm: '2rem' },
                         lineHeight: 1,
                         color: p.primary.main,
                         letterSpacing: '-0.02em',
@@ -189,13 +189,10 @@ export function JourneyCounter({ title }: JourneyCounterProps) {
             <Box
                 sx={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
-                    gap: { xs: 2, sm: 3 },
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    gap: { xs: 1.5, sm: 3 },
                     width: '100%',
                     justifyItems: 'center',
-                    '@media (min-width: 480px)': {
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                    },
                 }}
             >
                 <StatCard value={values.days} label="Days Shared" icon={<CalendarTodayRoundedIcon />} />

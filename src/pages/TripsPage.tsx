@@ -226,7 +226,7 @@ export function TripsPage() {
                             display: 'flex',
                             flexWrap: 'wrap',
                             gap: 1.5,
-                            justifyContent: 'center',
+                            justifyContent: 'flex-start',
                             px: { xs: 2, sm: 4 },
                             pt: 1,
                             pb: 2,
@@ -267,13 +267,9 @@ export function TripsPage() {
                                         fontSize: '0.8rem',
                                         color: c.ink,
                                         fontWeight: 500,
-                                        maxWidth: 180,
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
                                     }}
                                 >
-                                    {trip.name}
+                                    {trip.name.length > 10 ? `${trip.name.slice(0, 10)}…` : trip.name}
                                 </Typography>
                                 {trip.type === 'plan' && (
                                     <Typography
