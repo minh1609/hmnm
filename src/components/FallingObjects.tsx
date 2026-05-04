@@ -74,8 +74,11 @@ export function FallingObjects() {
 
     const [particles] = useState<Particle[]>(() => {
         const isMobile = window.matchMedia('(max-width: 600px)').matches;
-        const imageCount = Math.ceil(IMAGE_FILES.length / (isMobile ? 2 : 1));
-        const iconCount = Math.ceil(ICONS.length / (isMobile ? 2 : 1));
+        const mobileMultiplier = 0.6;
+        const desktopMultiplier = 1.2;
+        const multiplier = isMobile ? mobileMultiplier : desktopMultiplier;
+        const imageCount = Math.ceil(IMAGE_FILES.length * multiplier);
+        const iconCount = Math.ceil(ICONS.length * multiplier);
         return [
             ...Array.from<unknown, ImageParticle>({ length: imageCount }, (_, i) => ({
                 kind: 'image',
