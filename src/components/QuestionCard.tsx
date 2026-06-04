@@ -1,12 +1,21 @@
 import { useState } from 'react';
 import { Box, Typography, LinearProgress, Snackbar, Alert } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import type { Question } from '@/types';
 import { YesCelebration } from '@/components/YesCelebration';
-import type { QuestionCardProps } from './QuestionCard.types';
+import { useAppStore } from '@/store';
 
-export type { Question } from './QuestionCard.types';
+export type { Question };
 
-export function QuestionCard({ questions, loadingAnswer, showYesCelebration, onComplete }: QuestionCardProps) {
+interface QuestionCardProps {
+    questions: Question[];
+    onComplete: () => void;
+}
+
+export function QuestionCard({ questions, onComplete }: QuestionCardProps) {
+    const showCelebration = useAppStore((s) => s.showCelebration);
+    const setShowCelebration = useAppStore((s) => s.setShowCelebration);
+    const loading = useAppStore((s) => s.loading);
     const theme = useTheme();
     const {
         palette: p,
@@ -27,6 +36,7 @@ export function QuestionCard({ questions, loadingAnswer, showYesCelebration, onC
     function handleAnswer(optionIndex: number) {
         if (optionIndex === question.correctIndex) {
             if (currentIndex + 1 >= questions.length) {
+                setShowCelebration(true)
                 onComplete();
             } else {
                 setCurrentIndex((i) => i + 1);
@@ -42,9 +52,9 @@ export function QuestionCard({ questions, loadingAnswer, showYesCelebration, onC
 
     return (
         <>
-            <LinearProgress
-                variant={loadingAnswer ? 'indeterminate' : 'determinate'}
-                value={showYesCelebration ? 100 : progress}
+                <LinearProgress
+                variant={loading ? 'indeterminate' : 'determinate'}
+                value={showCelebration ? 100 : progress}
                 sx={{
                     height: 3,
                     backgroundColor: c.borderSubtle,
@@ -65,7 +75,7 @@ export function QuestionCard({ questions, loadingAnswer, showYesCelebration, onC
                     py: 4,
                 }}
             >
-                {!loadingAnswer && !showYesCelebration && (
+                {!loading && !showCelebration && (
                     <Box
                         key={currentIndex}
                         className="timeline-slide-left"
@@ -202,7 +212,7 @@ export function QuestionCard({ questions, loadingAnswer, showYesCelebration, onC
                 )}
             </Box>
 
-            {showYesCelebration && <YesCelebration />}
+            {showCelebration && <YesCelebration />}
 
             <Snackbar
                 key={snackbar.key}

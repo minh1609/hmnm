@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useAppStore } from '@/store';
 import { Box, Button, CircularProgress } from '@mui/material';
 import {
     doc,
@@ -51,8 +52,9 @@ export function WybmgfPage() {
     } = theme;
     const { isAdmin } = useAuth();
 
-    const [showYesCelebration, setShowYesCelebration] = useState(false);
-    const [loadingAnswer, setLoadingAnswer] = useState(true);
+    const showCelebration = useAppStore((s) => s.showCelebration);
+    const setShowCelebration = useAppStore((s) => s.setShowCelebration);
+    const setLoading = useAppStore((s) => s.setLoading);
     const [resetting, setResetting] = useState(false);
     const [resetKey, setResetKey] = useState(0);
     const celebTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -62,12 +64,12 @@ export function WybmgfPage() {
             try {
                 const metaDoc = await getDoc(doc(db, 'general', 'wybmgf'));
                 if (metaDoc.exists() && metaDoc.data().answer === true) {
-                    setShowYesCelebration(true);
+                    setShowCelebration(true);
                 }
             } catch {
                 // treat as false on error
             } finally {
-                setLoadingAnswer(false);
+                setLoading(false);
             }
         }
         fetchAnswerStatus();
@@ -81,7 +83,6 @@ export function WybmgfPage() {
     );
 
     function handleComplete() {
-        setShowYesCelebration(true);
         runTransaction(db, async (tx) => {
             tx.set(
                 doc(db, 'general', 'wybmgf'),
@@ -111,7 +112,7 @@ export function WybmgfPage() {
             officialSnap.forEach((d) => batch.delete(d.ref));
 
             await batch.commit();
-            setShowYesCelebration(false);
+            setShowCelebration(false);
             setResetKey((k) => k + 1);
         } catch {
             // silent
@@ -127,13 +128,11 @@ export function WybmgfPage() {
             <QuestionCard
                 key={resetKey}
                 questions={QUESTIONS}
-                loadingAnswer={loadingAnswer}
-                showYesCelebration={showYesCelebration}
                 onComplete={handleComplete}
             />
 
             {/* Admin reset button — overlaid above celebration */}
-            {showYesCelebration && isAdmin && (
+            {showCelebration && isAdmin && (
                 <Box
                     sx={{
                         position: 'fixed',
