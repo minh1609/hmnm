@@ -76,4 +76,5 @@ export interface Question {
     options: string[];
     correctIndex: number;
     wrongMessages: string[];
+    image?: string;
 }
