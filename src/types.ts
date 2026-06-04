@@ -70,3 +70,10 @@ export interface TimelineYear {
     description: string;
     events: TimelineEvent[];
 }
+
+export interface Question {
+    question: string;
+    options: string[];
+    correctIndex: number;
+    wrongMessages: string[];
+}
