@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Box, Typography, LinearProgress, Snackbar, Alert, Button, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import type { Question } from '@/types';
-import { YesCelebration } from '@/components/YesCelebration';
 import { useAppStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -14,9 +13,11 @@ interface QuestionCardProps {
     questions: Question[];
     onComplete: () => void;
     onReset?: () => void | Promise<void>;
+    onWrongAnswer?: (questionIndex: number, chosenIndex: number) => void;
+    onAdvance?: (questionIndex: number) => void;
 }
 
-export function QuestionCard({ questions, onComplete, onReset }: QuestionCardProps) {
+export function QuestionCard({ questions, onComplete, onReset, onWrongAnswer, onAdvance }: QuestionCardProps) {
     const showCelebration = useAppStore((s) => s.showCelebration);
     const setShowCelebration = useAppStore((s) => s.setShowCelebration);
     const loading = useAppStore((s) => s.loading);
@@ -54,18 +55,21 @@ export function QuestionCard({ questions, onComplete, onReset }: QuestionCardPro
 
     function handleAnswer(optionIndex: number) {
         if (optionIndex === question.correctIndex) {
+            //last answer check
             if (currentIndex + 1 >= questions.length) {
                 setShowCelebration(true)
                 onComplete();
             } else {
                 setCurrentIndex((i) => i + 1);
                 setWrongAttempts(0);
+                onAdvance?.(currentIndex);
             }
         } else {
             const msgs = question.wrongMessages;
             const msg = msgs[wrongAttempts % msgs.length];
             setWrongAttempts((n) => n + 1);
             setSnackbar((s) => ({ open: true, message: msg, key: s.key + 1 }));
+            onWrongAnswer?.(currentIndex, optionIndex);
         }
     }
 
@@ -230,8 +234,6 @@ export function QuestionCard({ questions, onComplete, onReset }: QuestionCardPro
                     </Box>
                 )}
             </Box>
-
-            {showCelebration && <YesCelebration />}
 
             {showCelebration && isAdmin && (
                 <Box sx={{ position: 'fixed', bottom: 72, left: 24, zIndex: 9999 }}>
