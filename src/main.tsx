@@ -14,6 +14,7 @@ import { ReasonILikeYou } from './components/ReasonILikeYou';
 import { useAuth } from './hooks/useAuth';
 import { UnderConstruction } from './components/UnderConstruction';
 import { PageHeader } from './components/PageHeader';
+import { useLocation } from 'react-router-dom';
 
 /** Centred wrapper used by the loading and error states. */
 const AppShell = ({ children }: { children: ReactNode }) => {
@@ -93,7 +94,8 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
 
 const AppGuard = () => {
     const { isAdmin, isGf } = useAuth();
-    if (!isAdmin && !isGf && import.meta.env.PROD) {
+    const { pathname } = useLocation();
+    if (!isAdmin && !isGf && pathname !== '/sorry' && import.meta.env.PROD) {
         return (
             <>
                 <PageHeader title="The Journey So Far ..." showBack={false} />

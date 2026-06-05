@@ -27,9 +27,9 @@ const QUESTIONS: Question[] = [
         options: ['Maybe', 'Still thinking…', 'Not yet', 'Được rồi'],
         correctIndex: 3,
         wrongMessages: [
-            "Chọn sai làm em bé khóc oy, dỗ em bé mau đi",
-            "Chọn sai làm em bé khóc oy, dỗ em bé mau đi",
-            "Chọn sai làm em bé khóc oy, dỗ em bé mau đi",
+            "Chọn sai rồi, em bé đang khóc kìa 😢 thử lại đi em",
+            "Sao chọn vậy, em bé tức rồi đó, chọn lại nhanh lên",
+            "Không có đúng đâu, dỗ em bé trước rồi tính sau 🥺",
         ],
     },
 ];
