@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAppStore } from '@/store';
-import { Box, Button, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import {
     doc,
     getDoc,
@@ -18,9 +18,6 @@ import { useTheme } from '@mui/material/styles';
 import { PageHeader } from '@/components/PageHeader';
 import { QuestionCard } from '@/components/QuestionCard';
 import type { Question } from '@/types';
-import { useAuth } from '@/hooks/useAuth';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { secondaryButtonSx } from '@/styles/appStyles';
 
 const QUESTIONS: Question[] = [
     {
@@ -50,13 +47,8 @@ export function WybmgfPage() {
     const {
         tokens: { colors: c },
     } = theme;
-    const { isAdmin } = useAuth();
-
-    const showCelebration = useAppStore((s) => s.showCelebration);
     const setShowCelebration = useAppStore((s) => s.setShowCelebration);
     const setLoading = useAppStore((s) => s.setLoading);
-    const [resetting, setResetting] = useState(false);
-    const [resetKey, setResetKey] = useState(0);
     const celebTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
@@ -92,7 +84,7 @@ export function WybmgfPage() {
             const eventRef = doc(collection(db, 'timeline_events'));
             tx.set(eventRef, {
                 date: Timestamp.fromDate(new Date()),
-                name: 'official',
+                name: 'Official',
                 burstIcon: '💗',
                 owner: 'mindy',
             });
@@ -100,24 +92,19 @@ export function WybmgfPage() {
     }
 
     async function handleReset() {
-        setResetting(true);
         try {
             const batch = writeBatch(db);
 
             batch.set(doc(db, 'general', 'wybmgf'), { answer: false }, { merge: true });
 
             const officialSnap = await getDocs(
-                query(collection(db, 'timeline_events'), where('name', '==', 'official'))
+                query(collection(db, 'timeline_events'), where('name', '==', 'Official'))
             );
             officialSnap.forEach((d) => batch.delete(d.ref));
 
             await batch.commit();
-            setShowCelebration(false);
-            setResetKey((k) => k + 1);
         } catch {
             // silent
-        } finally {
-            setResetting(false);
         }
     }
 
@@ -126,33 +113,10 @@ export function WybmgfPage() {
             <PageHeader title="Questions for You" />
 
             <QuestionCard
-                key={resetKey}
                 questions={QUESTIONS}
                 onComplete={handleComplete}
+                onReset={handleReset}
             />
-
-            {/* Admin reset button — overlaid above celebration */}
-            {showCelebration && isAdmin && (
-                <Box
-                    sx={{
-                        position: 'fixed',
-                        bottom: 72,
-                        left: 24,
-                        zIndex: 9999,
-                    }}
-                >
-                    <Button
-                        startIcon={
-                            resetting ? <CircularProgress size={14} sx={{ color: 'inherit' }} /> : <DeleteOutlineIcon />
-                        }
-                        onClick={handleReset}
-                        disabled={resetting}
-                        sx={secondaryButtonSx(theme)}
-                    >
-                        Reset
-                    </Button>
-                </Box>
-            )}
         </Box>
     );
 }

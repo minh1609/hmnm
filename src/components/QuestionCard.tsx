@@ -1,21 +1,28 @@
 import { useState } from 'react';
-import { Box, Typography, LinearProgress, Snackbar, Alert } from '@mui/material';
+import { Box, Typography, LinearProgress, Snackbar, Alert, Button, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import type { Question } from '@/types';
 import { YesCelebration } from '@/components/YesCelebration';
 import { useAppStore } from '@/store';
+import { useAuth } from '@/hooks/useAuth';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { secondaryButtonSx } from '@/styles/appStyles';
 
 export type { Question };
 
 interface QuestionCardProps {
     questions: Question[];
     onComplete: () => void;
+    onReset?: () => void | Promise<void>;
 }
 
-export function QuestionCard({ questions, onComplete }: QuestionCardProps) {
+export function QuestionCard({ questions, onComplete, onReset }: QuestionCardProps) {
     const showCelebration = useAppStore((s) => s.showCelebration);
     const setShowCelebration = useAppStore((s) => s.setShowCelebration);
     const loading = useAppStore((s) => s.loading);
+    const resetting = useAppStore((s) => s.resetting);
+    const setResetting = useAppStore((s) => s.setResetting);
+    const { isAdmin } = useAuth();
     const theme = useTheme();
     const {
         palette: p,
@@ -32,6 +39,18 @@ export function QuestionCard({ questions, onComplete }: QuestionCardProps) {
 
     const question = questions[currentIndex];
     const progress = (currentIndex / questions.length) * 100;
+
+    async function handleReset() {
+        setResetting(true)
+        try {
+            await onReset?.();
+        } catch {}
+        setCurrentIndex(0);
+        setWrongAttempts(0);
+        setSnackbar({ open: false, message: '', key: 0 });
+        setShowCelebration(false);
+        setResetting(false);
+    }
 
     function handleAnswer(optionIndex: number) {
         if (optionIndex === question.correctIndex) {
@@ -213,6 +232,21 @@ export function QuestionCard({ questions, onComplete }: QuestionCardProps) {
             </Box>
 
             {showCelebration && <YesCelebration />}
+
+            {showCelebration && isAdmin && (
+                <Box sx={{ position: 'fixed', bottom: 72, left: 24, zIndex: 9999 }}>
+                    <Button
+                        startIcon={
+                            resetting ? <CircularProgress size={14} sx={{ color: 'inherit' }} /> : <DeleteOutlineIcon />
+                        }
+                        onClick={handleReset}
+                        disabled={resetting}
+                        sx={secondaryButtonSx(theme)}
+                    >
+                        Reset
+                    </Button>
+                </Box>
+            )}
 
             <Snackbar
                 key={snackbar.key}
