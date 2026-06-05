@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Mood = {
     Happy: 'happy',
@@ -11,13 +11,8 @@ import { Box } from '@mui/material';
 import {
     doc,
     getDoc,
-    collection,
     serverTimestamp,
-    Timestamp,
     runTransaction,
-    query,
-    where,
-    getDocs,
     writeBatch,
 } from 'firebase/firestore';
 import { db } from '@/firebase';
